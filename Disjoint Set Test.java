@@ -45,15 +45,14 @@ public class DisjointSetTest {
             if (g != h){
                ans1[index++] = i;
                 lead[g] = h;
-        }
+        	}
         }
         
         if (index == a-1)
             for (int q : ans1)
                out.println(q);
-  else
-            out.println("Disconnected Graph");
-        out.close();
+ 	else
+            System.out.println("Disconnected Graph");
      }
      
         
