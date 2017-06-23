@@ -50,7 +50,7 @@ public class DisjointSetTest {
         
         if (index == a-1)
             for (int q : ans1)
-               out.println(q);
+               System.out.println(q);
  	else
             System.out.println("Disconnected Graph");
      }
