@@ -13,9 +13,9 @@ ll cnt, arr[8][3] = {
 };
 
 inline void Calc() {
-  cnt = (ll) (K) * (K - 1) * (K - 2) / 6 * arr[N - 1][2];
-  cnt += (ll) (K) * (K - 1) / 2 * arr[N - 1][1];
-  cnt += (ll) (K) * arr[N - 1][0];
+  cnt = (ll) arr[N - 1][2] * (K) * (K - 1) * (K - 2) / 6;
+  cnt += (ll) arr[N - 1][1] * (K) * (K - 1) / 2;
+  cnt += (ll) arr[N - 1][0] * (K);
 }
 
 int main() {
