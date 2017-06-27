@@ -20,8 +20,7 @@ int f(int a) {
 				DP[G[a][i]] = f(G[a][i]);
 				z = z + DP[G[a][i]]; 
 			}
-			else 
-				z = z + DP[G[a][i]];
+			else z = z + DP[G[a][i]];
 		}
 		return z;	
 	}
@@ -34,8 +33,6 @@ int main() {
 		cin >> x >> y;
 		G[x].push_back(y);
 	}
-	for(int i=0; i<10000; i++) {
-		DP[i] = -1;
-	}
+	for(int i=0; i<10000; i++) DP[i] = -1;
 	cout << f(1) << endl;
 }
