@@ -10,10 +10,9 @@ int main() {
     for (int i=0; i<people; i++) scanf("%d ", &p[i]);
     sort(d, d + people); 
     sort(p, p + people);
-    if (type) {
+    if (type) 
         for (int i=0; i<people; i++) sum += max(d[i], p[i]);
-    }
-    else {
+    else 
         for (int i=0; i<people; i++) sum += max(d[people - 1 - i], p[i]);
-    }
+    
     printf("%d\n", sum); 
