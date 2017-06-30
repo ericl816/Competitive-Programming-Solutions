@@ -7,7 +7,7 @@
 char _;
 using namespace std;
 
-const int MAXN = 1 << 22;
+const int MAXN = 1 << 21;
 int N, M, i, S, num;
 pii arr[MAXN]; 
 char ch;
