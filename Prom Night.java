@@ -171,7 +171,7 @@ public class TLE16PromNight {
     }
     ans = cnt - sum;
     System.out.println(ans);
-	}
+    }
 	
     public static void IncreaseFlow(int source, int minresid) {
 	  if (source == sink) {
