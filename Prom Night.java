@@ -127,6 +127,7 @@ public class TLE16PromNight {
     //Is a max-bipartite matching problem 
     //Can use the Ford-Fulkerson algorithm (Runtime of O(Ef)), Edmond Karp algorithm(Runtime of O(VE^2)), or Dinic's algorithm (Runtime of O(V^2E))
     //We can also use the Hungarian algorithm which has a good runtime apparently...
+    //This solution uses Dinic's algorithm which has the best runtime 
     static ArrayList<ArrayList<Integer>> adj = new ArrayList<ArrayList<Integer>>();
     static int N, M, t, id, sink, amount, cnt, sum = 0, ans; 
     static int dist [] = new int [210];
@@ -172,8 +173,8 @@ public class TLE16PromNight {
       if (amount == 0) break; 
       sum += amount;
     }
-    ans = cnt - sum;
-    System.out.println(ans);
+        ans = cnt - sum;
+        System.out.println(ans);
     }
 	
     public static void IncreaseFlow(int source, int minresid) {
@@ -186,5 +187,5 @@ public class TLE16PromNight {
 	    flow[source][arr[source]] += amount;
 	    flow[arr[source]][source] -= amount;
 	  }
-	}
+       }
     }
