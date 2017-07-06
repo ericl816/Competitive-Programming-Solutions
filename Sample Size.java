@@ -9,11 +9,11 @@ public class CCO12SampleSize {
 	public static void main (String[] args) throws IOException {
 		int n = readInt();
 		int[] p = new int[n];
-		for (int x = 0; x < n; x++)
+		for (int x=0; x<n; x++)
 			p[x] = readInt();
-		inner : for (int x = 1;; x++) {
-			main : for (int z = 0; z < n; z++) {
-				for (double y = 0; y <= x; y++) {
+		inner : for (int x=1;; x++) {
+			main : for (int z=0; z<n; z++) {
+				for (double y=0; y<=x; y++) {
 					if ((int) (Math.round(y / x * 100 + 0.001)) == p[z])
 						continue main;
 				}
