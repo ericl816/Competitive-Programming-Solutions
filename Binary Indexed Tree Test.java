@@ -55,13 +55,13 @@ public class BinaryIndexedTreeTest  {
 	}
 
 	public static void Update(long[] bit, int pos, int end) {
-		for(; pos<bit.length; pos += pos &- pos) //X = X & (X-1) strips off the lowest set bit, thus, counting the number of set bits in a number.
+		for(; pos<bit.length; pos += pos &- pos) //X = X & (X-1) strips off the lowest set bit, getting the number with the first "pos" bits set.
 			bit[pos] += end;
 	}
 
 	public static long Query(long[] bit, int pos) {
 		long ans = 0;
-		for(; pos>0; pos -= pos &- pos) //X = X & (X-1) strips off the lowest set bit, thus, counting the number of set bits in a number.
+		for(; pos>0; pos -= pos &- pos) //X = X & (X-1) strips off the lowest set bit, getting the number with the first "pos" bits set.
 			ans += bit[pos];
 
 		return ans;
