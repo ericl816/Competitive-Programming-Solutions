@@ -21,7 +21,7 @@ int main() {
     }
     for(int i=(1 << N) - 1; i>=1; i--) arr[i] = max(arr[i << 1], arr[i << 1 | 1]);
     while(M--) {
-        scanf("%s", &ch);
+        scanf("%c", &ch);
         if(ch == 'R') {
           scan(i);
           scan(S);
