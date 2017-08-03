@@ -16,7 +16,7 @@ void DFS(int par, int root) {
       sum[root] = 1;
       for (int i=0; i<vec[root].size(); i++) {
         int e = vec[root][i];
-        if (e != par) {
+        if (e ^ par) {
         DFS(root, e);
         if (len < arr[root] + 1 + arr[e]) {
           len = arr[root] + 1 + arr[e];
