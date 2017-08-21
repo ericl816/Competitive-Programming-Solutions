@@ -9,8 +9,8 @@ int n, t, sum, DP[MAXN][MAXN];
 double ans = INF;
 
 inline void EditDist (string s1, string s2) {
-  memset(DP, 0x3f, sizeof(DP));
-  for (int a=0; a<=s1.length(); a++) DP[a][0] = a;
+  	memset(DP, 0x3f, sizeof(DP));
+  	for (int a=0; a<=s1.length(); a++) DP[a][0] = a;
 	for (int b=0; b<=s2.length(); b++) DP[0][b] = b;
 	for (int i=1; i<=s1.length(); i++) {
 		for (int j=1; j<=s2.length(); j++) {
