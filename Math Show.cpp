@@ -33,7 +33,7 @@ ll Greedy (int time) {
 
 ll Solve () {
 	for (int i=0; i<=n; i++) {
-		ll total = Recur(i);
+		ll total = Greedy(i);
 		ans = max(ans, total);
 	}
 	return ans;
