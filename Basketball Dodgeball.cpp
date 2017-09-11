@@ -83,8 +83,8 @@ int main () {
 	memset(vis, 0, sizeof(vis));
 	Dijkstras(adj1, src1);
 	dist1 = dist[baller1];
-  memset(dist, INF, sizeof(dist));
-  memset(vis, 0, sizeof(vis));
+	memset(dist, INF, sizeof(dist));
+	memset(vis, 0, sizeof(vis));
 	Dijkstras(adj2, src2);
 	dist2 = dist[baller2];
 	if (dist1 > dist2) printf("%s\n", ":'(");
