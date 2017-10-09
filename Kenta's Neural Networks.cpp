@@ -8,16 +8,16 @@ string s1, s2;
 int n, t, sum, DP[MAXN][MAXN];
 double ans = INF;
 
-inline void EditDist (string s1, string s2) {
-  	memset(DP, 0x3f, sizeof(DP));
-  	for (int a=0; a<=s1.length(); a++) DP[a][0] = a;
+void EditDist (string s1, string s2) {
+  for (int a=0; a<=s1.length(); a++) DP[a][0] = a;
 	for (int b=0; b<=s2.length(); b++) DP[0][b] = b;
 	for (int i=1; i<=s1.length(); i++) {
 		for (int j=1; j<=s2.length(); j++) {
+		  DP[i][j] = MAXN;
 		  if (s1[i - 1] ^ s2[j - 1]) {
-		    	DP[i][j] = min(DP[i][j], DP[i - 1][j] + 1);
-			DP[i][j] = min(DP[i][j], DP[i][j - 1] + 1);
-			DP[i][j] = min(DP[i][j], DP[i - 1][j - 1] + 1);
+		      DP[i][j] = min(DP[i][j], DP[i - 1][j] + 1);
+		      DP[i][j] = min(DP[i][j], DP[i][j - 1] + 1);
+		      DP[i][j] = min(DP[i][j], DP[i - 1][j - 1] + 1);
 		  }
 		  else DP[i][j] = DP[i - 1][j - 1];
 		}
@@ -25,6 +25,7 @@ inline void EditDist (string s1, string s2) {
 }
 
 int main () {
+	cin.sync_with_stdio(0);
 	cin >> s1 >> n;
 	for (int i=0; i<n; i++) {
 		cin >> t;
@@ -36,5 +37,5 @@ int main () {
 		}
 		ans = min(ans, (double) sum / t);
 	}
-	printf("%.6lf\n", ans);
+	cout << setprecision(6) << ans << "\n";
 }
