@@ -1,35 +1,8 @@
-/*
-4.4.2 - Big Integer and Rational Class
-
-The following bigint class is implemented by storing "chunks"
-of the big integer in a large base that is a power of 10 so
-it can be efficiently stored, operated on, and printed.
-
-It has extensive features including karatsuba multiplication,
-exponentiation by squaring, and n-th root using binary search.
-The class is thoroughly templatized, so you can use it as
-easily as you do for normal ints. For example, you may use
-operators with a bigint and a string (e.g. bigint(1234)+"-567"
-and the result will be correctly promoted to a bigint that has
-a value of 667). I/O is done using <iostream>. For example:
-  bigint a, b; cin >> a >> b; cout << a + b << "\n";
-adds two integers together and prints the result, just as you
-would expect for a normal int, except with arbitrary precision.
-The class also supports other streams such as fstream.
-
-After the bigint class, a class for rational numbers is
-implemented, using two bigints to store its numerators and
-denominators. It is useful for when exact results of division
-operations are needed.
-*/
-
 #include <bits/stdc++.h>
 using namespace std;
 
 struct bigint {
-  //base should be a power of 10 for I/O to work
-  //base and base_digits should be consistent
-  static const int base = 1000000000, base_digits = 9;
+  static const int base = 100000, base_digits = 5;
 
   typedef std::vector<int> vint;
   typedef std::vector<long long> vll;
@@ -438,14 +411,6 @@ template<class T> bigint operator ^ (const T & a, const bigint & b) { return big
 
 int N;
 bigint a, b;
-
-inline void BigIntAdd() {
-  cin >> N;
-  while (N--) {
-    cin >> a >> b;
-    cout << (a + b) << endl;
-  }
-}
 
 int main() {
   cin.sync_with_stdio(0);
