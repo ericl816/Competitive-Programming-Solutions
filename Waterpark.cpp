@@ -1,38 +1,37 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
+#define ll long long
+#define MAXN 10010
+#define INF 0x3f3f3f3f
+#define vi vector<int>
+#define pb push_back
+#define pii pair<int, int>
+#define mp make_pair
+#define f first
+#define s second
+#define mii map<int, int>
+#define umii unordered_map<int, int>
 using namespace std;
 
-int n;
-int x = 1;
-int y = 1;
-vector<int> v,w;
-vector<int> G[10000];
-int DP[10000];
+int n, x, y;
+int DP[MAXN];
+vi adj[MAXN];
 
-int f(int a) {
-	if(a == n) {
-		DP[n] = 1;
-		return 1;
-	}
-	else {
-		int z = 0;
-		for(int i=0; i<G[a].size(); i++) {
-			if(DP[G[a][i]] == -1) {
-				DP[G[a][i]] = f(G[a][i]);
-				z = z + DP[G[a][i]]; 
-			}
-			else z = z + DP[G[a][i]];
-		}
-		return z;	
-	}
-}
-
-int main() {
-    ios::sync_with_stdio(0);
+int main () {
+	cin.sync_with_stdio(0);
+	cin.tie(0);
 	cin >> n;
-	while(x != 0 && y != 0) {
-		cin >> x >> y;
-		G[x].push_back(y);
+	while (1) {
+	  cin >> x >> y;
+	  if (!x) break;
+	  adj[x].pb(y);
 	}
-	for(int i=0; i<10000; i++) DP[i] = -1;
-	cout << f(1) << endl;
+	DP[1] = 1;
+	for (int i=1; i<=n; i++) {
+		for (size_t j=0; j<adj[i].size(); j++) {
+			int &next = adj[i][j];
+			DP[next] += DP[i];
+		}
+	}
+	cout << DP[n] << endl;
+	return 0;
 }
