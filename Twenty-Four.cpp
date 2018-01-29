@@ -30,7 +30,7 @@ void Recur (int idx, int curr, int next) {
 	Recur(idx + 1, curr, next + C[idx + 1]);
 	Recur(idx + 1, curr, next - C[idx + 1]);
 	Recur(idx + 1, curr, next * C[idx + 1]);
-	if (C[idx + 1] ^ 0 && next % C[idx + 1] == 0) Recur(idx + 1, curr, next / C[idx + 1]);
+	if (C[idx + 1] && next % C[idx + 1] == 0) Recur(idx + 1, curr, next / C[idx + 1]);
 }
 
 int main () {
