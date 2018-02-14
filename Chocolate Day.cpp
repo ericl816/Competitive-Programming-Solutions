@@ -6,10 +6,6 @@ char _;
 #define INF 0x3f3f3f3f
 using namespace std;
 
-// Solution WAs 60/100
-// Seems like solution is wrong; did not consider that the subarrays have to be strictly increasing by 1
-// Correct solution should use a prefix-sum array
-
 int N, T, a, b, c, L, cnt;
 ll cups[MAXN], chocolates[MAXN], psa[MAXN], arr[MAXN];
 
