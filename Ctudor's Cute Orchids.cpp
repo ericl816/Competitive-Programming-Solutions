@@ -14,47 +14,38 @@
 #define mii map<int, int>
 #define umii unordered_map<int, int>
 using namespace std;
-int n, m;
-int cost[MAXN], deal_cost[MAXN];
-int deals[MAXN][MAXN];
 
-map<pair<int, vi>, int> memo;
-
-inline int solve(int deal, const vector<int>& state) {
-    auto key = mp(deal, state);
-    if (memo.find(key) != end(memo)) return memo[key];
-    int res = INF;
-    if (deal >= 0) {
-        int with_deal = deal_cost[deal];
-        bool can_make = 1;
-        vector<int> next_state(begin(state), end(state));
-        for (int i=0; i<n; i++) {
-            next_state[i] -= deals[deal][i];
-            if (next_state[i] < 0) can_make = 0;
-        }
-        if (can_make) res = min(res, deal_cost[deal] + solve(deal - 1, next_state));
-        res = min(res, solve(deal - 1, state));
-    } 
-    else {
-        int score = 0;
-        for (int i=0; i<n; i++) score += cost[i] * state[i];
-        res = min(res, score);
-    }
-    return memo[key] = res;
-}
+int N, M, minn = INF, cost;
+int C[MAXN], D[MAXN], orchids[MAXN], num[MAXN];
+int Q[MAXN][MAXN];
 
 int main () {
     cin.sync_with_stdio(0);
     cin.tie(0);
-    cin >> n >> m;
-    for (int i=0; i<n; i++) cin >> cost[i];
-    for (int i=0; i<m; i++) {
-        cin >> deal_cost[i];
-        for (int j=0; j<n; j++) cin >> deals[i][j];
+    cin >> N >> M;
+    for (int i=1; i<=N; i++) cin >> C[i];
+    for (int i=0; i<M; i++) {
+        cin >> D[i];
+        for (int j=1; j<=N; j++) cin >> Q[i][j];
     }
-    vector<int> state(n);
-    for (int i=0; i<n; i++) cin >> state[i];
-    int ans = solve(m - 1, state);
-    cout << ans << endl;
+    for (int i=1; i<=N; i++) cin >> orchids[i];
+    for (int i=0; i<(1 << M); i++) {
+        memset(num, 0, sizeof(num));
+        cost = 0;
+        for (int j=0; j<M; j++) {
+            // Consider this subset
+            if (i & (1 << j)) {
+                cost += D[j];
+                for (int k=1; k<=N; k++) num[k] += Q[j][k];    
+            }
+        }
+        for (int j=1; j<=N; j++) {
+            if (num[j] > orchids[j]) goto outer;
+            cost += C[j] * (orchids[j] - num[j]);
+        }
+        minn = min(minn, cost);
+        outer: continue;
+    }
+    cout << minn << endl;
     return 0;
 }
