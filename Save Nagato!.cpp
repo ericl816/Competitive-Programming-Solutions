@@ -1,46 +1,60 @@
 #include <bits/stdc++.h>
+#define ll long long
+#define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
+char _;
+#define MAXN 500010
+#define INF 0x3f3f3f3f
+#define min(a, b) (a) < (b) ? (a) : (b)
+#define max(a, b) (a) < (b) ? (b) : (a)
+#define vi vector<int>
+#define pb push_back
+#define pii pair<int, int>
+#define mp make_pair
+#define f first
+#define s second
+#define mii map<int, int>
+#define umii unordered_map<int, int>
 using namespace std;
 
-const int MAXN = 500001;
-int N, u, v;
-vector<int> adj[MAXN];
-int max1[MAXN], max2[MAXN], idx[MAXN], dp[MAXN];
+// Alternatively, you can just DFS 3 times to get the tree diameter
 
-void dfs(int cur, int next) {
-    for (int i=0; i<adj[cur].size(); i++) {
-        int curr = adj[cur][i];
-        if (!(curr ^ next)) continue;
-        dfs(curr, cur);
-        if (max1[cur] < max1[curr] + 1) {
-            max2[cur] = max1[cur];
-            max1[cur] = max1[curr] + 1;
-            idx[cur] = curr;
+int N, u, v;
+vi adj[MAXN];
+int max1[MAXN], max2[MAXN], child[MAXN], DP[MAXN];
+
+inline void DFS (int node, int prev) {
+    for (size_t i=0; i<adj[node].size(); i++) {
+        int &next = adj[node][i];
+        if (next == prev) continue;
+        DFS(next, node);
+        if (max1[node] < max1[next] + 1) {
+            max2[node] = max1[node];
+            max1[node] = max1[next] + 1;
+            child[node] = next;
         }
-        else if (max2[cur] < max1[curr] + 1) {
-            max2[cur] = max1[curr] + 1;
-        }
+        else if (max2[node] < max1[next] + 1) max2[node] = max1[next] + 1;
     }
 }
 
-void recur(int min, int cur, int next) {
-    dp[cur] = max(min, max1[cur]);
-    for (int i = 0; i < adj[cur].size(); i++) {
-        int curr = adj[cur][i];
-        if (!(curr ^ next)) continue; 
-        if (curr == idx[cur]) recur(max(min + 1 , max2[cur] + 1), curr, cur);
-        else recur(max(min + 1 , max1[cur] + 1), curr, cur);
+inline void Recur (int minn, int node, int prev) {
+    DP[node] = max(minn, max1[node]);
+    for (size_t i=0; i<adj[node].size(); i++) {
+        int &next = adj[node][i];
+        if (next == prev) continue;
+        if (next == child[node]) Recur(max(minn + 1, max2[node] + 1), next, node);
+        else Recur(max(minn + 1, max1[node] + 1), next, node);
     }
 }
 
 int main() {
-    scanf("%d", &N);
+    scan(N);
     for (int i=0; i<N-1; i++) {
-        scanf("%d %d", &u, &v);
-        adj[u].push_back(v);
-        adj[v].push_back(u);
+        scan(u); scan(v);
+        adj[u].pb(v);
+        adj[v].pb(u);
     }
-    dfs(1, -1);
-    recur(0, 1, -1);
-    for (int i=1; i<=N; i++)
-        printf("%d\n", dp[i] + 1);
+    DFS(1, -1);
+    Recur(0, 1, -1);
+    for (int i=1; i<=N; i++) printf("%d\n", DP[i] + 1);
+    return 0;
 }
