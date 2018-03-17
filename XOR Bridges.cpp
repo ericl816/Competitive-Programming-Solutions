@@ -79,7 +79,7 @@ public:
     void Rank (int bit, vector<pii> &vec) {
         if (!~bit || vec.size() <= 1) return;
         if (M & (1 << bit)) {
-            for (int i=1; i<vec.size(); i++) lead[Find(vec[i].f)] = Find(vec[0].f);
+            for (int i=1; i<vec.size(); i++) Rank(vec[0].f, vec[i].f);
             Rank(bit - 1, vec);
         }
         else {
