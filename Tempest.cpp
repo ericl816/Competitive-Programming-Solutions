@@ -29,7 +29,10 @@ int dist1[MAXN], dist2[MAXN];
 queue<int> q;
 priority_queue<pii, vector<pii>, greater<pii>> pq;
 
-// NOTE: The priority queue version of Dijkstra's seem to be slower than the normal version for some reason
+/* 
+ * NOTE: The priority queue version of Dijkstra's seem to be slower than the normal version for some reason
+ * Even though the time complexity for PQ version is: O((E+V) logV), compared to 
+ */ 
 void SPFA (int src, int dist[MAXN]) {
 	memset(vis, 0, sizeof(vis));
 	q.push(src);
@@ -78,7 +81,6 @@ int main () {
 	scanf("%d %d %d %d", &N, &M, &X, &Y);
 	for (int i=1; i<=M; i++) {
 		scanf("%d %d %d", &A, &B, &C);
-		//A--; B--;
 		adj[A].pb(mp(B, C));
 		adj[B].pb(mp(A, C));
 		edges[i] = (Edge) {A, B, C};
@@ -88,8 +90,6 @@ int main () {
 	SPFA(X, dist1); // dist1 = Warm air
 	SPFA(Y, dist2); // dist2 = Cold air
 	scanf("%d", &Q);
-	//for (int i=0; i<N; i++) for (pii &next : adj1[i]) vec.pb(dist1[i] + dist2[next.f] + next.s);
-	//sort(vec.begin(), vec.end());
 	for (int i=0; i<Q; i++) {
 		scanf("%d %d", &F, &L);
 		if (F == 1) {
@@ -114,18 +114,6 @@ int main () {
 			}
 			else printf("%d\n", min(dist1[node1], dist1[node2]));
 		}
-		/*
-		if (dist1[L] ^ INF && dist2[L] ^ INF) {
-			//F == 1 is a node, F == 2 is a channel
-			if (dist1[L] == dist2[L]) printf("%d\n", dist1[L]);
-			else if (dist1[L] ^ dist2[L]) printf("%.5f\n", (dist1[L] + dist2[L]) / (double) 2.0);
-			else {
-				int idx = upper_bound(vec.begin(), vec.end(), L) - vec.begin();
-				printf("%d\n", idx ? vec[idx - 1] : -1);
-			}
-		}
-		else printf("%d\n", -1);
-		*/
 	}
 	return 0;
 }
