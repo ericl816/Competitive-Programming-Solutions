@@ -36,7 +36,7 @@ int main () {
 			if (i & 1) odd.pb(x);
 			else even.pb(x);
 		}
-		// Only O(N) sorting passes, not O(N^2)
+		// Only O(logN) sorting passes, not O(N^2)
 		sort(even.begin(), even.end());
 		sort(odd.begin(), odd.end());
 		for (size_t i=0; i<even.size(); i++) {
