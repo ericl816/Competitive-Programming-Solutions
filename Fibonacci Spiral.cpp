@@ -44,6 +44,7 @@ inline void PreCompute () {
     for (int i=0; i<MAXN; i++) {
         leftx[i] = currx;
         downy[i] = curry;
+        // Using matrices to get the (i + 1)th Fibonacci number even though it's overkill
         currx += Fib(i + 1).a * movex[idx];
         curry += Fib(i + 1).a * movey[idx];
         idx = (idx + 1) % 4;
