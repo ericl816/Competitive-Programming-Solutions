@@ -19,8 +19,6 @@ char _;
 #define umii unordered_map<int, int>
 using namespace std;
 
-// Time Complexity: O(N*T)
-
 int T, N;
 
 int main () {
@@ -29,15 +27,8 @@ int main () {
 	scan(T);
 	for (int z=1; z<=T; z++) {
 		scan(N);
-
 		// For outputting
 		printf("%s %d %s", "Case #", z, ": ");
 	}
 	return 0;
 }
-
-/*
-1
-3
-8 9 7
-*/
