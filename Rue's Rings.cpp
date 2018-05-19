@@ -1,4 +1,5 @@
-#include <bits/stdc++.h>
+// #include <bits/stdc++.h>
+#include "/Users/ericliu/Desktop/Competitive-Programming-Templates/stdc++.h"
 #define ll long long
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
@@ -23,17 +24,18 @@ void Do_Test_Cases () {
 	while (TEST_CASES--) {
 		cin >> N;
 		vi diam[MAXM];
-		vi ans;
+		vi ans, IDS;
 		int minn = INF;
 		while (N--) {
 			cin >> ID >> R;
+			IDS.pb(ID);
 			for (int i=0; i<R; i++) {
 				cin >> D[i];
 				diam[ID].pb(D[i]);
 				minn = min(minn, D[i]);
 			}
 		}
-		for (int i=0; i<R; i++) {
+		for (int i : IDS) {
 			for (size_t j=0; j<diam[i].size(); j++) {
 				int &next = diam[i][j];
 				if (next == minn) ans.pb(i);
@@ -54,7 +56,7 @@ int main () {
     cin.tie(0);
     cin.sync_with_stdio(0);
     cout.tie(0);
-    // freopen("DATA11.txt", "r", stdin);
+    freopen("DATA21.txt", "r", stdin);
     Do_Test_Cases();
     return 0;
 }

@@ -1,4 +1,5 @@
-#include <bits/stdc++.h>
+// #include <bits/stdc++.h>
+#include "/Users/ericliu/Desktop/Competitive-Programming-Templates/stdc++.h"
 #define ll long long
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
@@ -18,7 +19,7 @@ int N, X, Y, Z;
 char op;
 
 void Do_Test_Cases () {
-	int TEST_CASES = 2;
+	int TEST_CASES = 10;
 	while (TEST_CASES--) {
 		vector<string> keys;
 		vector<string> check;
@@ -82,7 +83,7 @@ int main () {
     cin.tie(0);
     cin.sync_with_stdio(0);
     cout.tie(0);
-    // freopen("DATA11.txt", "r", stdin);
+    freopen("DATA31.txt", "r", stdin);
     Do_Test_Cases();
     return 0;
 }
