@@ -1,8 +1,7 @@
 #pragma GCC optimize "Ofast"
 #pragma GCC optimize "unroll-loops"
 #pragma GCC target "sse,sse2,sse3,sse4,abm,avx,mmx,popcnt,tune=native"
-// #include <bits/stdc++.h>
-#include "/Users/ericliu/Desktop/Competitive-Programming-Templates/stdc++.h"
+#include <bits/stdc++.h>
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ll long long
@@ -51,7 +50,7 @@ int main () {
 		adj[u].pb(mp(v, w));
 		adj[v].pb(mp(u, w));
 	}
-	SSSP();
+	Dijkstras();
 	for (int i=0; i<N; i++) {
 		if (dist[i] == INF) cout << -1 << endl;
 		else cout << dist[i] << endl;
