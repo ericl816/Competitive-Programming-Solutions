@@ -5,8 +5,9 @@
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ll long long
-#define MAXN 2010
+#define MAXN 100010
 #define INF 0x3f3f3f3f
+#define MOD 1000000007
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
 #define vi vector<int>
@@ -20,9 +21,9 @@ char _;
 using namespace std;
 
 int N;
-ll ans;
-int DP[MAXN][MAXN];
-string s[MAXN];
+ll cnt = 1, ans;
+string s;
+char temp;
 
 int main () {
 	#ifdef NOT_DMOJ
@@ -33,18 +34,18 @@ int main () {
 	cin.tie(0);
 	cout.tie(0);
 	cin >> N;
-	for (int i=1; i<=N; i++) {
-		cin >> s[i];
-		for (int j=0; j<N; j++) DP[j + 1][i] = s[i][j] == '#';
-	}
-	for (int i=N; i; i--) {
-		for (int j=1; j<=N; j++) {
-			if (DP[j][i] == 1) {
-				DP[j][i] += min(DP[j - 1][i + 1], min(DP[j][i + 1], DP[j + 1][i + 1]));
-				ans += DP[j][i];
-			}
+	while (N--) {
+		cin >> s;
+		if (s[0] == temp) {
+			cnt++;
+			ans += cnt;
 		}
+		else {
+			ans++;
+			cnt = 1;
+		}
+		temp = s[0];
 	}
-	cout << ans << endl;
+	cout << ans << "\n";
 	return 0;
 }

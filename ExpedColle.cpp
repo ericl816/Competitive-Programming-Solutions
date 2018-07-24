@@ -5,7 +5,7 @@
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ll long long
-#define MAXN 3000010
+#define MAXN 2010
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
@@ -19,10 +19,10 @@ char _;
 #define umii unordered_map<int, int>
 using namespace std;
 
-int N, K;
-ll ans;
-deque<int> minq, maxq;
-int arr[MAXN];
+int N, R;
+ll E, C1, V1, CA, CB, CM, VA, VB, VM, extra;
+priority_queue<ll, vector<ll>, greater<ll> > pq[MAXN];
+ll DP[MAXN];
 
 int main () {
 	#ifdef NOT_DMOJ
@@ -32,21 +32,30 @@ int main () {
 	cin.sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
-	cin >> N >> K;
-	for (int i=0, left=0; i<N; i++) {
-		cin >> arr[i];
-		while (!minq.empty() && arr[i] < minq.back()) minq.pop_back();
-		minq.pb(arr[i]);
-		while (!maxq.empty() && arr[i] > maxq.back()) maxq.pop_back();
-		maxq.pb(arr[i]);
-		while (left < i && maxq.front() - minq.front() > K) {
-			if (!minq.empty() && arr[left] == minq.front()) minq.pop_front();
-			if (!maxq.empty() && arr[left] == maxq.front()) maxq.pop_front();
-			left++;
+	cin >> N >> R;
+	for (int i=0; i<N; i++) {
+		cin >> E >> C1 >> V1 >> CA >> CB >> CM >> VA >> VB >> VM;
+		for (int j=0; j<E; j++) {
+			if (C1 <= R) {
+				if (C1 == 0) extra += V1;
+				else {
+					pq[C1].push(V1);
+					if (pq[C1].size() * C1 > R) pq[C1].pop();
+				}
+			}
+			C1 = 1LL * (C1 * CA + CB) % CM;
+			V1 = 1LL * (V1 * VA + VB) % VM;
 		}
-		ans += i - left + 1;
 	}
-	cout << ans << "\n";
+	// cout << C1 << " " << V1 << endl;
+	for (int i=1; i<=R; i++) {
+		while (!pq[i].empty()) {
+			ll val = pq[i].top();
+			pq[i].pop();
+			for (int j=R; j; j--) if (j - i >= 0 && DP[j] <= DP[j - i] + val) DP[j] = DP[j - i] + val;
+		}
+	}
+	cout << DP[R] + extra << "\n";
 	return 0;
 }
 

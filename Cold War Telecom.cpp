@@ -18,7 +18,7 @@ vi adj[MAXN];
 si crucial;
 bool vis[MAXN];
 
-void TarjansDFS(int node, int prev) {
+inline void TarjansDFS(int node, int prev) {
 	int cnt = 0; //Stores the number of children in the DFS tree
 	DFN[node] = low[node] = idx++;
 	vis[node] = 1;
@@ -28,7 +28,7 @@ void TarjansDFS(int node, int prev) {
 		    cnt++;
 		    TarjansDFS(next, node);
 		    low[node] = min(low[node], low[next]);
-		    //It is an articulation point (if low[next] >= DFN[node] (no path from next to node) or (if there are more than 2 children && the node is the root of the DFS tree)
+		    //It is an articulation point if low[next] >= DFN[node] (no path from next to node) or if there are more than 1 children && the node is the root of the DFS tree
 		    if ((DFN[node] <= low[next] && DFN[node]) || (cnt > 1 && !DFN[node])) crucial.insert(node + 1);
 		}
 		else if (DFN[next] < low[node]) low[node] = DFN[next]; // low[node] = min(low[node], DFN[next])

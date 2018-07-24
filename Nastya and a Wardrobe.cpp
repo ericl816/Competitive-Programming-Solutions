@@ -5,8 +5,8 @@
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ll long long
-#define MAXN 2010
 #define INF 0x3f3f3f3f
+#define MOD 1000000007
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
 #define vi vector<int>
@@ -19,10 +19,18 @@ char _;
 #define umii unordered_map<int, int>
 using namespace std;
 
-int N;
-ll ans;
-int DP[MAXN][MAXN];
-string s[MAXN];
+ll n, k;
+
+inline ll Fpow (ll x, ll y) {
+	ll res = 1; 
+	x %= MOD;
+	while (y) {
+		if (y & 1) res = (res * x) % MOD;
+		x = x * x % MOD;
+		y >>= 1;
+	}
+	return res;
+}
 
 int main () {
 	#ifdef NOT_DMOJ
@@ -32,19 +40,11 @@ int main () {
 	cin.sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
-	cin >> N;
-	for (int i=1; i<=N; i++) {
-		cin >> s[i];
-		for (int j=0; j<N; j++) DP[j + 1][i] = s[i][j] == '#';
+	cin >> n >> k;
+	if (n == 0) {
+		cout << 0 << "\n";
+		return 0;
 	}
-	for (int i=N; i; i--) {
-		for (int j=1; j<=N; j++) {
-			if (DP[j][i] == 1) {
-				DP[j][i] += min(DP[j - 1][i + 1], min(DP[j][i + 1], DP[j + 1][i + 1]));
-				ans += DP[j][i];
-			}
-		}
-	}
-	cout << ans << endl;
+	cout << (((n % MOD) * Fpow(2, k + 1) % MOD) - Fpow(2, k) + 1 + MOD) % MOD << "\n";;  
 	return 0;
 }

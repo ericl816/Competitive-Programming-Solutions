@@ -2,7 +2,7 @@
 #pragma GCC optimize "unroll-loops"
 #pragma GCC target "sse,sse2,sse3,sse4,abm,avx,mmx,popcnt,tune=native"
 #include <bits/stdc++.h>
-#define MAXN 30
+#define MAXN 60
 #define INF 0x3f3f3f3f
 #define ll long long
 #define vi vector<int>

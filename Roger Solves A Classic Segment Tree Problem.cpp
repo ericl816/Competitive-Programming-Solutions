@@ -1,10 +1,11 @@
 #pragma GCC optimize "Ofast"
 #pragma GCC optimize "unroll-loops"
 #pragma GCC target "sse,sse2,sse3,sse4,abm,avx,mmx,popcnt,tune=native"
-#include <bits/stdc++.h>
+// #include <bits/stdc++.h>
+#include "/Users/ericliu/Desktop/Competitive-Programming-Templates/stdc++.h"
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
-#define MAXN 50010
+#define MAXN 500010
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
@@ -61,14 +62,21 @@ inline ll minsegQuery (int l, int r, int idx = 1) {
 }
 
 int main () {
+	#ifdef NOT_DMOJ
+	freopen("in.txt", "r", stdin);
+	freopen("out.txt", "w", stdout);
+	#endif // NOT_DMOJ
+	cin.sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
 	scan(N); scan(Q);
 	for (int i=1; i<=N; i++) {
 		scan(arr[i]);
 		segmin[i + N - 1] = segmax[i + N - 1] = arr[i];
 	}
 	for (int i=N - 1; i>0; i--) {
-  		segmin[i] = min(segmin[i << 1], segmin[i << 1 | 1]);
-  		segmax[i] = max(segmax[i << 1], segmax[i << 1 | 1]);
+		segmin[i] = min(segmin[i << 1], segmin[i << 1 | 1]);
+		segmax[i] = max(segmax[i << 1], segmax[i << 1 | 1]);
 	}
 	for (int i=0, a, b; i<Q; i++) {
 		scan(a); scan(b);

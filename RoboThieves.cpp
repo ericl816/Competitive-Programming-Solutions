@@ -24,20 +24,15 @@ bool vis[MAXN][MAXN], flag[MAXN][MAXN];
 priority_queue<pii> q;
 
 inline bool Check (int x, int y) {
-	return x >= 0 && x < N && y >= 0 && y < M;
-}
-
-inline bool Conveyor (char ch) {
-	return ch == 'L' || ch == 'D' || ch == 'R' || ch == 'U';
+	return x >= 0 && x < N && y >= 0 && y < N;
 }
 
 int main () {
 	cin.sync_with_stdio(0);
 	cin.tie(0);
-	int move[4][4] = {{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
-	int *movex = new int [4] {0, 0, -1, 1};
-	int *movey = new int [4] {-1, 1, 0, 0};
-	char *conveyor = new char [4] {'L', 'R', 'U', 'D'};
+	int *movex = new int [4] {0, 0, 1, -1};
+	int *movey = new int [4] {1, -1, 0, 0};
+	char *conveyor = new char [4] {'R', 'L', 'D', 'U'};
 	cin >> N >> M;
 	for (int i=0; i<N; i++) {
 		cin >> s;

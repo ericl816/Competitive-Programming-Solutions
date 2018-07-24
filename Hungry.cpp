@@ -1,11 +1,12 @@
 #pragma GCC optimize "Ofast"
 #pragma GCC optimize "unroll-loops"
 #pragma GCC target "sse,sse2,sse3,sse4,abm,avx,mmx,popcnt,tune=native"
-#include <bits/stdc++.h>
+// #include <bits/stdc++.h>
+#include "/Users/ericliu/Desktop/Competitive-Programming-Templates/stdc++.h"
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ll long long
-#define MAXN 2010
+#define MAXN 100010
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
@@ -19,10 +20,12 @@ char _;
 #define umii unordered_map<int, int>
 using namespace std;
 
-int N;
-ll ans;
-int DP[MAXN][MAXN];
-string s[MAXN];
+int N, a, b;
+vector<pii> vec1, vec2;
+
+inline bool Cmp (pii &a, pii &b) {
+	return a.f < b.f;
+}
 
 int main () {
 	#ifdef NOT_DMOJ
@@ -33,18 +36,15 @@ int main () {
 	cin.tie(0);
 	cout.tie(0);
 	cin >> N;
-	for (int i=1; i<=N; i++) {
-		cin >> s[i];
-		for (int j=0; j<N; j++) DP[j + 1][i] = s[i][j] == '#';
+	for (int i=0; i<N; i++) {
+		cin >> a >> b;
+		vec1.pb(mp(a, i));
+		vec2.pb(mp(b, i));
 	}
-	for (int i=N; i; i--) {
-		for (int j=1; j<=N; j++) {
-			if (DP[j][i] == 1) {
-				DP[j][i] += min(DP[j - 1][i + 1], min(DP[j][i + 1], DP[j + 1][i + 1]));
-				ans += DP[j][i];
-			}
-		}
-	}
-	cout << ans << endl;
+	sort(vec1.begin(), vec1.end(), Cmp);
+	sort(vec2.begin(), vec2.end(), Cmp);
+	for (size_t i=0; i<vec1.size(); i++) cout << vec1[i].s + 1 << " ";
+	cout << endl;
+	for (size_t i=0; i<vec2.size(); i++) cout << vec2[i].s + 1 << " ";
 	return 0;
 }

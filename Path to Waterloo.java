@@ -133,42 +133,38 @@ public class GFSSOCPathtoWaterloo {
 
     public static void SPFA (int start) {
           q.offer(start);
-	  dist[start] = 0;
-	  while (!q.isEmpty()) {
-	    Integer curr = q.poll();
-	    for (Integer edge : adj.get(curr)) {
-	      int currcost = dist[curr] + 1;
-	      if (currcost < dist[edge]) {
-	      dist[edge] = currcost;
-	      q.offer(edge);
-	         }
-	      }
- 	}
+          dist[start] = 0;
+          while (!q.isEmpty()) {
+            Integer curr = q.poll();
+            for (Integer edge : adj.get(curr)) {
+                int currcost = dist[curr] + 1;
+                if (currcost < dist[edge]) {
+                    dist[edge] = currcost;
+                    q.offer(edge);
+                }
+            }
+        }
     }
 
 	public static void main (String[] args) throws IOException {
 	    Reader r = new Reader ();
-	  n = r.nextInt(); t = r.nextInt();
-	  for (int i=0; i<n+2; i++) {
-	  adj.add(new ArrayList<Integer>());
-	  dist[i] = 1 << 30;
-	  }
-	  hm.put("home", 0); hm.put("Waterloo GO", 1);
-	
-	  for (int i=0; i<n; i++)
-	  hm.put(r.readLine(), i+2);
-	  
-	  for (int i=0; i<t; i++) {
-	    split = r.readLine().split("-");
-	    s1 = split[0]; s2 = split[1];
-	    node1 = hm.get(s1); node2 = hm.get(s2);
-	    adj.get(node1).add(node2);
-	    adj.get(node2).add(node1);
-	  }
-	  
-	  int start = hm.get("home");
-	  SPFA(start);
- 	int end = hm.get("Waterloo GO");
- 	System.out.println(dist[end] != 1 << 30 ? dist[end] : "RIP ACE");
+        n = r.nextInt(); t = r.nextInt();
+        for (int i=0; i<n+2; i++) {
+            adj.add(new ArrayList<Integer>());
+            dist[i] = 1 << 30;
+        }
+        hm.put("home", 0); hm.put("Waterloo GO", 1);
+        for (int i=0; i<n; i++) hm.put(r.readLine(), i+2);
+        for (int i=0; i<t; i++) {
+            split = r.readLine().split("-");
+            s1 = split[0]; s2 = split[1];
+            node1 = hm.get(s1); node2 = hm.get(s2);
+            adj.get(node1).add(node2);
+            adj.get(node2).add(node1);
+        }
+        int start = hm.get("home");
+        SPFA(start);
+        int end = hm.get("Waterloo GO");
+        System.out.println(dist[end] != 1 << 30 ? dist[end] : "RIP ACE");
     }
 }

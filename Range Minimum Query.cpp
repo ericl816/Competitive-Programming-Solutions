@@ -1,12 +1,13 @@
-#pragma GCC optimize "Ofast"
-#pragma GCC optimize "unroll-loops"
 #pragma GCC target "sse,sse2,sse3,sse4,abm,avx,mmx,popcnt,tune=native"
 #include <bits/stdc++.h>
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ll long long
-#define MAXN 2010
+#define ull unsigned long long
+#define MAXM 17 // log2(MAXN)
+#define MAXN 100010
 #define INF 0x3f3f3f3f
+#define MOD 1000000007
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
 #define vi vector<int>
@@ -19,10 +20,11 @@ char _;
 #define umii unordered_map<int, int>
 using namespace std;
 
-int N;
-ll ans;
-int DP[MAXN][MAXN];
-string s[MAXN];
+// Sparse Table Approach
+
+int N, Q, SIZE, minn;
+int arr[MAXN];
+int segmin[MAXM][MAXN];
 
 int main () {
 	#ifdef NOT_DMOJ
@@ -32,19 +34,24 @@ int main () {
 	cin.sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
-	cin >> N;
+	scan(N);
 	for (int i=1; i<=N; i++) {
-		cin >> s[i];
-		for (int j=0; j<N; j++) DP[j + 1][i] = s[i][j] == '#';
+		scan(arr[i]);
+		segmin[0][i] = arr[i];
 	}
-	for (int i=N; i; i--) {
-		for (int j=1; j<=N; j++) {
-			if (DP[j][i] == 1) {
-				DP[j][i] += min(DP[j - 1][i + 1], min(DP[j][i + 1], DP[j + 1][i + 1]));
-				ans += DP[j][i];
-			}
+	// Could use MAXM or: 32 - __builtin_clz(N) - same as: log2(N)
+	for (int i=1; i<=(32 - __builtin_clz(N)); i++) {
+		for (int j=1; j + (1 << i) - 1<=N; j++) {
+			segmin[i][j] = min(segmin[i - 1][j], segmin[i - 1][j + (1 << (i - 1))]);
 		}
 	}
-	cout << ans << endl;
+	scan(Q);
+	for (int i=0, a, b; i<Q; i++) {
+		scan(a); scan(b);
+		a++, b++;
+		SIZE = log(b - a + 1) / log(2);
+		minn = min(segmin[SIZE][a], segmin[SIZE][b - (1 << SIZE) + 1]);
+		printf("%d\n", minn);
+	}
 	return 0;
 }

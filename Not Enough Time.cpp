@@ -7,9 +7,8 @@ using namespace std;
 
 int n, t;
 int ans = 0;
-int p [2001][3];
-int v [2001][3];
-int dp [10001];
+int p[2001][3], v[2001][3];
+int dp[10001];
 
 int main () {
   scan(n); scan(t);

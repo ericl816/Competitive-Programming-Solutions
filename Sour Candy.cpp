@@ -1,4 +1,9 @@
+#pragma GCC optimize "Ofast"
+#pragma GCC optimize "unroll-loops"
+#pragma GCC target "sse,sse2,sse3,sse4,abm,avx,mmx,popcnt,tune=native"
 #include <bits/stdc++.h>
+#define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
+char _;
 #define ll long long
 #define MAXN 100010
 #define INF 0x3f3f3f3f
@@ -12,97 +17,95 @@
 #define s second
 #define mii map<int, int>
 #define umii unordered_map<int, int>
-#define mlli map<ll, int>
-#define umlli unordered_map<ll, int>
-#define SIZEOF(arr) sizeof(arr) / sizeof(arr[0])
 using namespace std;
-  
-// Use BIT to count the number of inversions required
-// This question involves finding the longest increasing "subarray"
-// ** Subarrays are contiguous, whereas subsequences are not **
+
 struct BIT {
 private:
-  int N;
-  vi tree;
-  
+	int N;
+	vi tree;
+
 public:
-  BIT(int N) : N(N), tree(N + 1) { }
-  
-  void Update (int idx, int val) {
-    for (; idx<=MAXN; idx += idx & -idx) tree[idx] += val;
-  }
-  
-  ll Query (int idx) {
-    ll sum = 0;
-    for (; idx; idx -= idx & -idx) sum += tree[idx];
-    return sum;
-  }
-  
-  ll Query (int a, int b) {
-    return Query(b) - Query(a - 1);
-  }
+	BIT (int N) : N(N), tree(N + 1) { }
+
+	inline void Update (int idx, int val) {
+		for (; idx<=MAXN; idx += idx & -idx) tree[idx] += val;
+	}
+
+	inline ll Query (int idx) {
+		ll sum = 0;
+		for (; idx; idx -= idx & -idx) sum += tree[idx];
+		return sum;
+	}
+
+	inline ll Query (int a, int b) {
+		return Query(b) - Query(a - 1);
+	}
 };
-  
-int N, ord[MAXN], DP[MAXN], num, X, idx, idx1; //num = N - X, where X is the len of longest subarray
-ll arr[MAXN];
-mlli sour; //Stores the value and the idx
-char op = 'F', op1 = 'B';
-//bool front, back, invert, flag;
+
 BIT tree(MAXN);
-  
+int N;
+int arr[MAXN], ord[MAXN], DP[MAXN];
+mii sour;
+pii orig, res;
+
 int main () {
-  cin.sync_with_stdio(0);
-  cin.tie(0);
-  cin >> N;
-  for (int i=1; i<=N; i++) {
-    cin >> arr[i];
-    sour[arr[i]] = i;
-  }
-  for (int i=1; i<=N; i++) {
-    cin >> ord[i];
-    arr[sour[ord[i]]] = i; //Update the given indices
-  }
-  for (int i=1; i<=N; i++) sour[arr[i]] = i;
-    
-  // Do DP to find the longest subarray of the second sequence
-  /*
-  for (int i=1; i<=N; i++) {
-    for (int j=0; j<i; j++) {
-      if (ord[j] < ord[i]) {
-        DP[i] = max(DP[i], DP[j] + 1);
-        flag = 1;
-      }
-      if (DP[i] > X) X = DP[i];
-    }
-  }
-  */
-  sour[0] = 0;
-  pii ind = pii(-1, 0);
-  pii temp = pii(0, 1);
-  for (int i=1; i<=N; i++) {
-    if (sour[i - 1] < sour[i]) temp.f++;
-    else {
-      ind = max(ind, temp);
-      temp = mp(1, i);
-    }
-  }
-  ind = max(ind, temp);
-  X = ind.f;
-  num = N - X;
-  cout << num << "\n";
-  for (int i=ind.s - 1; i>0; i--) {
-    idx = sour[i] + tree.Query(sour[i]);
-    cout << op << " " << idx << "\n";
-    tree.Update(1, 1);
-    tree.Update(sour[i], -1);
-    //front = 1;
-  }
-  for (int i=X + ind.s; i<=N; i++) {
-    idx1 = sour[i] + tree.Query(sour[i]);
-    cout << op1 << " " << idx1 << "\n";
-    tree.Update(sour[i] + 1, -1);
-    tree.Update(N + 1, 1); 
-    //back = 1;
-  }
-  return 0;
+	#ifdef NOT_DMOJ
+	freopen("in.txt", "r", stdin);
+	freopen("out.txt", "w", stdout);
+	#endif // NOT_DMOJ
+	cin.sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+	cin >> N;
+	for (int i=1; i<=N; i++) {
+		cin >> arr[i];
+		sour[arr[i]] = i;
+	}
+	for (int i=1; i<=N; i++) {
+		cin >> ord[i];
+		arr[sour[ord[i]]] = i;
+	}
+	for (int i=1; i<=N; i++) sour[arr[i]] = i;
+	// for (auto i : sour) cout << i.f << " " << i.s << endl;
+	orig = pii(-1, 0);
+	res = pii(0, 1);
+	sour[0] = 0;
+	for (int i=1; i<=N; i++) {
+		if (sour[i - 1] < sour[i]) res.f++;
+		else {
+			orig = max(orig, res);
+			res = pii(1, i);
+			// cout << "HERE: " << i << endl;
+		}
+		// cout << "HERE: " << res.f << endl;
+	}
+	orig = max(orig, res);
+	// Min number of moves = N - number of already-ordered elements
+	cout << N - orig.f << "\n";
+	// cout << orig.s - 1 << endl;
+	for (int i=orig.s - 1; i; i--) {
+		cout << "F ";
+		cout << sour[i] + tree.Query(sour[i]) << "\n";
+		// Moving the candy to the front of the line
+		tree.Update(1, 1);
+		tree.Update(sour[i], -1);
+	}
+	// cout << orig.f << " " << orig.s << endl;
+	for (int i=orig.f + orig.s; i<=N; i++) {
+		cout << "B ";
+		// cout << "HERE: " << sour[i] << endl;
+		cout << sour[i] + tree.Query(sour[i]) << "\n";
+		// Moving the candy to the back of hte line
+		tree.Update(sour[i] + 1, -1);
+		tree.Update(N + 1, 1);
+	}
+	return 0;
 }
+
+/* 
+ * Look for:
+ * the exact constraints (multiple sets are too slow for n=10^6 :( ) 
+ * special cases (n=1?)
+ * overflow (ll vs int?)
+ * array bounds
+ */

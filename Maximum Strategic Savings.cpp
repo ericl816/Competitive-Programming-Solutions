@@ -34,7 +34,7 @@ struct Edge {
 };
 
 vector<Edge> edgelist;
-priority_queue<Edge, vector<Edge>, greater<Edge>> pq;
+priority_queue<Edge, vector<Edge>, greater<Edge> > pq;
 
 int N, M, P, Q, a, b, c, x, y, z;
 int edgecnt1, edgecnt2;
@@ -48,11 +48,14 @@ private:
 public:
 	Disjoint (int N) : N(N), lead(N + 1), rank(N + 1) { }
 
-	void make_Set () {
-		for (int i=1; i<=N; i++) lead[i] = i;
+	inline void make_Set () {
+		for (int i=1; i<=N; i++) {
+			lead[i] = i;
+			rank[i] = 0;
+		}
 	}
 
-	int Find (int x) {
+	inline int Find (int x) {
 		while (lead[x] ^ x) {
 			lead[x] = lead[lead[x]];
 			x = lead[x];
@@ -60,23 +63,21 @@ public:
 		return x;
 	}
 
-	bool Merge (int x, int y) {
-		int c = Find(x);
-		int d = Find(y);
-		return c ^ d;
+	inline bool Merge (int x, int y) {
+		return Find(x) ^ Find(y);
 	}
 
-	void Union (int x, int y) {
-		int c = Find(x);
-		int d = Find(y);
+	inline void Union (int x, int y) {
+		int a = Find(x);
+		int b = Find(y);
 		if (Merge(x, y)) {
-			if (rank[c] > rank[d]) {
-				lead[d] = c;
-				rank[c] += rank[d];
+			if (rank[a] > rank[b]) {
+				lead[b] = a;
+				rank[a] += rank[b];
 			}
 			else {
-				lead[c] = d;
-				rank[d] += rank[c];
+				lead[a] = b;
+				rank[b] += rank[a];
 			}
 		}
 	}
@@ -91,29 +92,29 @@ int main () {
 	ds2.make_Set();
 	for (int i=1; i<=P; i++) {
 		scan(a); scan(b); scan(c);
-		totalcost += c * N; // Since it's a 2d grid with N by M rows and columns
+		totalcost += (ll) c * N; // Since it's a 2d grid with N by M rows and columns
 		edgelist.pb((Edge) {a, b, c, 1});
 	}
 	for (int i=1; i<=Q; i++) {
 		scan(x); scan(y); scan(z);
-		totalcost += z * M; // Since it's a 2d grid with N by M rows and columns
+		totalcost += (ll) z * M; // Since it's a 2d grid with N by M rows and columns
 		edgelist.pb((Edge) {x, y, z, 0});
 	}
 	for (Edge &next : edgelist) pq.push(next);
 	while (!pq.empty()) {
 		Edge curr = pq.top();
 		pq.pop();
-		if (curr.flight == 1 && ds1.Merge(curr.a, curr.b)) {
-			resedge += curr.cost * edgecnt1;
-			edgecnt2--; // Decrease the number of columns since we have already merged
-			ds1.Union(curr.a, curr.b);
-		}
-		else if (curr.flight == 0 && ds2.Merge(curr.a, curr.b)) {
-			resedge += curr.cost * edgecnt2;
-			edgecnt1--; // Decrease the number of rows since we have already merged
+		if (curr.flight == 0 && ds2.Merge(curr.a, curr.b)) {
 			ds2.Union(curr.a, curr.b);
+			resedge += (ll) curr.cost * edgecnt2;
+			edgecnt1--; // Decrease the number of rows since we have already merged
+		}
+		else if (curr.flight == 1 && ds1.Merge(curr.a, curr.b)) {
+			ds1.Union(curr.a, curr.b);
+			resedge += (ll) curr.cost * edgecnt1;
+			edgecnt2--; // Decrease the number of columns since we have already merged
 		}
 	}
 	// Final answer is total MST cost subtract the cost needed to remove edges (rows &/ columns)
-    return !printf("%lld\n", totalcost - resedge);
+	return !printf("%lld\n", totalcost - resedge);
 }

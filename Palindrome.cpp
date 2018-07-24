@@ -28,8 +28,8 @@ int main () {
 	cin.tie(0);
 	cin >> N >> s;
 	if (isPalindrome(s)) {
-	  cout << 0 << endl;
-	  return 0;
+		cout << 0 << endl;
+		return 0;
 	}
 	for (int i=0; i<N; i++) {
 		for (int j=0; j<N; j++) {

@@ -5,7 +5,7 @@
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ll long long
-#define MAXN 2010
+#define MAXN 100010
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
@@ -19,10 +19,34 @@ char _;
 #define umii unordered_map<int, int>
 using namespace std;
 
-int N;
-ll ans;
-int DP[MAXN][MAXN];
-string s[MAXN];
+struct BIT {
+private:
+	int N;
+	vi tree;
+
+public:
+	BIT (int N) : N(N), tree(N + 1) { }
+
+	void Update (int idx, int val) {
+		for (; idx<=MAXN; idx += idx & -idx) tree[idx] = max(tree[idx], val);
+	}
+
+	int Query (int idx) {
+		int sum = 0;
+		for (; idx; idx -= idx & -idx) sum = max(sum, tree[idx]);
+		return sum;
+	}
+};
+
+BIT tree(MAXN);
+
+int N, X, Y, ans = 1;
+pii arr[MAXN];
+
+inline bool Cmp (pii &a, pii &b) {
+	if (a.f == b.f) return a.s > b.s;
+	return a.f < b.f;
+}
 
 int main () {
 	#ifdef NOT_DMOJ
@@ -33,18 +57,17 @@ int main () {
 	cin.tie(0);
 	cout.tie(0);
 	cin >> N;
-	for (int i=1; i<=N; i++) {
-		cin >> s[i];
-		for (int j=0; j<N; j++) DP[j + 1][i] = s[i][j] == '#';
+	for (int i=0; i<N; i++) {
+		cin >> X >> Y;
+		arr[i] = mp(X, Y);
 	}
-	for (int i=N; i; i--) {
-		for (int j=1; j<=N; j++) {
-			if (DP[j][i] == 1) {
-				DP[j][i] += min(DP[j - 1][i + 1], min(DP[j][i + 1], DP[j + 1][i + 1]));
-				ans += DP[j][i];
-			}
-		}
+	sort(arr, arr + N , Cmp);
+	tree.Update(arr[0].s, 1);
+	for (int i=1; i<N; i++) {
+		int res = tree.Query(arr[i].s - 1);
+		ans = max(ans, res + 1);
+		tree.Update(arr[i].s, res + 1);
 	}
-	cout << ans << endl;
+	cout << ans << "\n";
 	return 0;
 }

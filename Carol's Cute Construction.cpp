@@ -109,7 +109,7 @@ int main () {
 		cin >> s;
 		for (int j=0; j<N; j++) grid[i][j] = s[j];
 	}	
-	source = ((N * N) << 1) + 1;
+	source = ((N * N) << 1) | 1;
 	sink = source + 1;
 	Network flow(MAXM, source, sink);
 	for (int i=0; i<N; i++) {

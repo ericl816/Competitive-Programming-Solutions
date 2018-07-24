@@ -5,7 +5,6 @@
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ll long long
-#define MAXN 2010
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
@@ -19,10 +18,9 @@ char _;
 #define umii unordered_map<int, int>
 using namespace std;
 
-int N;
-ll ans;
-int DP[MAXN][MAXN];
-string s[MAXN];
+int T, N, M, x, y, maxx, maxy;
+string s;
+bool flag;
 
 int main () {
 	#ifdef NOT_DMOJ
@@ -32,19 +30,25 @@ int main () {
 	cin.sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
-	cin >> N;
-	for (int i=1; i<=N; i++) {
-		cin >> s[i];
-		for (int j=0; j<N; j++) DP[j + 1][i] = s[i][j] == '#';
-	}
-	for (int i=N; i; i--) {
-		for (int j=1; j<=N; j++) {
-			if (DP[j][i] == 1) {
-				DP[j][i] += min(DP[j - 1][i + 1], min(DP[j][i + 1], DP[j + 1][i + 1]));
-				ans += DP[j][i];
-			}
+	cin >> T;
+	while (T--) {
+		cin >> N >> M;
+		flag = 0;
+		s = "";
+		for (int i=0; i<M; i++) {
+			cin >> x >> y;
+			if (x + y > N || (x == 0 && y == 0)) flag = 1;
+			maxx = max(maxx, x);
+			maxy = max(maxy, y);
+			if (maxx + maxy > N) flag = 1;
+		}
+		if (flag) cout << -1 << "\n";
+		else {
+			for (int i=0; i<maxx; i++) s += "a";
+			for (int i=0; i<maxy; i++) s += "b";
+			if ((int) s.size() < N) for (size_t i=s.size(); i<N; i++) s += "a";
+			cout << s << "\n";
 		}
 	}
-	cout << ans << endl;
 	return 0;
 }

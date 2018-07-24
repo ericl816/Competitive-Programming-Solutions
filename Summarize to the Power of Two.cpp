@@ -5,7 +5,7 @@
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ll long long
-#define MAXN 2010
+#define MAXN 120010
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
@@ -19,10 +19,12 @@ char _;
 #define umii unordered_map<int, int>
 using namespace std;
 
-int N;
+int n;
+int a[MAXN];
+vector<ll> pows;
+set<ll> seq;
 ll ans;
-int DP[MAXN][MAXN];
-string s[MAXN];
+bool flag[MAXN];
 
 int main () {
 	#ifdef NOT_DMOJ
@@ -32,19 +34,27 @@ int main () {
 	cin.sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
-	cin >> N;
-	for (int i=1; i<=N; i++) {
-		cin >> s[i];
-		for (int j=0; j<N; j++) DP[j + 1][i] = s[i][j] == '#';
+	cin >> n;
+	for (int i=0; i<n; i++) cin >> a[i];
+	for (int i=1; i<=31; i++) pows.pb(1 << i);
+	for (int i=0; i<n; i++) {
+		for (auto j : pows) flag[i] |= seq.count(j - a[i]);
+		seq.insert(a[i]);
 	}
-	for (int i=N; i; i--) {
-		for (int j=1; j<=N; j++) {
-			if (DP[j][i] == 1) {
-				DP[j][i] += min(DP[j - 1][i + 1], min(DP[j][i + 1], DP[j + 1][i + 1]));
-				ans += DP[j][i];
-			}
-		}
+	seq.clear();
+	for (int i=n - 1; i>=0; i--) {
+		for (auto j : pows) flag[i] |= seq.count(j - a[i]);
+		seq.insert(a[i]);
 	}
-	cout << ans << endl;
+	for (int i=0; i<n; i++) ans += flag[i] ^ 1;
+	cout << ans << "\n";
 	return 0;
 }
+
+/* 
+ * Look for:
+ * the exact constraints (multiple sets are too slow for n=10^6 :( ) 
+ * special cases (n=1?)
+ * overflow (ll vs int?)
+ * array bounds
+ */
