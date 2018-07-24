@@ -61,7 +61,6 @@ inline int Query (int l, int r) {
 	return num + 1;
 }
 
-
 inline void Build_Max_ST () {
 	for (int i=1; i<=N; i++) segmax[0][i] = a[i];
 	for (int i=1; i<=SIZE; i++) {

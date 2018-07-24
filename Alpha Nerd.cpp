@@ -5,7 +5,7 @@
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ll long long
-#define MAXN 10010
+#define MAXN 300010
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
@@ -19,21 +19,29 @@ char _;
 #define umii unordered_map<int, int>
 using namespace std;
 
-int M, n;
-int dp[MAXN][MAXN];
-string s;
-char ch[MAXN];
+int N, M, A, B, cnt;
+bool vis[MAXN], is_child[MAXN];
+vi adj[MAXN];
+
+inline void DFS (int node, int prev) {
+	vis[node] = 1;
+	is_child[node] = 1;
+	for (size_t i=0; i<adj[node].size(); i++) {
+		int &next = adj[node][i];
+		if (next == prev) continue;
+		DFS(next, node);
+		is_child[node] &= (is_child[next] ^ 1);
+	}
+	if (is_child[node]) cnt++;
+}
 
 int main () {
-    gets(ch);
-    scanf("%d", &M);
-    n = strlen(ch);
-    for (int i=0; i<=n; i++) dp[0][i] = dp[i][0] = 1;
-    for (int i=0; i<n; i++) {
-        for (int j=0; j<n; j++) {
-            dp[i + 1][j + 1] = (dp[i][j + 1] + dp[i + 1][j]) % M;
-            if (ch[i] ^ ch[j]) dp[i + 1][j + 1] = (dp[i + 1][j + 1] - dp[i][j] + M) % M;
-        }
-    }
-    return !printf("%d\n", dp[n][n]);
+	scan(N); scan(M);
+	for (int i=0; i<M; i++) {
+		scan(A); scan(B);
+		adj[--A].pb(--B);
+		adj[B].pb(A);
+	}
+	for (int i=0; i<N; i++) if (!vis[i]) DFS(i, -1);
+	return !printf("%d\n", min(N - 2, cnt - 1));
 }

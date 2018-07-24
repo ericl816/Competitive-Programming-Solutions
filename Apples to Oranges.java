@@ -27,27 +27,24 @@ public class DMPG15ApplestoOranges {
 			 a = hm.get(next());
 			 b = hm.get(next());
 			 c = readDouble();
-			al[a].add(new Edge (b, c));
+			 al[a].add(new Edge (b, c));
 		}
-                
-                max[hm.get("APPLES")] = 1.0;
+        max[hm.get("APPLES")] = 1.0;
 		q.offer(hm.get("APPLES"));
-
 		while (!q.isEmpty()) {
 			Integer curr = q.poll();
 			if (max[curr] > 1.01 && curr == hm.get("APPLES")) {
 				System.out.println("YA");
 				return;
 			}
-				for (Edge e : al[curr]) {
-					if (max[e.dest] < max[curr] * e.cost) {
-						max[e.dest] =  max[curr] * e.cost;
-						q.offer(e.dest);
-					    }
-				    }
-                          }
-                
-                System.out.println("NAW");
+			for (Edge e : al[curr]) {
+				if (max[e.dest] < max[curr] * e.cost) {
+					max[e.dest] =  max[curr] * e.cost;
+					q.offer(e.dest);
+				}
+			}
+		}
+		System.out.println("NAW");
 	}
 
 	static class Edge {

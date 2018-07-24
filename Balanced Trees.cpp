@@ -29,14 +29,29 @@ inline ll Recur (int n) {
 	if (n == 1) return val = 1;
 	if (val) return val;
 	ll sum = 0;
-	for (int i=2; i<=n;) {
+	for (int i=2; i<=n; i++) {
 		ll res = n / i;
 		ll idx = n % i == 0 ? i : n / res;
 		sum += (idx - i + 1) * Recur(res); // idx - i + 1 = the number of branches in the subtree, Recur(res) = val
-		i = idx + 1;
+		i = idx;
 	}
 	return val = sum;
 }
+/*
+inline long long calc (int num) {
+  if (num <= 2) return mem[num] = 1;
+  if (mem.count(num)) return mem[num];
+  int idx = num;
+  long long sum = 0;
+  while (idx >= 2) {
+    int nex = num / idx;
+    int next = num / (nex + 1);
+    sum += (long long) (idx - next) * calc(nex);
+    idx = next;
+  }
+  return mem[num] = sum;
+}
+*/
 
 int main () {
 	scan(N);

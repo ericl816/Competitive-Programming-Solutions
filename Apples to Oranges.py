@@ -1,4 +1,4 @@
-# Solves the infamous arbitrage problem using logs - which is supposed to be the intended solution
+# Solves the arbitrage problem using logs - which is supposed to be the intended solution
 import sys
 raw_input = sys.stdin.readline
 from math import log
@@ -21,3 +21,4 @@ for i in xrange(1, n):
     if not z:
         break
 print ['NAW', 'YA'][dist[apple] < -1e-6]
+# YA = Impossible to convert -> negative cycle exists

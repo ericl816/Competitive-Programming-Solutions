@@ -24,7 +24,7 @@ using namespace std;
 /*
  * The max. element of dp will be the value of ans
  * We need to find any ai such that dp[ai] = ans
- * We call this value lst. To obtain the subseqnece, we iterate over all elements of the array in reverse order.
+ * We call this value lst. To obtain the subsequence, we iterate over all elements of the array in reverse order.
  * If the current element ak = lst, then push k to the array of positions of our subsequence and decrement lst by 1
  */
 
@@ -50,7 +50,7 @@ int main() {
     }
     for (int i=n - 1; i>=0; --i) {
         if (a[i] == lst) {
-            cout << lst << "\n";
+            // cout << lst << "\n";
             res.pb(i);
             --lst;
         }

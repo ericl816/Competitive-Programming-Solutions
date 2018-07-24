@@ -10,7 +10,7 @@ import sys
 raw_input = sys.stdin.readline
 MOD = 1000000007
 DP = [[0 for i in range(10010)] for j in range(2)]
-for z in range(3):
+for z in range(10):
 	N = int(raw_input())
 	DP = [[0 for i in range(10010)] for j in range(2)]
 	DP[1][1] = 1

@@ -6,8 +6,8 @@
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ll long long
-#define MAXN 100010
-#define EPS 1e-6
+#define MAXM 1010
+#define MAXN 5010
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
@@ -21,31 +21,34 @@ char _;
 #define umii unordered_map<int, int>
 using namespace std;
 
-int Q, Y, Z;
-double lo, hi = MAXN;
+int N, M, ans;
+string W;
+vector<string> D;
 
 int main () {
 	#ifdef NOT_DMOJ
-	freopen("in.txt", "r", stdin);
+	freopen("DATA11.txt", "r", stdin);
 	freopen("out.txt", "w", stdout);
 	#endif // NOT_DMOJ
-	cin >> Q;
-	for (int i=0; i<Q; i++) {
-		cin >> Y >> Z;
-		hi = MAXN;
-		lo = 0.0;
-		double mid = 0.0;
-		while (hi - lo >= EPS) {
-			double res = 1.0;
-			mid = static_cast<double>((lo + hi) / 2.0);
-			for (int j=0; j<Y; j++) {
-				res = pow(mid, res);
-				if (res > Z) break;
+	cin.sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+	cin >> N >> M >> W;
+	for (int i=0; i<M; i++) {
+		string x;
+		cin >> x;
+		for (int j=1; j<=25; j++) {
+			bool flag = 1;
+			for (int k=0; k<N && flag; k++) {
+				if (W[k] == '?') continue;
+				if ((W[k] - 'a' + j) % 26 != x[k] - 'a') flag = 0;
 			}
-			if (res > Z) hi = mid;
-			else lo = mid;
+			if (flag) {
+				ans++;
+				break;
+			}
 		}
-		cout << fixed << setprecision(10) << lo << "\n";
 	}
+	cout << ans << endl;
 	return 0;
 }

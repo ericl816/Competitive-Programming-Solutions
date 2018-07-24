@@ -59,7 +59,7 @@ int T = 5, N, M, x, y, cnt, ans, idx;
 int DFN[MAXN], low[MAXN], par[MAXN];
 Disjoint ds(MAXN);
 
-// Find the number of bridges
+// Use Tarjan's DFS to find the number of bridges in the graph
 inline int TarjansDFS (vi adj[], int node, int prev) {
 	DFN[node] = low[node] = idx++;
 	for (size_t i=0; i<adj[node].size(); i++) {

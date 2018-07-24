@@ -40,5 +40,6 @@ int main () {
 	TarjansDFS(1, -1);
 	for (int i=1; i<=n; i++) for (int &next : adj[i]) if (low[i] ^ low[next]) cnt[low[i]]++;
 	for (int i=1; i<=n; i++) if (cnt[i] == 1) ans++;
+	// ans = number of leaves in the tree
 	return 0 * printf("%d\n", (ans + 1) >> 1);
 }

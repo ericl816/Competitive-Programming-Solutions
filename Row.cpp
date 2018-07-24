@@ -1,13 +1,12 @@
 #pragma GCC optimize "Ofast"
 #pragma GCC optimize "unroll-loops"
 #pragma GCC target "sse,sse2,sse3,sse4,abm,avx,mmx,popcnt,tune=native"
-// #include <bits/stdc++.h>
-#include "/Users/ericliu/Desktop/Competitive-Programming-Templates/stdc++.h"
+#include <bits/stdc++.h>
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ll long long
-#define MAXN 100010
-#define EPS 1e-6
+#define MAXM 1010
+#define MAXN 5010
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
@@ -21,31 +20,41 @@ char _;
 #define umii unordered_map<int, int>
 using namespace std;
 
-int Q, Y, Z;
-double lo, hi = MAXN;
+int n;
+string s;
+bool flag, flag1 = 1;
 
 int main () {
 	#ifdef NOT_DMOJ
 	freopen("in.txt", "r", stdin);
 	freopen("out.txt", "w", stdout);
 	#endif // NOT_DMOJ
-	cin >> Q;
-	for (int i=0; i<Q; i++) {
-		cin >> Y >> Z;
-		hi = MAXN;
-		lo = 0.0;
-		double mid = 0.0;
-		while (hi - lo >= EPS) {
-			double res = 1.0;
-			mid = static_cast<double>((lo + hi) / 2.0);
-			for (int j=0; j<Y; j++) {
-				res = pow(mid, res);
-				if (res > Z) break;
+	cin.sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+	cin >> n;
+	cin >> s;
+	for (int i=1; i<=n; i++) {
+		flag = 0, flag1 = 0;
+		if (s[i - 1] == '0') {
+			if (i == 1 || s[i - 2] == '0') flag = 1;
+			if (i == n || s[i] == '0') flag1 = 1;
+			if (flag && flag1) {
+				cout << "No" << endl;
+				return 0;
 			}
-			if (res > Z) hi = mid;
-			else lo = mid;
 		}
-		cout << fixed << setprecision(10) << lo << "\n";
+		if (s[i - 1] == '1') {
+			if (i >= 2 && s[i - 2] == '1') {
+				cout << "No" << endl;
+				return 0;
+			}
+			if (i < n && s[i] == '1') {
+				cout << "No" << endl;
+				return 0;
+			}
+		}
 	}
+	cout << "Yes" << endl;
 	return 0;
 }
