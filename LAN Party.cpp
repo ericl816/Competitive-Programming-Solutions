@@ -1,43 +1,51 @@
+#pragma GCC optimize "Ofast"
+#pragma GCC optimize "unroll-loops"
+#pragma GCC target "sse,sse2,sse3,sse4,abm,avx,mmx,popcnt,tune=native"
 #include <bits/stdc++.h>
+#define ll long long
+#define MAXN 355
+#define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
+char _;
 #define min(x, y) ((x) < (y) ? (x) : (y))
-#define p pop()
-#define t top()
 using namespace std;
 
-const int MAXN = 355;
-int R, C, M, u, v, arr[MAXN];
+/* Solution uses a histogram to keep track of the available square sizes
+ * Overall Time Complexity is O(N^3). See DFS method down below
+ */
+
+int R, C, M, u, v;
+int hist[MAXN];
 bool grid[MAXN][MAXN][MAXN];
 stack<int> st; 
 
-void recur (int a, int b, int c) {
-  if (grid[a][b][c]) {
-    grid[a][b][c] = 0;
-    recur(a, b, c + 1);
-    recur(a - 1, b, c + 1);
-    recur(a, b - 1, c + 1);
-    recur(a - 1, b - 1, c + 1);
-    arr[c]--;
-    if (!arr[c]) {
-      while(c <= st.t) st.p;
-    }
+// Time Complexity: O(N^3)
+inline void DFS (int c, int a, int b) {
+  if (grid[c][a][b]) {
+    grid[c][a][b] = 0;
+    DFS(c + 1, a, b);
+    DFS(c + 1, a - 1, b);
+    DFS(c + 1, a, b - 1);
+    DFS(c + 1, a - 1, b - 1);
+    if (!--hist[c]) while(c <= st.top()) st.pop();
   }
 }
 
 int main () {
-  scanf("%d %d \n%d", &R, &C, &M);
+  scan(R); scan(C); scan(M);
   st.push(0);
   for (int i=0; i<=min(R, C); ) {
-    for (int j=1; j<=R - i; j++) {
-      for (int k=1; k<=C - i; k++) {
-        arr[i + 1]++; 
-        grid[j][k][i + 1] = 1;
+    for (int j=1; j + i<=R; j++) {
+      for (int k=1; k + i<=C; k++) {
+        hist[i + 1]++;
+        grid[i + 1][j][k] = 1;
       }
     }
     st.push(i++);
   }
   for (int i=0; i<M; i++) {
-    scanf("%d %d", &u, &v);
-    recur(u, v, 1);
-    printf("%d\n", st.t);
-    }
+    scan(u); scan(v);
+    DFS(1, u, v);
+    printf("%d\n", st.top());
+  }
+  return 0;
 }

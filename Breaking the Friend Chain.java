@@ -129,24 +129,23 @@ public class BreakingtheFriendChain {
   static boolean visited [] = new boolean [20001];
   static int n, m, a, b, x, y;
 
-  public static void DFS (int x) {
+  public static void BFS (int x) {
         q.offer(x);
 		visited[x] = true;
 		while (!q.isEmpty()) {
 			Integer curr = q.poll();
 			for (Integer edge : adj.get(curr)) {
-				if (visited[edge])
-					continue;
+				if (visited[edge]) continue;
 				visited[edge] = true;
 				q.offer(edge);
 			}
 		}
-        }
+    }
 
 	public static void main (String[] args) throws IOException {
 		Reader r = new Reader ();
-                      n = r.nextInt();
-		      m = r.nextInt();
+        n = r.nextInt();
+        m = r.nextInt();
 
 		for (int i = 0; i < n; i++)
 			adj.add(new ArrayList<Integer>());
@@ -154,12 +153,12 @@ public class BreakingtheFriendChain {
 		for (int i = 0; i < m; i++) {
 			 a = r.nextInt() - 1;
 			 b = r.nextInt() - 1;
-			adj.get(a).add(b);
-			adj.get(b).add(a);
+             adj.get(a).add(b);
+             adj.get(b).add(a);
 		}
-		 x = r.nextInt() - 1;
-		 y = r.nextInt() - 1;
-		DFS(x);
+        x = r.nextInt() - 1;
+        y = r.nextInt() - 1;
+		BFS(x);
 		System.out.println(visited[y] ? 1 : 0);
 	}
 }

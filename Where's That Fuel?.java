@@ -124,24 +124,21 @@ class Reader {
 
 public class CCO14WheresThatFuel {
 	
-        public static ArrayList <Planet> pl = new ArrayList<Planet>();
-        public static int n, p, a, b, ans, pos;
+    public static ArrayList <Planet> pl = new ArrayList<Planet>();
+    public static int n, p, a, b, ans, pos;
        
 	public static void main (String[] args) throws IOException {
         Reader r = new Reader ();
-	n = r.nextInt();
+        n = r.nextInt();
         p = r.nextInt();
         pos = 1;
         for (int i=1; i<=n; i++) {
             a = r.nextInt();
             b = r.nextInt();
-            if (i == p) 
-                pos = a;
-            else if (b <= a)
-             pl.add(new Planet(a, b));
+            if (i == p) pos = a;
+            else if (b <= a) pl.add(new Planet(a, b));
         }
-        
-        Collections.sort (pl);
+        Collections.sort(pl);
         ans = 1;
         for (int i=0; i<pl.size(); i++) {
             if (pl.get(i).c <= pos && pos <= pos + pl.get(i).f - pl.get(i).c) {
@@ -149,18 +146,18 @@ public class CCO14WheresThatFuel {
                 ans++;
             }
         }
-                System.out.println(pos + "\n" + ans);   
+        System.out.println(pos + "\n" + ans);   
 }
         
-        public static class Planet implements Comparable <Planet> {
-            int f, c;
-            Planet (int f, int c) {
-                this.f = f;
-                this.c = c;
+    public static class Planet implements Comparable <Planet> {
+        int f, c;
+        Planet (int f, int c) {
+            this.f = f;
+            this.c = c;
         }
-            @Override
-            public int compareTo (Planet e) {
-                return this.c - e.c;
-            }
+        @Override
+        public int compareTo (Planet e) {
+            return this.c - e.c;
         }
+    }
 }

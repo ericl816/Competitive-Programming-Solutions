@@ -12,14 +12,14 @@ using namespace std;
 
 ull N;
 
-ull FPow (ull x, ull y) {
+inline ull FPow (ull x, ull y) {
 	if (y == 0) return 1;
 	if (y == 1) return x;
 	if (y & 1) return x * FPow((x * x) % MOD, y >> 1) % MOD;
 	return FPow((x * x) % MOD, y >> 1) % MOD;
 }
 
-ull Calc (ull x) {
+inline ull Calc (ull x) {
 	return (ull) (FPow(2, x + 3) - 5 + MOD) % MOD;
 }
 

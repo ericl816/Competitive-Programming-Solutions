@@ -19,7 +19,7 @@ struct Array {
 };
 
 inline bool BlkCompare (Array &a, Array &b) {
-  return (a.l / SIZE ^ b.l / SIZE) ? a.l < b.l : a.r < b.r;
+	return (a.l / SIZE ^ b.l / SIZE) ? a.l < b.l : a.r < b.r;
 }
 
 int N, Q, lidx = 1, ridx, A[MAXN];

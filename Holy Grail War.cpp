@@ -16,6 +16,7 @@ char op;
 
 struct Node {
 	ll l, r, sum, ans, lval, rval;
+	// Note: No need for lazy propagation!
 };
 
 struct Seg {
@@ -26,14 +27,17 @@ private:
 public:
 	Seg(int N) : N(N), tree(N << 2) { }
 
+	// This method calculates the maximum sub-segment sum
 	Node PushUp (Node l, Node r) {
 		if (l.sum == -INF) return r;
 		if (r.sum == -INF) return l;
-		
 		Node next;
 		next.sum = l.sum + r.sum;
+
+		// We also have to consider the leaf nodes on the opposite side (left or right) to get the answer
 		next.lval = max(l.lval, l.sum + r.lval);
 		next.rval = max(r.rval, r.sum + l.rval);
+
 		next.ans = max(next.lval, next.rval);
 		next.ans = max(next.ans, next.sum);
 		next.ans = max(next.ans, l.rval + r.lval);
@@ -42,6 +46,7 @@ public:
 		return next;
 	}
 
+	// Not actuall Push_Down since there is no lazy value...
 	void PushDown (int idx, ll val) {
 		tree[idx].sum = tree[idx].ans = tree[idx].lval = tree[idx].rval = val;
 	}
@@ -58,6 +63,7 @@ public:
 		else PushDown(idx, d[l]);
 	}
 
+	// Point update, not range update
 	void Update (int idx, int l, int r, int arridx) {
 		if (l > arridx || r < arridx) return;
 		if (l == r) {
@@ -69,7 +75,7 @@ public:
 		Update(idx << 1 | 1, mid + 1, r, arridx);
 		tree[idx] = PushUp(tree[idx << 1], tree[idx << 1 | 1]);
 	}
-
+	
 	Node Query (int idx, int l, int r, int l1, int r1) {
 		if (r1 < l || l1 > r) return Node {-INF, -INF, -INF, -INF};
 		if (l >= l1 && r <= r1) return tree[idx];
@@ -82,11 +88,11 @@ Seg tree(MAXN);
 
 int main () {
 	scanf("%d %d", &N, &Q);
+	tree.Build(1, 1, N);
 	for (int i=1; i<=N; i++) {
 		scanf("%lld", &d[i]);
 		tree.Update(1, 1, N, i);
 	}
-	// tree.Build(1, 1, N);
 	while (Q--) {
 		scanf(" %c", &op);
 		if (op == 'S') {

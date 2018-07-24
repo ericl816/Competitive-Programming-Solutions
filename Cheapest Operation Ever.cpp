@@ -12,19 +12,19 @@ inline ll calc(int a, int b) {
 }
 
 inline ll solve(int n) {
-  if (~dp[n]) return dp[n];
-	if (n > N) return 0;
-	ll ans = 1e16;
-	for (int i = n; i <= N; i++) {
+    if (~dp[n]) return dp[n];
+    if (n > N) return 0;
+    ll ans = 1e16;
+    for (int i = n; i <= N; i++) {
         if (calc(n, i) > 400000) break; 
         ans = min(ans, H + calc(n, i) + solve(i + 1));
-	  }
+    }
     return dp[n] = ans;
 }
 
 int main() {
-  scan(N); scan(H);
-  memset(dp, -1, sizeof dp);
-	for (int i=1; i<=N; i++) scan(arr[i]);
-	printf("%lld\n", solve(1));
+    scan(N); scan(H);
+    memset(dp, -1, sizeof dp);
+    for (int i=1; i<=N; i++) scan(arr[i]);
+    return !printf("%lld\n", solve(1));
 }

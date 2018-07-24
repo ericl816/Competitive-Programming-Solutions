@@ -124,16 +124,11 @@ class Reader {
 
 public class TLE16PromNight {
 
-    //Is a max-bipartite matching problem 
-    //Can use the Ford-Fulkerson algorithm (Runtime of O(Ef)), Edmond Karp algorithm(Runtime of O(VE^2)), or Dinic's algorithm (Runtime of O(V^2E))
-    //We can also use the Hungarian algorithm which has a good runtime apparently...
-    //This solution uses Ford-Fulkerson's algorithm which has the worst runtime.
-    static ArrayList<ArrayList<Integer>> adj = new ArrayList<ArrayList<Integer>>();
-    static int N, M, t, id, sink, amount, cnt, sum = 0, ans; 
-    static int dist [] = new int [210];
-    static int arr [] = new int [210];
-    static int flow [][] = new int [210][210];
-    static Queue<Integer> q = new LinkedList<Integer>();
+    private static int N, M, t, id, sink, amount, cnt, sum = 0; 
+    private static int dist [] = new int [210];
+    private static int arr [] = new int [210];
+    private static int flow [][] = new int [210][210];
+    private static Queue<Integer> q = new LinkedList<Integer>();
         
     public static void main(String[] args) throws IOException {
         Reader r = new Reader();
@@ -143,49 +138,48 @@ public class TLE16PromNight {
             t = r.nextInt();
             if (i == 1) cnt = t;
             else flow[0][i] = 1;
-        for (int j=0; j<t; j++) {
-            id = r.nextInt();
-            id += N;
-            flow[i][id] = 1;
-        if (i == 1) flow[id][N + M + 1] = 1;
-      }
-    }
-      while (true) {
-        amount = 0;
-        Arrays.fill(dist, 1 << 32);
-        Arrays.fill(arr, -1);
-        dist[sink] = 0;
-        arr[sink] = -1;
-        while(!q.isEmpty()) q.remove();
-        q.add(sink);
-      while(!q.isEmpty()) {
-        Integer curr = q.poll();
-        if (curr == N + M + 1) break;
-        for (int i=0; i<=N + M + 1; i++) {
-          if (0 < flow[curr][i] && dist[i] == 1 << 32) {
-            dist[i] = dist[curr] + 1;
-            arr[i] = curr;
-            q.offer(i);
-          }
+            for (int j=0; j<t; j++) {
+                id = r.nextInt();
+                id += N;
+                flow[i][id] = 1;
+                if (i == 1) flow[id][N + M + 1] = 1;
+            }
         }
-      }
-      IncreaseFlow(N + M + 1, 1 << 32);
-      if (amount == 0) break; 
-      sum += amount;
+        while (true) {
+            amount = 0;
+            Arrays.fill(dist, 1 << 31);
+            Arrays.fill(arr, -1);
+            dist[sink] = 0;
+            arr[sink] = -1;
+            while (!q.isEmpty()) q.remove();
+            q.add(sink);
+            while (!q.isEmpty()) {
+                Integer curr = q.poll();
+                if (curr == N + M + 1) break;
+                for (int i=0; i<=N + M + 1; i++) {
+                    if (0 < flow[curr][i] && dist[i] == 1 << 31) {
+                        dist[i] = dist[curr] + 1;
+                        arr[i] = curr;
+                        q.offer(i);
+                    }
+                }
+            }
+            IncreaseFlow(N + M + 1, 1 << 31);
+            if (amount == 0) break;
+            sum += amount;
+        }
+        System.out.println(Math.abs(cnt - sum));
     }
-        ans = cnt - sum;
-        System.out.println(ans);
-    }
-	
+    
     public static void IncreaseFlow(int source, int minresid) {
-	  if (source == sink) {
-	    amount = minresid;
-	    return;
-	  }
-	  if (arr[source] != -1) {
-	    IncreaseFlow(arr[source], Math.min(minresid, flow[arr[source]][source]));
-	    flow[source][arr[source]] += amount;
-	    flow[arr[source]][source] -= amount;
-	  }
-       }
+        if (source == sink) {
+            amount = minresid;
+            return;
+        }
+        if (arr[source] != -1) {
+            IncreaseFlow(arr[source], Math.min(minresid, flow[arr[source]][source]));
+            flow[source][arr[source]] += amount;
+            flow[arr[source]][source] -= amount;
+        }
     }
+}

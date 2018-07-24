@@ -16,7 +16,7 @@ int n, t, coins[MAXM], DP[MAXN][MAXM];
 
 inline int Recur (int idx, int val) {
 	if (val == 0) return 1;
-	if ((idx == n && val > 0) || val < 0) return 0;
+	if ((idx >= n && val > 0) || val < 0) return 0;
 	int &res = DP[val][idx];
 	if (~res) return res;
 	return res = Recur(idx + 1, val) + Recur(idx + 1, val - coins[idx]);

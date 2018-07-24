@@ -117,7 +117,6 @@ int travelTime (int N, int M, int L, int A[], int B[], int T[]) {
 		}
 	}
 	sort(radii.begin(), radii.end(), greater<int>());
-	// reverse(radii.begin(), radii.end());
 	if (radii.size() >= 2) ans = max(ans, radii[0] + radii[1] + L);
 	if (radii.size() >= 3) ans = max(ans, radii[1] + radii[2] + (L << 1));
 	return ans;

@@ -14,27 +14,15 @@
 #define sll set<ll>
 using namespace std;
 
-struct PLLLL {
-  ll f, s;
-};
-
 int F, N, dist, energy;
 ll e[MAXN], d[MAXN], cnt;
 string s, t;
 msll val;
 vector<pllll> type;
 sll si;
-bool flag;
-
-ll Recurse (int idx, vector<pllll> type, ll cnt, ll energy, ll dist) {
-	sll::iterator it = si.begin();
-	if (type.size() > idx && si.size() > idx && (!type[idx].f || energy + type[idx].f) && !flag) return Recurse(idx + 1, type, cnt + 1, energy + type[idx].f + dist, dist);
-	else if (type.size() > idx && type[idx].f && type[idx].s - dist <= energy && flag) return Recurse(idx + 1, type, cnt + 1, energy + type[idx].f - type[idx].s + dist, type[idx].s);
-	return cnt;
-}
 
 bool compare (const pllll &a, const pllll &b) {
-  return a.s < b.s;
+	return a.s < b.s;
 }
 
 int main () {
@@ -50,21 +38,18 @@ int main () {
 		cin >> t >> d[i];
 		ll energy = val[t];
 		ll dist = d[i];
-		if (dist != d[i - 1]) flag = 1;
-		type.pb(mp(energy, dist)); //First = energy, second = distance required
-		si.insert(dist);
+		type.pb(mp(energy, dist));
 	}
 	sort(type.begin(), type.end(), compare);
 	for (int i=0; i<N; i++) {
-		if (dist ^ type[i].s && 0 > energy - type[i].s + dist) break; //Different distances
-		else if (dist == type[i].s) energy += type[i].f; //Equal distances
+		if (dist ^ type[i].s && 0 > energy - type[i].s + dist) break;
+		else if (dist == type[i].s) energy += type[i].f;
 		else {
-			energy = energy - type[i].s + dist + type[i].f;
+			energy -= type[i].s - dist - type[i].f;
 			dist = type[i].s;
 		}
 		cnt++;
 	}
-	//cout << Recurse(0, type, 0, 0, 0) << "\n";
 	cout << cnt << "\n";
 	return 0;
 }

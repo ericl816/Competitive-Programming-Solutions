@@ -1,3 +1,6 @@
+#pragma GCC optimize "Ofast"
+#pragma GCC optimize "unroll-loops"
+#pragma GCC target "sse,sse2,sse3,sse4,abm,avx,mmx,popcnt,tune=native"
 #include <bits/stdc++.h>
 #define scan(y) do{while((y=getchar())<'0'); for(y-='0'; '0'<=(_=getchar()); y=(y<<3)+(y<<1)+_-'0');}while(0)
 char _;
@@ -23,8 +26,10 @@ using namespace std;
  * This is similar to how you can only take up to K pizza slices in the Pizza Bag problem statement
  */
 
-int N, K, idx[MAXN], last;
-ll n, DP[MAXN], ans = INF;
+int N, K, last;
+int idx[MAXN];
+ll n, ans = INF;
+ll DP[MAXN];
 vi steps;
 deque<pair<ll, int>> minq;
 
@@ -32,34 +37,31 @@ int main () {
 	scan(N);
 	scan(K);
 	minq.pb(mp(0, 0));
-
 	// Perform Sldiing-Range Minimum Query
 	for (int i=1; i<=N; i++) {
 		scan(n);
 		while (!minq.empty() && minq.front().s < i - K) minq.pop_front();
 		DP[i] = minq.front().f + n; // Hop forwards to next stone
 		idx[i] = minq.front().s;
-		// Pop the back element if it's greater than or equal to the currently stored element in DP[]
+		// Pop the back element if it's greater than or equal to the currently stored element in DP array
 		// This is becasue we want to store the greatest elements at the top of the deque
 		while (!minq.empty() && minq.back().f >= DP[i]) minq.pop_back();
 		minq.pb(mp(DP[i], i));
 	}
 	// Range [N - K, N] is inclusive (starting with index 1)
 	for (int i=N - K + 1; i<=N; i++) {
-	  if (DP[i] <= ans) {
-	  	ans = DP[i];
-	    last = i;
-	  }
+		if (DP[i] <= ans) {
+			ans = DP[i];
+			last = i;
+		}
 	}
 	while (last) {
 		steps.pb(last);
 		last = idx[last];
 	}
-	cout << ans << endl;
+	printf("%lld\n", ans);
 	reverse(steps.begin(), steps.end());
-  
 	// Indices are 0-indexed!
 	for (auto next : steps) printf("%d ", next);
-	printf("\n");
 	return 0;
 }
