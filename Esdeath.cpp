@@ -22,7 +22,7 @@ using namespace std;
 /* 
  * Find diameter of tree 
  * Binary search values for D, if needs less than S soldiers, lower d, if greater than S raise D
- * Checking: create a discovery number array for 2nd bfs, if a node has not been covered, move D steps along the discovery, 
+ * Checking: create a discovery number array for 2nd BFS, if a node has not been covered, move D steps along the discovery, 
  * then run DFS for D steps and mark nodes as covered
  */
 

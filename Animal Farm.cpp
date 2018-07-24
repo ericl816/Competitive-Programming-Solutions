@@ -71,13 +71,15 @@ int main () {
 		for (int j=0; j<S; j++) cin >> corners[j];
 		for (int j=0; j<S; j++) cin >> price[j];
 		for (int j=0; j<S; j++) {
+			// Since the descriptions are given in cylical order
 			int corner1 = corners[j], corner2 = corners[(j + 1) % S];
+			// The order of the pair of elements (nodes in this case) should matter
 			if (corner1 > corner2) swap(corner1, corner2);
 			pii curr = pii(corner1, corner2);
 			if (outsidepoints.count(curr)) {
 				adj.pb(mp(price[j], mp(i, nodes[curr])));
 				edgelist.pb(mp(price[j], mp(i, nodes[curr])));
-				outsidepoints.erase(curr);
+				outsidepoints.erase(curr); // Erase it since the edge has already been trampled by the animals
 			}
 			else {
 				outsidepoints.insert(curr);
@@ -87,22 +89,23 @@ int main () {
 		}
 	}
 	for (set<pii>::iterator it=outsidepoints.begin(); it!=outsidepoints.end(); it++) edgelist.pb(mp(cost[*it], mp(0, nodes[*it])));
-	ds.make_Set();
 	sort(adj.begin(), adj.end());
 	sort(edgelist.begin(), edgelist.end());
 
-	// Do Kruskal's
+	// Run Kruskal's for 1st time
+	ds.make_Set();
 	for (auto &next : adj) {
 		if (ds.Merge(next.s.f, next.s.s)) {
-			ans1 += next.f;
 			ds.Union(next.s.f, next.s.s);
+			ans1 += next.f;
 		}
 	}
+	// Run Kruskal's for 2nd time
 	ds.make_Set();
 	for (auto &next : edgelist) {
 		if (ds.Merge(next.s.f, next.s.s)) {
-			ans2 += next.f;
 			ds.Union(next.s.f, next.s.s);
+			ans2 += next.f;
 		}
 	}
 	cout << (min(ans1, ans2)) << endl;

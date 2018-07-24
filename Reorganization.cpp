@@ -13,7 +13,7 @@ int n, R, arr[MAXN];
 pii group;
 set<pii> tree;
 
-int main() {
+int main () {
 	scanf("%d %d", &n, &R);
 	tree.insert(mp(R, 0));
 	for (int i=1; i<n; i++) {

@@ -19,7 +19,7 @@ using namespace std;
 
 int N, M;
 ll arr[MAXN], sum, ans;
-map<ll, ll> subsetsums;
+unordered_map<ll, ll> subsetsums;
 
 int main () {
 	scan(N);
@@ -30,20 +30,17 @@ int main () {
 	for (int i=0; i<(1 << half1); i++) {
 		sum = 0;
 		for (int j=0; j<half1; j++) {
-			if ((i & 1 << j) > 0) sum += j >= N ? -arr[j] : arr[j];
+			if (i & (1 << j)) sum += j >= N ? -arr[j] : arr[j];
 		}
-		// map<ll, ll>::iterator it = subsetsums.find(sum);
 		if (!subsetsums.count(sum)) subsetsums[sum] = 0;
 		subsetsums[sum]++;
 	}
 	for (int i=0; i<(1 << half2); i++) {
 		sum = 0;
 		for (int j=0; j<half2; j++) {
-			if ((i & 1 << j) > 0) sum += half1 + j >= N ? -arr[half1 + j] : arr[half1 + j];
+			if (i & (1 << j)) sum += half1 + j >= N ? -arr[half1 + j] : arr[half1 + j];
 		}
-		// map<ll, ll>::iterator it = subsetsums.find(-sum);
 		if (subsetsums.count(-sum)) ans += subsetsums[-sum];
 	}
-	printf("%lld\n", ans - 1);
-
+	return !printf("%lld\n", ans - 1);
 }

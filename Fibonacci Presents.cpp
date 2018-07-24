@@ -17,8 +17,7 @@ inline ll Recur (int x) {
 	if (~DP[x]) return DP[x];
 	else if (x == 0) return arr[x];
 	else if (x == 1) return max(arr[0], arr[x]);
-	DP[x] = max(arr[x], Recur(x - 2) + arr[x - 1]);
-	return DP[x];
+	return DP[x] = max(arr[x], Recur(x - 2) + arr[x - 1]);
 }
 
 int main () {

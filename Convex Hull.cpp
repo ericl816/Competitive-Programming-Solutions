@@ -37,10 +37,11 @@ int main () {
 	memset(dist, INF, sizeof(dist));
 	scan(A); scan(B);
 	for (int i=0; i<=K; i++) dist[A][i] = 0;
+	vis[A] = 1;
 	q.push(A);
 	while (!q.empty()) {
 		int curr = q.front();
-	  q.pop();
+		q.pop();
 		vis[curr] = 0;
 		for (Edge &next : adj[curr]) {
 			for (int j=0; j+next.h<=K; j++) {

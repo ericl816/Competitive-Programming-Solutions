@@ -18,12 +18,12 @@ using namespace std;
 /* A small modification to Dijkstra's shortest path algorithm allows us to find roads that are part of shortest paths from a source city
    - to(v) = the number of paths from city C to city v
    - from(v) = the number of paths from city v to any other city
-*/
+ */
 
 struct State {
   int f, s;
   bool operator < (const State &e) const {
-    return s > e.s;
+  	return s > e.s;
   }
 };
 
@@ -38,7 +38,8 @@ int N, M, O, D, L, from[MAXN], to[MAXN], dist[MAXN], num[MAXN];
 ll len[MAXN];
 vector<Edge> adj[MAXN];
 bool vis[MAXN], vis1[MAXN];
-priority_queue<State> pq;
+priority_queue<pii, vector<pii>, greater<pii>> pq;
+// priority_queue<State> pq;
 stack<int> st;
 
 void SSSP (int src) {
@@ -47,9 +48,9 @@ void SSSP (int src) {
 	memset(to, 0, sizeof(to));
 	dist[src] = 0;
 	to[src] = 1;
-	pq.push((State) {src, 0});
+	pq.push(mp(src, 0));
 	while (!pq.empty()) {
-		State curr = pq.top();
+		pii curr = pq.top();
 		pq.pop();
 		int node = curr.f;
 		int cost = curr.s;
@@ -64,15 +65,18 @@ void SSSP (int src) {
 			if (dist[currnode] < nextcost) continue;
 			if (nextcost < dist[currnode]) {
 				dist[currnode] = nextcost;
+				// Update the number of shortest paths leading to the current node to 0
 				to[currnode] = 0;
-				pq.push((State) {currnode, dist[currnode]});
+				pq.push(mp(currnode, dist[currnode]));
 			}
 			to[currnode] = (to[currnode] + to[node]) % MOD;
 		}
 	}
+	// Use a stack so that we don't have to reverse the list if we use a vector
 	while (!st.empty()) {
 		int curr = st.top();
 		st.pop();
+		// Similarly, we update the number of shortest paths leading to the node to 1
 		from[curr] = 1;
 		for (size_t i=0; i<adj[curr].size(); i++) {
 			Edge &next = adj[curr][i];

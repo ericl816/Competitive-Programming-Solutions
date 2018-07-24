@@ -19,8 +19,8 @@ int main () {
   }
   for (int i=N; i>=1; i--) {
     val = max(val, L[i] * pq[i].size());
-  if (pq[B[i]].size() < pq[i].size()) swap(pq[B[i]], pq[i]);
-    while(!pq[i].empty()) {
+    if (pq[B[i]].size() < pq[i].size()) swap(pq[B[i]], pq[i]);
+    while (!pq[i].empty()) {
       pq[B[i]].push(pq[i].top());
       pq[i].pop();
     }
@@ -30,5 +30,5 @@ int main () {
       pq[B[i]].pop();
     }
   }
-  printf("%llu\n", val);
+  return !printf("%llu\n", val);
 }

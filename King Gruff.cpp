@@ -28,7 +28,7 @@ vector<pii> vec;
 queue<int> q;
 
 inline void ShortestPath (int src, vector<Edge> adj[], int dist[]) {
-  memset(vis, 0, sizeof(vis));
+	memset(vis, 0, sizeof(vis));
 	q.push(src);
 	dist[src] = 0;
 	vis[src] = 1;
@@ -36,10 +36,10 @@ inline void ShortestPath (int src, vector<Edge> adj[], int dist[]) {
 		int curr = q.front(); q.pop();
 		vis[curr] = 0;
 		for (Edge &next : adj[curr]) {
-		  int nextcost = next.dist + dist[curr];
+			int nextcost = next.dist + dist[curr];
 			if (nextcost < dist[next.node]) {
 				dist[next.node] = nextcost;
-				 if(!vis[next.node]) {
+				if (!vis[next.node]) {
 					vis[next.node] = 1;
 					q.push(next.node);
 			  }
@@ -60,15 +60,14 @@ int main () {
 	memset(dist2, INF, sizeof(dist2));
 	ShortestPath(A - 1, adj1, dist1);
 	ShortestPath(B - 1, adj2, dist2);
-	for (size_t i=0; i<N; i++) 
-		for (Edge &next : adj1[i]) vec.pb(mp(dist1[i] + dist2[next.node] + next.dist, next.cost));
+	for (size_t i=0; i<N; i++) for (Edge &next : adj1[i]) vec.pb(mp(dist1[i] + dist2[next.node] + next.dist, next.cost));
 	sort(vec.begin(), vec.end());
 	for (size_t i=1; i<vec.size(); i++) vec[i].s += vec[i - 1].s;
 	scan(Q);
 	for (int i=0; i<Q; i++) {
-	  scan(D);
-	  idx = upper_bound(vec.begin(), vec.end(), mp(D, INF)) - vec.begin();
-	  printf("%d\n", idx ? vec[idx - 1].s : 0);
+		scan(D);
+		idx = upper_bound(vec.begin(), vec.end(), mp(D, INF)) - vec.begin();
+		printf("%d\n", idx ? vec[idx - 1].s : 0);
 	}
 	return 0;
 }

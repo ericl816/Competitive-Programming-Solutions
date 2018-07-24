@@ -35,11 +35,10 @@ int main () {
 				}
 			}
 		}
-		res = res ^ 1;
+		res ^= 1;
 	}
 	for (int i=0; i<=10000; i++) ans = max(ans, DP[i][res]);
 	for (int i=10000; i>=0; i--)
-		// if (DP[i][res] == ans) { }
 		if (DP[i][N & 1] == ans) {
 			cout << ans << " " << i << "\n";
 			break;

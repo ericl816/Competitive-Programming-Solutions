@@ -16,62 +16,65 @@ char _;
 #define max(a, b) (a) < (b) ? (b) : (a)
 using namespace std;
 
-int val;
-ll N, P, cnt, sum, num, arr[MAXN], psa[MAXN], BIT[MAXN];
+/*
+        Given p, convert every inputted number to num-p, and test for if the subsequence 
+        sums to >= 0. Use integers, no decimals needed.
+        Using naive for loops, it will take O(n^2).
+        
+        But.
+        We get prefix sum array instead. 
+        To check if from ai to aj the sum is >= 0, just check if pref[j]-pref[i-1]>=0.
+        Check at sj, is there anything before it that's <= sj? If there is, add 1 to the total.
+        Remember to add 1 to the total if sj is already 0.
+        
+        Inversion: Given array a, if i<j and ai>aj, it's an inversion.
+        This can be done using bit.
+        For a 3 2 1 4
+        bit
+        3: check how many after it is in the bit. None? Inversion = 0. Add 1 to 3 in bit.
+        2: check. 1 after it. Inversion = 1. Add 1 to 2 in bit.
+        1: check. 2 after it. Inversion = 2. Add 1 to 1 in bit.
+        4: check. None after it. Inversion = 0. Add 1 to 4 in bit.
+        Sum into a total to find total inversions. 
+        This takes O(logn) time.
+        
+        Vudu takes a similar principle. For any sj, its "inversion" is the total number
+        of elements before it minus all those that are larger than it. This will give 
+        the total number of elements that are <= it.
+        For the bit index, use p+sj.
+*/
+
+ll N, P, cnt, sum, num, val;
+ll arr[MAXN], psa[MAXN];
 mii map;
 pair<ll, int> seq[MAXN];
 
-/*
-bool flag;
-vector<ll> vec1;
-pll group[MAXN];
-long double avg[MAXN];
-*/
+struct BIT {
+private:
+	int N;
+	vector<ll> tree;
 
-bool compare (const pair<ll, int> x, const pair<ll, int> y) {
-  if (x.f != y.f) return x.f < y.f;
-  if (x.s != y.s) return x.s < y.s;
+public:
+	BIT (int N) : N(N), tree(N + 1) { }
+
+	void Update (int idx, int size) {
+		for (; idx<=size; idx += idx & -idx) tree[idx]++;
+	}
+
+	ll Query (int idx) {
+		ll sum = 0;
+		for (; idx; idx -= idx & -idx) sum += tree[idx];
+		return sum;
+	}
+};
+
+BIT tree(MAXN);
+
+bool Cmp (const pair<ll, int> &x, const pair<ll, int> &y) {
+  if (x.f ^ y.f) return x.f < y.f;
+  if (x.s ^ y.s) return x.s < y.s;
   return x.f < y.f && x.s < y.s;
 }
-
-
-void Update (int idx, int size) {
-	for (; idx<=size; idx += idx & -idx) BIT[idx]++;
-}
-
-int Query (int idx) {
-	int sum = 0;
-	for (; idx>0; idx -= idx & -idx) sum += BIT[idx];
-	return sum;
-}
-
-/*
-void Generate (ll n, ll x) {
-	int cap = pow(2, x);
-	for (int i=1; i<cap; i++) {
-		for (int j=i; j<x; j++) {
-				if (i & (1 << j)) { //If bit is set
-					pll next = vec[j][j];
-				  ll val = next.f;
-				  ll idx = next.s;
-					vec1.push_back(next.first);
-				}
-		}
-	}
-	for (size_t i=0; i<vec1.size(); i++) {
-		ll next = vec1[i];
-		sum += next;
-		avg[i] = (long double) sum / i;
-	}
-	for (size_t i=0; i<vec1.size(); i++) {
-	  	if (avg[i] >= n) { //If avg is greater
-		  	flag = 1;
-			  num++;
-			  continue;
-		  }
-	  }
-}
-*/
 
 int main () {
 	scan(N);
@@ -82,16 +85,16 @@ int main () {
 		psa[i] += psa[i - 1] - P;
 		seq[i] = mp(psa[i], i);
 	}
-	sort(seq, seq + N + 1, compare);
+	sort(seq, seq + N + 1, Cmp);
 	ll prev = -INF;
 	for (int i=0; i<=N; i++) {
-		if (seq[i].f != prev) val++;
+		if (seq[i].f ^ prev) val++;
 		psa[seq[i].s + 1] = val;
 		prev = seq[i].f;
 	}
 	for (int i=0; i<=N; i++) {
-		num += Query(psa[i]);
-		Update(psa[i], val);
+		num += tree.Query(psa[i]);
+		tree.Update(psa[i], val);
 	}
-	printf("%lld\n", num);
+	return !printf("%lld\n", num);
 }

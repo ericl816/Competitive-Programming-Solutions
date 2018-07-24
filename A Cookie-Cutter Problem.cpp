@@ -14,9 +14,11 @@
 #define umii unordered_map<int, int>
 using namespace std;
 
+// Exact same question as: CCC '01 S4 - Cookies
+
 int N;
 double xcoor[MAXN], ycoor[MAXN];
-double radius = -INF, side1, side2, side3, semi_perimeter, diameter;
+double diameter = -INF, side1, side2, side3, semi_perimeter, res;
 
 
 inline double Dist (double a, double b) {
@@ -27,12 +29,10 @@ inline double Get_Semi_Perimeter (double a, double b, double c) {
     return (a + b + c) / 2.0;
 }
 
-// Use Heron's Formula
 inline double Herons (double a, double b, double c, double sp) {
     return sqrt((sp * (sp - a) * (sp - b) * (sp - c)));
 }
 
-// Get the diameter of the circle circumscribed about a triangle (circumcircle) via this formula: D = 2abc / 4A, where A = area of inscribred triangle
 inline double Get_Diameter (double a, double b, double c, double sp) {
     return 2 * (a * b * c) / (4 * Herons(a, b, c, sp)); 
 }
@@ -47,14 +47,15 @@ int main () {
                 side2 = Dist(xcoor[k] - xcoor[i], ycoor[k] - ycoor[i]);
                 side3 = Dist(xcoor[k] - xcoor[j], ycoor[k] - ycoor[j]);
                 semi_perimeter = Get_Semi_Perimeter(side1, side2, side3);
-                diameter = 0;
-                if (semi_perimeter == 0 || side1 * side1 + side2 * side2 < side3 * side3 || side1 * side1 + side3 * side3 < side2 * side2 || side2 * side2 + side3 * side3 < side1 * side1) radius = max(radius, max(side1, max(side2, max(side3, diameter))));
-                else diameter = Get_Diameter(side1, side2, side3, semi_perimeter);
-                radius = max(radius, diameter); // Want the smallest diameter possible
+                res = 0;
+                if (semi_perimeter == 0 || side1 * side1 + side2 * side2 < side3 * side3 || side1 * side1 + side3 * side3 < side2 * side2 || side2 * side2 + side3 * side3 < side1 * side1) diameter = max(diameter, max(side1, max(side2, max(side3, diameter))));
+                else res = Get_Diameter(side1, side2, side3, semi_perimeter);
+                diameter = max(diameter, res);
             }
         }
     }
-    if (N == 2) radius = Dist(xcoor[0] - xcoor[1], ycoor[0] - ycoor[1]);
+    if (N == 2) diameter = Dist(xcoor[0] - xcoor[1], ycoor[0] - ycoor[1]);
     cout << setprecision(10) << fixed;
-    cout << (radius == -INF ? 0 : radius / 2.0) << endl;
+    // Output the smallest radius possible
+    cout << (diameter == -INF ? 0 : diameter / 2.0) << endl;
 }

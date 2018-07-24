@@ -22,7 +22,7 @@ vector<pii> coor;
 set<pii> sp;
 
 // Solution involves using a sweep-line approach; question is similar to that of the Tinted Glass Window question
-// The answer is the Query function(Q) - Query function(Q - 1)
+// The answer is the: Query function(Q) - Query function(Q - 1)
 
 ll Query (int Q) {
 	memset(diff, 0, sizeof(diff));
