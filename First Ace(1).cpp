@@ -5,7 +5,8 @@
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ll long long
-#define MAXN 1000010
+#define MAXM 1010
+#define MAXN 10010
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
@@ -19,9 +20,11 @@ char _;
 #define umii unordered_map<int, int>
 using namespace std;
 
-int C, N;
-int arr[MAXN];
-bitset<MAXN> DP;
+// TBH, this solution is both DP and greedy...
+
+int N, V, S, T;
+vector<pii> queries[MAXN];
+int DP[MAXN];
 
 int main () {
 	#ifdef NOT_DMOJ
@@ -31,12 +34,22 @@ int main () {
 	cin.sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
-	scan(C); scan(N);
-	DP.set(0);
+	cin >> N;
 	for (int i=0; i<N; i++) {
-	  scan(arr[i]);
-	  if ((DP & (DP << arr[i])) != 1) DP |= (DP << arr[i]);
+		cin >> V >> S >> T;
+		queries[T].pb(mp(V, S));
 	}
-	for (int i=C - 1; i>=0; i--) if (DP[i]) return !printf("%d\n", i);
-	return !printf("%d\n", 0);
+	for (int i=1; i<=MAXM; i++) {
+		DP[i] = DP[i - 1];
+		for (size_t j=0; j<queries[i].size(); j++) {
+			pii &next = queries[i][j];
+			for (int k=i; k>=next.s; k--) {
+				if (DP[k] <= DP[k - next.s] + next.f) {
+					DP[k] = DP[k - next.s] + next.f;
+				}
+			}
+		}
+	}
+	cout << DP[MAXM] << "\n";
+	return 0;
 }

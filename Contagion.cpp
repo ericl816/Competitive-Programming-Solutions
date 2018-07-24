@@ -16,8 +16,9 @@ char _;
 #define umii unordered_map<int, int>
 using namespace std;
 
-int N, X;
-ll dist[MAXN], Q, q;
+int N, X, node;
+ll Q, q, minn;
+ll dist[MAXN];
 pii adj[MAXN];
 bool vis[MAXN];
 
@@ -32,11 +33,11 @@ int main () {
         scan(adj[i].s);
     }
     scan(X);
-    memset(dist, 0x3f, sizeof dist);
+    memset(dist, INF, sizeof dist);
     dist[X - 1] = 0;
     for (int i=1; i<N; i++) {
-        ll minn = INF;
-        int node = -1;
+        minn = INF;
+        node = -1;
         for (int j=0; j<N; j++) {
             if (!vis[j] && dist[j] < minn) {
                 minn = dist[j];

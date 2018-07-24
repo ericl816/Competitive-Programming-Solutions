@@ -16,7 +16,8 @@ char _;
 #define umii unordered_map<int, int>
 using namespace std;
 
-int N, M, minn = INF;
+int N, M;
+ll minn = INF;
 int page[MAXN], dist[MAXN];
 bool vis[MAXN];
 vi endpages;
@@ -60,5 +61,5 @@ int main () {
 		int &next = endpages[i];
 		minn = min(minn, dist[next] + 1);
 	}
-	return !printf("%d\n", minn);
+	return !printf("%lld\n", minn);
 }

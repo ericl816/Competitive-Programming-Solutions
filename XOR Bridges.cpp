@@ -66,18 +66,21 @@ public:
 
     /*
      * The idea is to split the nodes into two groups: ones with the largest bit and ones without
-     * If M does not have this bit, then no nodes in one group can ever union with nodes in the other group
+     * If M does not have this bit, then no nodes in one group can never union with nodes in the other group
      * So then we repeat this process for the next bit with each of the two groups
      * If this bit is 1 for M, then any two nodes which have the same state for this bit can union
      * So we union all the ones in the same group
      * We thus repeat this process for the next bit with the entire group
-     * Make sure to union everyone if the index of the current bit ever hits -1 
+     * Make sure to union everyone if the index of the current bit ever hits -1 or the vector size is less than 2
      *
      * @param bit = index of the current bit being considered
      * @param vec = vector containing the appropriate nodes
      */
     void Rank (int bit, vector<pii> &vec) {
-        if (!~bit || vec.size() <= 1) return;
+        if (!~bit || vec.size() < 2) {
+            for (int i=1; i<vec.size(); i++) Rank(vec[0].f, vec[i].f);
+                return;
+        }
         if (M & (1 << bit)) {
             for (int i=1; i<vec.size(); i++) Rank(vec[0].f, vec[i].f);
             Rank(bit - 1, vec);

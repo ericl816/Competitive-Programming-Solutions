@@ -25,17 +25,16 @@ int main () {
   for (int i=0; i<N; i++) {
     int idx = i;
     for (int j=i + 1; j<N; j++) 
-      if (arr[idx][i] < arr[j][i])
-        idx = j;
+      if (arr[idx][i] < arr[j][i]) idx = j;
       if (idx ^ i) {
         det *= -1;
         swap(arr[i], arr[idx]);
       }
       for (int j=i + 1; j<N; j++) {
-        ll val =  arr[j][i] * fpow(arr[i][i] % MOD , MOD - 2 % MOD) % MOD;
+        ll val =  arr[j][i] * fpow(arr[i][i] % MOD, MOD - 2 % MOD) % MOD;
         for (int k=i; k<N; k++) arr[j][k] = ((arr[j][k] % MOD - val % MOD * arr[i][k] % MOD) % MOD + MOD) % MOD;
       }
   }
   for (int i=0; i<N; i++) det = (det % MOD * arr[i][i] % MOD) % MOD;
-  printf("%lld\n", (det + MOD) % MOD);
+  return !printf("%lld\n", (det + MOD) % MOD);
 }

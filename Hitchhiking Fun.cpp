@@ -1,4 +1,5 @@
-#include <bits/stdc++.h>
+// #include <bits/stdc++.h>
+#include "/Users/ericliu/Desktop/Competitive-Programming-Templates/stdc++.h"
 #define ll long long
 #define MAXN 100010
 #define INF 0x3f3f3f3f
@@ -47,6 +48,7 @@ int main() {
         cin >> a >> b >> c;
         a--; b--;
         safe = c;
+        // If it's not safe, make sure the weight is negligible
         adj[a].pb(mp(b, safe ? 1 : 1e-5));
         adj[b].pb(mp(a, safe ? 1 : 1e-5));
     }

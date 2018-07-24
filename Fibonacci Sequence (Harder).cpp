@@ -1,11 +1,18 @@
 #pragma GCC optimize "Ofast"
 #pragma GCC optimize "unroll-loops"
 #pragma GCC target "sse,sse2,sse3,sse4,abm,avx,mmx,popcnt,tune=native"
-#include <bits/stdc++.h>
+// #include <bits/stdc++.h>
+#include "/Users/ericliu/Desktop/Competitive-Programming-Templates/stdc++.h"
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ull unsigned long long
 #define MOD 1000000007
+#define MOD1 2000000016
+
+/* Problem is exactly identical to that of Fibonacci Sequence, except that the input is much much larger => N can be up to 10^100000
+ * We just need to reduce the value of N
+ * We still use Matrix Multiplication to have an overall Time Complexity of: O(logN)
+ */
 
 typedef struct {
   ull a, b;
@@ -25,7 +32,17 @@ Matrix Fib (ull n) {
     }
 }
 
+inline void read() {
+    while ((N = getchar()) < '0');
+    N -= '0';
+    _ = getchar();
+    while (_ >= '0') {
+        N = ((N << 3) + (N << 1) + _ - '0') % MOD1;
+        _ = getchar();
+    }
+}
+    
 int main() {
-    scan(N);
+    read();
     return !printf("%llu\n", Fib(N).a);
 }

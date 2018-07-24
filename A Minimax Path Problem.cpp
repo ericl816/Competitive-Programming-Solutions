@@ -20,64 +20,66 @@ char _;
 #define umii unordered_map<int, int>
 using namespace std;
 
+// Problem is similar to Distribution Channel -> first build a MST then perform HLD on it to get the heaviest edge
+
 struct Node {
     int l, r, val;
 };
 
 struct Edge {
-	int a, b, c;
-	bool operator < (const Edge &a) const {
-		return c < a.c;
-	}
+    int a, b, c;
+    bool operator < (const Edge &a) const {
+        return c < a.c;
+    }
 };
 
 struct Disjoint {
 private:
-	int N;
-	vi lead, rank;
+    int N;
+    vi lead, rank;
 
 public:
-	Disjoint (int N) : N(N), lead(N + 1), rank(N + 1) { }
+    Disjoint (int N) : N(N), lead(N + 1), rank(N + 1) { }
 
-	void make_Set () {
-		for (int i=0; i<N; i++) {
-			lead[i] = i;
-			rank[i] = 0;
-		}
-	}
+    void make_Set () {
+        for (int i=0; i<N; i++) {
+            lead[i] = i;
+            rank[i] = 0;
+        }
+    }
 
-	int Find (int x) {
-		while (lead[x] ^ x) {
-			lead[x] = lead[lead[x]];
-			x = lead[x];
-		}
-		return x;
-	}
+    int Find (int x) {
+        while (lead[x] ^ x) {
+            lead[x] = lead[lead[x]];
+            x = lead[x];
+        }
+        return x;
+    }
 
-	bool Merge (int x, int y) {
-		return Find(x) ^ Find(y);
-	}
+    bool Merge (int x, int y) {
+        return Find(x) ^ Find(y);
+    }
 
-	void Union (int x, int y) {
-		int a = Find(x);
-		int b = Find(y);
-		if (Merge(x, y)) {
-			if (rank[a] > rank[b]) {
-				lead[b] = a;
-				rank[a] += rank[b];
-			}
-			else {
-				lead[a] = b;
-				rank[b] += rank[a];
-			}
-		}
-	}
+    void Union (int x, int y) {
+        int a = Find(x);
+        int b = Find(y);
+        if (Merge(x, y)) {
+            if (rank[a] > rank[b]) {
+                lead[b] = a;
+                rank[a] += rank[b];
+            }
+            else {
+                lead[a] = b;
+                rank[b] += rank[a];
+            }
+        }
+    }
 } ds(MAXM);
 
 // Define variables needed for HLD
 int depth[MAXM], par[MAXM], subtree_size[MAXM], head[MAXM], chain[MAXM], vert[MAXM], weight[MAXM], ind[MAXM], arr[MAXM];
 int idx, chainNum;
-int N, M, a, b, c;
+int N, M, Q, u, v, w, s, t;
 ll cheapest = INF, heaviestedge, totalcost;
 vector<Edge> edgelist, unused;
 vector<pii> MST[MAXN];
@@ -239,49 +241,50 @@ inline int Query_Path (int x, int y) {
 }
 
 int main () {
-	#ifdef NOT_DMOJ
-	freopen("in.txt", "r", stdin);
-	freopen("out.txt", "w", stdout);
-	#endif // NOT_DMOJ
-	cin.sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
-	cin >> N >> M;
-	ds.make_Set();
-	if (M < N - 1) {
-		cout << -1 << "\n";
-		return 0;
-	}
-	for (int i=0; i<M; i++) {
-		cin >> a >> b >> c;
-		--a; --b;
-		edgelist.pb((Edge) {a, b, c});
-	}
-	sort(edgelist.begin(), edgelist.end());
-	for (size_t i=0; i<edgelist.size(); i++) {
-		Edge &next = edgelist[i];
-		if (ds.Merge(next.a, next.b)) {
-			ds.Union(next.a, next.b);
-			MST[next.a].pb(mp(next.b, next.c));
-			MST[next.b].pb(mp(next.a, next.c));
-			totalcost += next.c;
-		}
-		else unused.pb(next);
-	}
-	// cout << totalcost << "\n";
-	// If we can't remove any edges from the original MST, using the Cycle Theorem
-	if (unused.empty()) {
-		cout << -1 << "\n";
-		return 0;
-	}
-	InitHLD();
-	for (size_t i=0; i<unused.size(); i++) {
-		Edge &next = unused[i];
-		heaviestedge = Query_Path(next.a, next.b);
-		if (heaviestedge == next.c) continue;
-		// cout << heaviestedge << "\n";
-		cheapest = min(cheapest, totalcost + next.c - heaviestedge);
-	}
-	cout << (cheapest == INF ? -1 : cheapest) << "\n";
-	return 0;
+    #ifdef NOT_DMOJ
+    freopen("in.txt", "r", stdin);
+    freopen("out.txt", "w", stdout);
+    #endif // NOT_DMOJ
+    cin.sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+    cin >> N >> M >> Q;
+    ds.make_Set();
+    if (M < N - 1) {
+        cout << -1 << "\n";
+        return 0;
+    }
+    for (int i=0; i<M; i++) {
+        cin >> u >> v >> w;
+        --u; --v;
+        edgelist.pb((Edge) {u, v, w});
+    }
+    sort(edgelist.begin(), edgelist.end());
+    for (size_t i=0; i<edgelist.size(); i++) {
+        Edge &next = edgelist[i];
+        if (ds.Merge(next.a, next.b)) {
+            ds.Union(next.a, next.b);
+            MST[next.a].pb(mp(next.b, next.c));
+            MST[next.b].pb(mp(next.a, next.c));
+            totalcost += next.c;
+        }
+        else unused.pb(next);
+    }
+    // If we can't remove any edges from the original MST, using the Cycle Theorem
+    if (unused.empty()) {
+        cout << -1 << "\n";
+        return 0;
+    }
+    InitHLD();
+    for (int i=0; i<Q; i++) {
+        cin >> s >> t;
+        --s; --t;
+        if (ds.Merge(s, t)) {
+            cout << -1 << "\n";
+            continue;
+        }
+        heaviestedge = Query_Path(s, t);
+        cout << heaviestedge << "\n";
+    }
+    return 0;
 }

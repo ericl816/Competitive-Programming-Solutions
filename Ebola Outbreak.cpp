@@ -52,7 +52,7 @@ public:
 			}
 		}
 	}
-}; 
+};
 
 Disjoint ds(MAXN);
 
@@ -66,9 +66,9 @@ int main () {
 	ds.make_Set();
 	for (int i=1; i<=M; i++) {
 		cin >> K >> x;
-		for (int i=1; i<K; i++) {
-		  cin >> y;
-		  ds.Union(x, y);
+		for (int j=1; j<K; j++) {
+			cin >> y;
+			ds.Union(x, y);
 		}
 	}
 	for (int i=1; i<=N; i++) if (ds.Find(1) == ds.Find(i)) people.pb(i);

@@ -1,11 +1,11 @@
 #include <bits/stdc++.h>
+#define MAXN 1000010
 #define vi vector<int>
 #define pb push_back
 #define ll long long 
 #define umii unordered_map<int, int>
 using namespace std;
 
-const int MAXN = 1e6 + 10;
 char op[MAXN];
 int N, BIT[MAXN], X[MAXN], R[MAXN], K[MAXN], id[MAXN], rating[MAXN], cnt;
 vi vec;
@@ -44,6 +44,7 @@ int main () {
     }
   }
   sort(vec.begin(), vec.end());
+  // Coordinate compression
   for (int i=0; i<vec.size(); i++) umap[vec[i]] = i + 1;
   for(int i=0; i<N; i++) {
     if (op[i] == 'N') {

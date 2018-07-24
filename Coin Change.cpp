@@ -5,7 +5,7 @@
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ll long long
-#define MAXN 1000010
+#define MAXN 10010
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
@@ -19,9 +19,9 @@ char _;
 #define umii unordered_map<int, int>
 using namespace std;
 
-int C, N;
-int arr[MAXN];
-bitset<MAXN> DP;
+int x, n;
+int coins[MAXN];
+int DP[MAXN];
 
 int main () {
 	#ifdef NOT_DMOJ
@@ -31,12 +31,19 @@ int main () {
 	cin.sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
-	scan(C); scan(N);
-	DP.set(0);
-	for (int i=0; i<N; i++) {
-	  scan(arr[i]);
-	  if ((DP & (DP << arr[i])) != 1) DP |= (DP << arr[i]);
+	memset(DP, INF, sizeof(DP));
+	cin >> x >> n;
+	for (int i=0; i<n; i++) {
+		cin >> coins[i];
+		DP[coins[i]] = 1;
 	}
-	for (int i=C - 1; i>=0; i--) if (DP[i]) return !printf("%d\n", i);
-	return !printf("%d\n", 0);
+	for (int i=1; i<=x; i++) {
+		for (int j=0; j<n; j++) {
+			if (i - coins[j] >= 0) {
+				DP[i] = min(DP[i], DP[i - coins[j]] + 1);
+			}
+		}
+	}
+	cout << DP[x] << "\n";
+	return 0;
 }
