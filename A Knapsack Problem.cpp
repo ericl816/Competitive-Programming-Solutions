@@ -21,9 +21,8 @@ using namespace std;
 
 int N, M;
 int n[MAXN], v[MAXN], p[MAXN], c[MAXN], f[MAXN];
-vector<pair<ll, ll> > knapsack;
-ll ans = -INF, sum, res;
-ll DP[MAXN];
+ll DP[2][MAXN];
+ll ans = -INF;
 
 int main () {
 	#ifdef NOT_DMOJ
@@ -34,22 +33,19 @@ int main () {
 	cin.tie(0);
 	cout.tie(0);
 	cin >> N >> M;
+	for (int i=0; i<N; i++) cin >> n[i] >> v[i] >> p[i];
 	for (int i=0; i<N; i++) {
-		cin >> n[i] >> v[i] >> p[i];
-		for (n[i] = min(n[i], MAXN / v[i]), sum = 0LL, res = 1LL; sum + res < n[i]; sum += res, res <<= 1) knapsack.pb(mp(res * v[i], res * p[i]));
-		knapsack.pb(mp((n[i] - sum) * v[i], (n[i] - sum) * p[i]));
-	}
-	DP[0] = 0LL;
-	for (size_t i=0; i<knapsack.size(); i++) {
-		pair<ll, ll> &next = knapsack[i];
-		// cout << next.f << " " << next.s << "\n";
-		for (int j=MAXN; j>=next.f; j--) {
-			DP[j] = max(DP[j], DP[j - next.f] + next.s);
+		for (int j=0; j<MAXN; j++) {
+			ll num = 0;
+			while (j >= num * v[i] && num <= n[i]) {
+				DP[i & 1][j] = max(DP[i & 1][j], DP[(i & 1) ^ 1][j - num * v[i]] + num * p[i]);
+				++num;
+			}
 		}
 	}
 	for (int i=0; i<M; i++) {
 		cin >> c[i] >> f[i];
-		ans = max(ans, DP[c[i]] - f[i]);
+		ans = max(ans, DP[(N - 1) & 1][c[i]] - f[i]);
 	}
 	cout << ans << "\n";
 	return 0;
