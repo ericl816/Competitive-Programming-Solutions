@@ -1,4 +1,9 @@
+#pragma GCC optimize "Ofast"
+#pragma GCC optimize "unroll-loops"
+#pragma GCC target "sse,sse2,sse3,sse4,abm,avx,mmx,popcnt,tune=native"
 #include <bits/stdc++.h>
+#define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
+char _;
 #define ll long long
 #define MAXN 250010
 #define INF 0x3f3f3f3f
@@ -10,19 +15,28 @@
 #define mp make_pair
 #define f first
 #define s second
-#define umii unordered_map<int, int>
 #define mii map<int, int>
+#define umii unordered_map<int, int>
+#ifdef DEBUG
+	#define D(x...) printf(x)
+#else
+	#define D(x...)
+#endif
 using namespace std;
 
-int N, M, A, B, dials[10], tree[MAXN << 3][10], lazy[MAXN << 3];
+// Can also use Square Root Decomposition
+
+int N, M, A, B;
+int dials[10], lazy[MAXN * 5];
+int tree[MAXN * 5][10];
 string s;
 
-void Shift (int arr[10], int idx) {
+inline void Shift (int arr[10], int idx) {
 	for (int i=0; i<10; i++) dials[(i + idx) % 10] = arr[i];
 	for (int i=0; i<10; i++) arr[i] = dials[i];
 }
 
-void Push_Down (int idx) {
+inline void Push_Down (int idx) {
 	if (lazy[idx]) {
 	    lazy[idx << 1] += lazy[idx];
 	    lazy[idx << 1 | 1] += lazy[idx];
@@ -32,26 +46,25 @@ void Push_Down (int idx) {
 	}
 }
 
-void Push_Up (int idx) {
+inline void Push_Up (int idx) {
 	for (int i=0; i<10; i++) tree[idx][i] = tree[idx << 1][i] + tree[idx << 1 | 1][i];
 }
 
-void Build (int idx, int l, int r) {
+inline void Build (int idx, int l, int r) {
 	if (l == r) {
 		tree[idx][s[l] - '0']++;
 		return;
 	}
-	else {
-		int mid = (l + r) >> 1;
-		Build(idx << 1, l, mid);
-		Build(idx << 1 | 1, mid + 1, r);
-	}
+	int mid = (l + r) >> 1;
+	Build(idx << 1, l, mid);
+	Build(idx << 1 | 1, mid + 1, r);
 	Push_Up(idx);
 }
 
-void Update (int idx, int l, int r, int l1, int r1, int val) {
+inline void Update (int idx, int l, int r, int l1, int r1, int val) {
 	Push_Down(idx);
-	if (l == l1 && r == r1) {
+	if (l > r1 || r < l1) return;
+	if (l >= l1 && r <= r1) {
 		lazy[idx] += val;
 		Shift(tree[idx], val);
 		return;
@@ -66,12 +79,13 @@ void Update (int idx, int l, int r, int l1, int r1, int val) {
 	Push_Up(idx);
 }
 
-int Query (int idx, int l, int r, int l1, int r1) {
+inline int Query (int idx, int l, int r, int l1, int r1) {
 	Push_Down(idx);
+	if (l > r1 || r < l1) return 0;
 	int val = 0;
-	if (l == l1 && r == r1) {
+	if (l >= l1 && r <= r1) {
 		for (int i=0; i<10; i++) val += tree[idx][i] * i;
-			return val;
+		return val;
 	}
 	int mid = (l + r) >> 1;
 	if (r1 <= mid) return Query(idx << 1, l, mid, l1, r1);
@@ -80,8 +94,13 @@ int Query (int idx, int l, int r, int l1, int r1) {
 }
 
 int main () {
+	#ifdef NOT_DMOJ
+	freopen("in.txt", "r", stdin);
+	freopen("out.txt", "w", stdout);
+	#endif // NOT_DMOJ
 	cin.sync_with_stdio(0);
 	cin.tie(0);
+	cout.tie(0);
 	cin >> N >> M >> s;
 	s = " " + s;
 	Build(1, 1, N);
@@ -92,3 +111,11 @@ int main () {
 	}
 	return 0;
 }
+
+/* 
+ * Look for:
+ * the exact constraints (multiple sets are too slow for n=10^6 :( ) 
+ * special cases (n=1?)
+ * overflow (ll vs int?)
+ * array bounds
+ */
