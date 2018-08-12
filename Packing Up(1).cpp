@@ -55,11 +55,11 @@ int main () {
 		// Why can we apply the Convex Hull Trick???
 		// Answer:
 			// We want to minimize (i - k - 1 + PSA[i] - PSA[k] - L) ^ 2 = ((i - 1 + PSA[i] - L) - (PSA[k] + k)) ^ 2.
-	        // For a fixed i and any 0<k<j<i, choosing DP[k] is better than choosing DP[j], if
-	        // DP[k] + (i - 1 + PSA[i] - L - (k + PSA[k])) ^ 2 <= DP[j] + (i - 1 + PSA[i] - L - (j + PSA[j]) ^ 2
-	        // We can simplify this to be: DP[j] - DP[k] >= (k + PSA[k]) ^ 2 - (j + PSA[j]) ^ 2 - 2 * (k + PSA[k] - j - PSA[j]) * (i - 1 + PSA[i] - L),
-	        // which is true if (DP[j] + (j + PSA[j]) ^ 2 - DP[k] - (k + PSA[k]) ^ 2) / (j + PSA[j] - k - PSA[k]) >= 2 * (i - 1 + PSA[i] - L).
-	        // Hence if slope(j,k)<=2*(i-1+psa[i]-l), j will be better for all future i's.
+			// For a fixed i and any 0<k<j<i, choosing DP[k] is better than choosing DP[j], if
+			// DP[k] + (i - 1 + PSA[i] - L - (k + PSA[k])) ^ 2 <= DP[j] + (i - 1 + PSA[i] - L - (j + PSA[j]) ^ 2
+			// We can simplify this to be: DP[j] - DP[k] >= (k + PSA[k]) ^ 2 - (j + PSA[j]) ^ 2 - 2 * (k + PSA[k] - j - PSA[j]) * (i - 1 + PSA[i] - L),
+			// which is true if (DP[j] + (j + PSA[j]) ^ 2 - DP[k] - (k + PSA[k]) ^ 2) / (j + PSA[j] - k - PSA[k]) >= 2 * (i - 1 + PSA[i] - L).
+			// Hence if slope(j,k)<=2*(i-1+psa[i]-l), j will be better for all future i's.
 		ll gap = PSA[i] + i - L - 1;
 		while (mq.size() >= 2 && Slope(mq[1], mq[0]) <= gap * 2) mq.pop_front();
 		DP[i] = t(gap - mq.front().s) - t(mq.front().s) + mq.front().f;
