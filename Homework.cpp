@@ -17,14 +17,14 @@ using namespace std;
 int N, D;
 set<int> available;
 bool flag;
-vector< pair <double, int > > vec;
-double W, ans;
+vector<pair<double, int > > vec;
+double W;
 
 void Do_Test_Cases () {
 	int TEST_CASES = 10;
 	while (TEST_CASES--) {
 		available.clear();
-		flag = 0;
+		vec.clear();
 		for (int i=0; i<=MAXN; i++) available.insert(i);
 		cin >> N;
 		for (int i=0; i<N; i++) {
@@ -33,8 +33,10 @@ void Do_Test_Cases () {
 		}
 		sort(vec.begin(), vec.end());
 		reverse(vec.begin(), vec.end());
-		ans = 0;
-		for (pair<double, int> next : vec) {
+		double ans = 0;
+		for (size_t i=0; i<vec.size(); i++) {
+			pair<double, int> next = vec[i];
+			flag = 0;
 			auto it = available.lower_bound(next.s);
 			if (it == available.begin()) flag = 1;
 			if (!flag) {
@@ -53,16 +55,3 @@ int main () {
     Do_Test_Cases();
     return 0;
 }
-
-/*
-3
-1 1.0
-2 1.0
-3 1.0
-5
-1 2.0
-1 1.0
-3 3.0 
-7 10.0
-3 2.0
-*/

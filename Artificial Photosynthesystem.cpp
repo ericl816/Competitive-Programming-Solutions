@@ -1,5 +1,4 @@
-// #include <bits/stdc++.h>
-#include "/Users/ericliu/Desktop/Competitive-Programming-Templates/stdc++.h"
+#include <bits/stdc++.h>
 #define ll long long
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
@@ -22,30 +21,18 @@ inline void DFS (int c, int o, int w, int s) {
 	if (c < 0 || o < 0 || w < 0 || s < 0) return;
 	if (flag[c][o][w][s]) return;
 	flag[c][o][w][s] = 1;
-	// Photosynthesize
-	DFS(c - C1, o + O1, w - W1, s + S1);
-	// Respirate
-	DFS(c + C2, o - O2, w + W2, s - S2);
+	ans = max(ans, o);
+	DFS(c - C1, o + O1, w - W1, s + S1); // Photosynthesize
+	DFS(c + C2, o - O2, w + W2, s - S2); // Respirate
 }
 
 void Do_Test_Cases () {
 	int TEST_CASES = 10;
 	while (TEST_CASES--) {
 		memset(flag, 0, sizeof(flag));
+		ans = 0;
 		cin >> C >> O >> W >> S >> C1 >> W1 >> S1 >> O1 >> S2 >> O2 >> C2 >> W2;
 		DFS(C, O, W, S);
-		ans = 0;
-		for (int i=0; i<MAXN; i++) {
-			for (int j=0; j<MAXN; j++) {
-				for (int k=0; k<MAXN; k++) {
-					for (int l=0; l<MAXN; l++) {
-						if (flag[i][j][k][l]) {
-							ans = max(ans, j);
-						}
-					}
-				}
-			}
-		}
 		cout << ans << "\n";
 	}
 }
@@ -57,12 +44,3 @@ int main () {
     Do_Test_Cases();
     return 0;
 }
-
-/*
-4 4 4 4
-2 1 1 1
-2 1 1 1
-3 4 4 4
-2 2 1 2
-2 1 1 1
-*/
