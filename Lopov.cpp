@@ -5,7 +5,7 @@
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ll long long
-#define MAXN 25
+#define MAXN 300010
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
@@ -24,22 +24,10 @@ char _;
 #endif
 using namespace std;
 
-int N, bit1 = -1, bit2 = -1, minndiff = INF;
-int arr[MAXN];
-vector<pii> vec;
-
-inline bool Cmp (pii &a, pii &b) {
-	return a.s < b.s;
-}
-
-inline void Recur (int bit, int iter, ll val) {
-	if (iter >= N) {
-		vec.pb(mp(bit, val));
-		return;
-	}
-	Recur(bit | (1 << iter), iter + 1, val + arr[iter]);
-	Recur(bit, iter + 1, val);
-}
+int N, K;
+ll ans;
+vector<pii> items;
+multiset<ll> C; // Permits duplicate elements
 
 int main (int argc, char const *argv[]) {
 	#ifdef NOT_DMOJ
@@ -49,23 +37,25 @@ int main (int argc, char const *argv[]) {
 	cin.sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
-	cin >> N;
-	for (int i=0; i<N; i++) cin >> arr[i];
-	Recur(0, 0, 0);
-	sort(vec.begin(), vec.end(), Cmp);
-	for (size_t i=0; i<vec.size() - 1; i++) {
-		int diff = abs(vec[i].s - vec[i + 1].s);
-		if (diff < minndiff) {
-			minndiff = diff;
-			bit1 = vec[i].f;
-			bit2 = vec[i + 1].f;
+	cin >> N >> K;
+	for (int i=0, M, V; i<N; i++) {
+		cin >> M >> V;
+		items.pb(mp(V, M));
+	}
+	for (int i=0; i<K; i++) {
+		ll c;
+		cin >> c;
+		C.insert(c);
+	}
+	sort(items.begin(), items.end());
+	reverse(items.begin(), items.end());
+	for (int i=0; i<N; i++) {
+		if (C.lower_bound(items[i].s) != C.end()) {
+			ans += items[i].f;
+			C.erase(C.lower_bound(items[i].s));
 		}
 	}
-	// cout << bit1 << " " << bit2 << endl;
-	for (int i=0; i<N; i++) if (~bit1 && bit1 & (1 << i)) cout << i + 1 << " ";
-	cout << "\n";
-	for (int i=0; i<N; i++) if (~bit2 && bit2 & (1 << i)) cout << i + 1 << " ";
-	cout << "\n";
+	cout << ans << "\n";
 	return 0;
 }
 
