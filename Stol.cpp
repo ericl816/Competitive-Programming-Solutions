@@ -35,9 +35,9 @@ inline void Get_Max_Area (int n) {
 		// If this bar is higher than the bar on the top of the stack, push it into stack
 		if (st.empty() || hist[st.top()] <= hist[idx]) st.push(idx++);
 		// If this bar is lower than top of stack, then calculate area of rectangle with stack 
-        // top as the smallest (or minimum height) bar. 
-        // 'i' is 'right index' for the top and element 
-        // before top in stack is 'left index'
+		// top as the smallest (or minimum height) bar. 
+		// 'i' is 'right index' for the top and element 
+		// before top in stack is 'left index'
 		else {
 			int top_idx = st.top();
 			st.pop();
