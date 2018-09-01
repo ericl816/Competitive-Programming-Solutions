@@ -37,6 +37,7 @@ inline ll Recur (int n) {
 	}
 	return val = sum;
 }
+
 /*
 inline long long calc (int num) {
   if (num <= 2) return mem[num] = 1;

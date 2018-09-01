@@ -16,7 +16,7 @@ char _;
 #define umii unordered_map<int, int>
 using namespace std;
 
-int N, M, sx, sy, ex, ey, currcnt;
+int N, M, sx, sy, ex, ey;
 int dist[MAXN][MAXN];
 string s;
 char ch[MAXN][MAXN];
@@ -78,6 +78,6 @@ int main () {
 			}
 		}
 	}
-	for (int i=0; i<N; i++) for (int j=0; j<M; j++) if (ch[i][j] == '.') cout << (dist[i][j] == INF ? -1 : dist[i][j]) << endl;
+	for (int i=0; i<N; i++) for (int j=0; j<M; j++) if (ch[i][j] == '.') cout << (dist[i][j] == INF ? -1 : dist[i][j]) << "\n";
 	return 0;
 }

@@ -5,8 +5,7 @@
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ll long long
-#define ull unsigned long long
-#define MAXN 200010
+#define MAXN 100010
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
@@ -26,38 +25,8 @@ char _;
 #endif
 using namespace std;
 
-int len;
-string s;
-
-inline bool Solve (int currlen, int pos) {
-	if (pos) { // Starting on the left side
-		for (int i=0; i<(currlen >> 1); i++) {
-			if (s[i] != s[currlen - i - 1]) return 0;
-		}
-		return 1;
-	}
-	else { // Starting on the right side
-		for (int i=0; i<(currlen >> 1); i++) {
-			if (s[len - currlen + i] != s[len - i - 1]) return 0;
-		}
-		return 1;
-	}
-	return 1;
-}
-
-void Do_Test_Cases () {
-	int N = 10;
-	while (N--) {
-		cin >> s;
-		len = s.size();
-		for (int i=len; i>0; i--) {
-			if (Solve(i, 1) || Solve(i, 0)) {
-				cout << len - i << "\n";
-				break;
-			}
-		}
-	}
-}
+int n, d, v, d1, v1;
+long double ans;
 
 int main (int argc, char const *argv[]) {
 	#ifdef NOT_DMOJ
@@ -67,7 +36,18 @@ int main (int argc, char const *argv[]) {
 	cin.sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
-	Do_Test_Cases();
+	cin >> n >> d1 >> v1;
+	--n;
+	while (n--) {
+		cin >> d >> v;
+		if (v > v1) {
+			ans += 1.0 * abs(d1 - d) / v1;
+			v1 = v;
+			d1 = d;
+		}
+	}
+	ans += 1.0 * d1 / v1;
+	cout << fixed << setprecision(4) << ans << "\n";
 	return 0;
 }
 

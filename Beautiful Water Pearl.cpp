@@ -6,7 +6,6 @@
 char _;
 #define ll long long
 #define ull unsigned long long
-#define MAXN 200010
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
@@ -26,38 +25,7 @@ char _;
 #endif
 using namespace std;
 
-int len;
-string s;
-
-inline bool Solve (int currlen, int pos) {
-	if (pos) { // Starting on the left side
-		for (int i=0; i<(currlen >> 1); i++) {
-			if (s[i] != s[currlen - i - 1]) return 0;
-		}
-		return 1;
-	}
-	else { // Starting on the right side
-		for (int i=0; i<(currlen >> 1); i++) {
-			if (s[len - currlen + i] != s[len - i - 1]) return 0;
-		}
-		return 1;
-	}
-	return 1;
-}
-
-void Do_Test_Cases () {
-	int N = 10;
-	while (N--) {
-		cin >> s;
-		len = s.size();
-		for (int i=len; i>0; i--) {
-			if (Solve(i, 1) || Solve(i, 0)) {
-				cout << len - i << "\n";
-				break;
-			}
-		}
-	}
-}
+ll C, D, E, ans = 1LL;
 
 int main (int argc, char const *argv[]) {
 	#ifdef NOT_DMOJ
@@ -67,7 +35,15 @@ int main (int argc, char const *argv[]) {
 	cin.sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
-	Do_Test_Cases();
+	cin >> C >> D >> E;
+	for (int i=0; ans && i<30; i++) {
+		int c = C & (1 << i), d = D & (1 << i), e = E & (1 << i);
+		int res = 0;
+		if (c && !d && e) res = 2;
+		else if ((c && d && !e) || (!c && !d && !e)) res = 1;
+		ans *= res;
+	}
+	cout << ans << "\n";
 	return 0;
 }
 

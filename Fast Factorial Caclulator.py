@@ -3,7 +3,7 @@ tests = int(raw_input())
 for temp in xrange(tests):
 	var = 1
 	N = int(raw_input())
-	if 50 <= N:
+	if N >= 50:
 		print 0
 		continue
 	for i in xrange(2, N + 1):

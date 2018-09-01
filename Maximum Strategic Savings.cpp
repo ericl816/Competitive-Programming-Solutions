@@ -16,6 +16,7 @@ char _;
 using namespace std;
 
 // It is a 2D MST, however, we only need to run Kruskal's once
+// The overall time complexity should be around: O(QlogQ + PlogP)
 
 struct Edge {
 	int a, b;
@@ -34,7 +35,7 @@ struct Edge {
 };
 
 vector<Edge> edgelist;
-priority_queue<Edge, vector<Edge>, greater<Edge> > pq;
+priority_queue<Edge, vector<Edge>, greater<Edge>> pq;
 
 int N, M, P, Q, a, b, c, x, y, z;
 int edgecnt1, edgecnt2;
@@ -48,14 +49,11 @@ private:
 public:
 	Disjoint (int N) : N(N), lead(N + 1), rank(N + 1) { }
 
-	inline void make_Set () {
-		for (int i=1; i<=N; i++) {
-			lead[i] = i;
-			rank[i] = 0;
-		}
+	void make_Set () {
+		for (int i=1; i<=N; i++) lead[i] = i;
 	}
 
-	inline int Find (int x) {
+	int Find (int x) {
 		while (lead[x] ^ x) {
 			lead[x] = lead[lead[x]];
 			x = lead[x];
@@ -63,21 +61,23 @@ public:
 		return x;
 	}
 
-	inline bool Merge (int x, int y) {
-		return Find(x) ^ Find(y);
+	bool Merge (int x, int y) {
+		int c = Find(x);
+		int d = Find(y);
+		return c ^ d;
 	}
 
-	inline void Union (int x, int y) {
-		int a = Find(x);
-		int b = Find(y);
+	void Union (int x, int y) {
+		int c = Find(x);
+		int d = Find(y);
 		if (Merge(x, y)) {
-			if (rank[a] > rank[b]) {
-				lead[b] = a;
-				rank[a] += rank[b];
+			if (rank[c] > rank[d]) {
+				lead[d] = c;
+				rank[c] += rank[d];
 			}
 			else {
-				lead[a] = b;
-				rank[b] += rank[a];
+				lead[c] = d;
+				rank[d] += rank[c];
 			}
 		}
 	}
@@ -92,29 +92,28 @@ int main () {
 	ds2.make_Set();
 	for (int i=1; i<=P; i++) {
 		scan(a); scan(b); scan(c);
-		totalcost += (ll) c * N; // Since it's a 2d grid with N by M rows and columns
+		totalcost += c * N;
 		edgelist.pb((Edge) {a, b, c, 1});
 	}
 	for (int i=1; i<=Q; i++) {
 		scan(x); scan(y); scan(z);
-		totalcost += (ll) z * M; // Since it's a 2d grid with N by M rows and columns
+		totalcost += z * M;
 		edgelist.pb((Edge) {x, y, z, 0});
 	}
 	for (Edge &next : edgelist) pq.push(next);
 	while (!pq.empty()) {
 		Edge curr = pq.top();
 		pq.pop();
-		if (curr.flight == 0 && ds2.Merge(curr.a, curr.b)) {
-			ds2.Union(curr.a, curr.b);
-			resedge += (ll) curr.cost * edgecnt2;
-			edgecnt1--; // Decrease the number of rows since we have already merged
-		}
-		else if (curr.flight == 1 && ds1.Merge(curr.a, curr.b)) {
+		if (curr.flight == 1 && ds1.Merge(curr.a, curr.b)) {
+			resedge += curr.cost * edgecnt1;
+			edgecnt2--;
 			ds1.Union(curr.a, curr.b);
-			resedge += (ll) curr.cost * edgecnt1;
-			edgecnt2--; // Decrease the number of columns since we have already merged
+		}
+		else if (curr.flight == 0 && ds2.Merge(curr.a, curr.b)) {
+			resedge += curr.cost * edgecnt2;
+			edgecnt1--;
+			ds2.Union(curr.a, curr.b);
 		}
 	}
-	// Final answer is total MST cost subtract the cost needed to remove edges (rows &/ columns)
 	return !printf("%lld\n", totalcost - resedge);
 }

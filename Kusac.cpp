@@ -5,8 +5,6 @@
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ll long long
-#define ull unsigned long long
-#define MAXN 200010
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
@@ -26,37 +24,10 @@ char _;
 #endif
 using namespace std;
 
-int len;
-string s;
+int N, M;
 
-inline bool Solve (int currlen, int pos) {
-	if (pos) { // Starting on the left side
-		for (int i=0; i<(currlen >> 1); i++) {
-			if (s[i] != s[currlen - i - 1]) return 0;
-		}
-		return 1;
-	}
-	else { // Starting on the right side
-		for (int i=0; i<(currlen >> 1); i++) {
-			if (s[len - currlen + i] != s[len - i - 1]) return 0;
-		}
-		return 1;
-	}
-	return 1;
-}
-
-void Do_Test_Cases () {
-	int N = 10;
-	while (N--) {
-		cin >> s;
-		len = s.size();
-		for (int i=len; i>0; i--) {
-			if (Solve(i, 1) || Solve(i, 0)) {
-				cout << len - i << "\n";
-				break;
-			}
-		}
-	}
+inline int GCD (int a, int b) {
+	return b == 0 ? a : GCD(b, a % b);
 }
 
 int main (int argc, char const *argv[]) {
@@ -67,7 +38,8 @@ int main (int argc, char const *argv[]) {
 	cin.sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
-	Do_Test_Cases();
+	cin >> N >> M;
+	cout << M - GCD(N, M) << "\n";
 	return 0;
 }
 

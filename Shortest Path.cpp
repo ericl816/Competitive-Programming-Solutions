@@ -6,7 +6,7 @@
 char _;
 #define ll long long
 #define ull unsigned long long
-#define MAXN 200010
+#define MAXN 110
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
@@ -26,38 +26,11 @@ char _;
 #endif
 using namespace std;
 
-int len;
-string s;
-
-inline bool Solve (int currlen, int pos) {
-	if (pos) { // Starting on the left side
-		for (int i=0; i<(currlen >> 1); i++) {
-			if (s[i] != s[currlen - i - 1]) return 0;
-		}
-		return 1;
-	}
-	else { // Starting on the right side
-		for (int i=0; i<(currlen >> 1); i++) {
-			if (s[len - currlen + i] != s[len - i - 1]) return 0;
-		}
-		return 1;
-	}
-	return 1;
-}
-
-void Do_Test_Cases () {
-	int N = 10;
-	while (N--) {
-		cin >> s;
-		len = s.size();
-		for (int i=len; i>0; i--) {
-			if (Solve(i, 1) || Solve(i, 0)) {
-				cout << len - i << "\n";
-				break;
-			}
-		}
-	}
-}
+int N;
+int dist[MAXN];
+int adj[MAXN][MAXN];
+bool vis[MAXN];
+queue<int> q;
 
 int main (int argc, char const *argv[]) {
 	#ifdef NOT_DMOJ
@@ -67,7 +40,27 @@ int main (int argc, char const *argv[]) {
 	cin.sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
-	Do_Test_Cases();
+	cin >> N;
+	for (int i=0; i<N; i++) for (int j=0; j<N; j++) cin >> adj[i][j];
+	memset(dist, INF, sizeof(dist));
+	vis[0] = 1;
+	dist[0] = 0;
+	q.push(0);
+	while (!q.empty()) {
+		int curr = q.front();
+		q.pop();
+		vis[curr] = 0;
+		for (int i=0; i<N; i++) {
+			if (adj[curr][i] && dist[i] > dist[curr] + 1) {
+				dist[i] = dist[curr] + 1;
+				if (!vis[i]) {
+					vis[i] = 1;
+					q.push(i);
+				}
+			}
+		}
+	}
+	cout << dist[N - 1] << "\n";
 	return 0;
 }
 

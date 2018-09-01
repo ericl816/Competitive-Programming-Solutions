@@ -6,6 +6,7 @@
 char _;
 #define ll long long
 #define ull unsigned long long
+#define MAXM 100010
 #define MAXN 200010
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)
@@ -26,38 +27,10 @@ char _;
 #endif
 using namespace std;
 
-int len;
-string s;
-
-inline bool Solve (int currlen, int pos) {
-	if (pos) { // Starting on the left side
-		for (int i=0; i<(currlen >> 1); i++) {
-			if (s[i] != s[currlen - i - 1]) return 0;
-		}
-		return 1;
-	}
-	else { // Starting on the right side
-		for (int i=0; i<(currlen >> 1); i++) {
-			if (s[len - currlen + i] != s[len - i - 1]) return 0;
-		}
-		return 1;
-	}
-	return 1;
-}
-
-void Do_Test_Cases () {
-	int N = 10;
-	while (N--) {
-		cin >> s;
-		len = s.size();
-		for (int i=len; i>0; i--) {
-			if (Solve(i, 1) || Solve(i, 0)) {
-				cout << len - i << "\n";
-				break;
-			}
-		}
-	}
-}
+int B, F;
+ll ans;
+int f[MAXM], e[MAXM], p[MAXM], t[MAXM];
+vi cases;
 
 int main (int argc, char const *argv[]) {
 	#ifdef NOT_DMOJ
@@ -67,7 +40,22 @@ int main (int argc, char const *argv[]) {
 	cin.sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
-	Do_Test_Cases();
+	cin >> B;
+	for (int i=0; i<B; i++) {
+		cin >> f[i] >> e[i] >> p[i];
+	}
+	cin >> F;
+	for (int i=0; i<F; i++) {
+		cin >> t[i];
+		cases.pb(t[i]);
+	}
+	sort(cases.begin(), cases.end());
+	for (int i=0; i<B; i++) {
+		int ind1 = lower_bound(cases.begin(), cases.end(), f[i]) - cases.begin();
+		int ind2 = upper_bound(cases.begin(), cases.end(), e[i]) - cases.begin() - 1;
+		if (ind2 < ind1) ans += p[i];
+	}
+	cout << ans << "\n";
 	return 0;
 }
 

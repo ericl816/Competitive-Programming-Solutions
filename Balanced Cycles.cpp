@@ -32,7 +32,7 @@ using namespace std;
 2 4 r
 4 6 b
 4 5 b
- */
+*/
 
 int n, a, b;
 char color;
@@ -81,7 +81,7 @@ inline void Decompose_Tree (int node, int prev, int sum) {
 void Recur (int root, int prev) {
     DFS(root, -1);
     root = Get_Centroid(root, -1, subtree_size[root]);
-    freq.clear(); 
+    freq.clear();
     freq[0] = 1; 
     is_centroid[root] = 1;
     for (size_t i=0; i<adj[root].size(); i++) {

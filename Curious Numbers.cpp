@@ -5,9 +5,9 @@
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ll long long
+#define ull unsigned long long
 #define MAXN 10000000010
 #define INF 0x3f3f3f3f
-#define EPS 1e-10
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
 #define vi vector<int>
@@ -18,6 +18,12 @@ char _;
 #define s second
 #define mii map<int, int>
 #define umii unordered_map<int, int>
+#define println cout << "\n";
+#ifdef DEBUG
+	#define D(x...) printf(x)
+#else
+	#define D(x...)
+#endif
 using namespace std;
 
 ll Q, K, M, N;
@@ -35,14 +41,15 @@ inline ll Generate_Palindrome (int num, bool odd) {
 }
 
 inline void Get_Palindrome () {
-	ll res;
-	ll idx = 1;
+	// First, generate all even candidate palindromes
+	ll res, idx = 1;
 	res = Generate_Palindrome(idx, 0);
 	while (res <= MAXN) {
 		if (res % K == 0) palindromes.pb(res);
 		idx++;
 		res = Generate_Palindrome(idx, 0);
 	}
+	// Now, generate all odd candidate palindromes
 	idx = 1;
 	res = Generate_Palindrome(idx, 1);
 	while (res <= MAXN) {
@@ -52,7 +59,14 @@ inline void Get_Palindrome () {
 	}
 }
 
-int main () {
+int main (int argc, char const *argv[]) {
+	#ifdef NOT_DMOJ
+	freopen("in.txt", "r", stdin);
+	freopen("out.txt", "w", stdout);
+	#endif // NOT_DMOJ
+	cin.sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
 	scan(Q); scan(K);
 	Get_Palindrome();
 	sort(palindromes.begin(), palindromes.end());
@@ -62,3 +76,11 @@ int main () {
 	}
 	return 0;
 }
+
+/* 
+ * Look for:
+ * the exact constraints (multiple sets are too slow for n=10^6 :( ) 
+ * special cases (n=1?)
+ * overflow (ll vs int?)
+ * array bounds
+ */

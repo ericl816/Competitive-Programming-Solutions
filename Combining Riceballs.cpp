@@ -1,8 +1,7 @@
 #pragma GCC optimize "Ofast"
 #pragma GCC optimize "unroll-loops"
 #pragma GCC target "sse,sse2,sse3,sse4,abm,avx,mmx,popcnt,tune=native"
-// #include <bits/stdc++.h>
-#include "/Users/ericliu/Desktop/Competitive-Programming-Templates/stdc++.h"
+#include <bits/stdc++.h>
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ll long long
@@ -26,25 +25,6 @@ int dp[MAXN][MAXN];
 
 // Use a 2-pointer approach to solve the problem
 // Overall Time Complexity: O(N ^ 3)
-
-/*
-Problem Statement:
-
-Alphonse has N rice balls of various sizes in a row. He wants to form the largest rice ball possible for his friend to eat. Alphonse can perform the following operations:
-
-If two adjacent rice balls have the same size, Alphonse can combine them to make a new rice ball. 
-The new rice ball's size is the sum of the two old rice balls' sizes. 
-It occupies the position in the row previously occupied by the two old rice balls.
-If two rice balls have the same size, and there is exactly one rice ball between them, 
-    Alphonse can combine all three rice balls to make a new rice ball. 
-    (The middle rice ball does not need to have the same size as the other two.) 
-The new rice ball's size is the sum of the three old rice balls' sizes. 
-It occupies the position in the row previously occupied by the three old rice balls.
-
-Alphonse can perform each operation as many times as he wants.
-
-Determine the size of the largest rice ball in the row after performing 0 or more operations.
-*/
 
 int main () {
     #ifdef NOT_DMOJ

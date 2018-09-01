@@ -73,7 +73,7 @@ void DFS (int node) {
 			}
 		}
 	}
-	// Else if we're dealing with children node
+	// Else if we're dealing with children nodes
 	else for (int i=0; i<=X; i++) DP[node][i] = tree[node] + i;
 }
 

@@ -6,7 +6,6 @@
 char _;
 #define ll long long
 #define ull unsigned long long
-#define MAXN 200010
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
@@ -26,38 +25,8 @@ char _;
 #endif
 using namespace std;
 
-int len;
-string s;
-
-inline bool Solve (int currlen, int pos) {
-	if (pos) { // Starting on the left side
-		for (int i=0; i<(currlen >> 1); i++) {
-			if (s[i] != s[currlen - i - 1]) return 0;
-		}
-		return 1;
-	}
-	else { // Starting on the right side
-		for (int i=0; i<(currlen >> 1); i++) {
-			if (s[len - currlen + i] != s[len - i - 1]) return 0;
-		}
-		return 1;
-	}
-	return 1;
-}
-
-void Do_Test_Cases () {
-	int N = 10;
-	while (N--) {
-		cin >> s;
-		len = s.size();
-		for (int i=len; i>0; i--) {
-			if (Solve(i, 1) || Solve(i, 0)) {
-				cout << len - i << "\n";
-				break;
-			}
-		}
-	}
-}
+int T, N;
+bool flag;
 
 int main (int argc, char const *argv[]) {
 	#ifdef NOT_DMOJ
@@ -67,7 +36,37 @@ int main (int argc, char const *argv[]) {
 	cin.sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
-	Do_Test_Cases();
+	cin >> T;
+	while (T--) {
+		cin >> N;
+		int n = 1;
+		flag = 0;
+		stack<int> st1, st2;
+		for (int i=0, cars; i<N; i++) {
+			cin >> cars;
+			st1.push(cars);
+		}
+		while (1) {
+			if (st1.empty() && st2.empty()) {
+				flag = 1;
+				break;
+			}
+			if (!st1.empty() && st1.top() == n) {
+				n++;
+				st1.pop();
+			}
+			else if (!st2.empty() && st2.top() == n) {
+				n++;
+				st2.pop();
+			}
+			else if (!st1.empty() && st1.top() != n) {
+				st2.push(st1.top());
+				st1.pop();
+			}
+			else if (st1.empty()) break;
+		}
+		cout << (flag ? "Y" : "N") << "\n";
+	}
 	return 0;
 }
 

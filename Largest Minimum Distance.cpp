@@ -6,7 +6,7 @@
 char _;
 #define ll long long
 #define ull unsigned long long
-#define MAXN 200010
+#define MAXN 100010
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
@@ -26,37 +26,23 @@ char _;
 #endif
 using namespace std;
 
-int len;
-string s;
+// We'll binary search for the minimum distance between all M assigned students
 
-inline bool Solve (int currlen, int pos) {
-	if (pos) { // Starting on the left side
-		for (int i=0; i<(currlen >> 1); i++) {
-			if (s[i] != s[currlen - i - 1]) return 0;
-		}
-		return 1;
-	}
-	else { // Starting on the right side
-		for (int i=0; i<(currlen >> 1); i++) {
-			if (s[len - currlen + i] != s[len - i - 1]) return 0;
-		}
-		return 1;
-	}
-	return 1;
-}
+int N, M, ans = -1;
+int p[MAXN];
 
-void Do_Test_Cases () {
-	int N = 10;
-	while (N--) {
-		cin >> s;
-		len = s.size();
-		for (int i=len; i>0; i--) {
-			if (Solve(i, 1) || Solve(i, 0)) {
-				cout << len - i << "\n";
-				break;
-			}
+inline bool Check (int mid) {
+	int prev = p[0];
+	int num = 1;
+	for (int i=1; i<N; i++) {
+		// Only assign if distance from prev student is larger than current mid
+		if (abs(p[i] - prev) >= mid) {
+			prev = p[i];
+			++num;
 		}
+		if (num == M) return 1;
 	}
+	return 0;
 }
 
 int main (int argc, char const *argv[]) {
@@ -67,7 +53,20 @@ int main (int argc, char const *argv[]) {
 	cin.sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
-	Do_Test_Cases();
+	cin >> N >> M;
+	for (int i=0; i<N; i++) cin >> p[i];
+	sort(p, p + N);
+	// Largest distance is between [0, p[N - 1]]
+	int lo = 0, hi = p[N - 1];
+	while (lo <= hi) {
+		int mid = (lo + hi) >> 1;
+		if (Check(mid)) {
+			ans = max(ans, mid);
+			lo = mid + 1;
+		}
+		else hi = mid - 1;
+	}
+	cout << ans << "\n";
 	return 0;
 }
 

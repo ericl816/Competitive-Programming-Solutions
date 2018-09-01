@@ -15,7 +15,7 @@ char _;
 #define umii unordered_map<int, int>
 using namespace std;
 
-int N, A, B, maxx;
+int N;
 long double minn = INF, mid, diff, sum;
 vi v;
 vector<double> vec;
@@ -38,7 +38,6 @@ int main () {
 	  sum = vec[i] + vec[i + 1];
 	  if (minn > sum) minn = sum;
 	}
-	cout << setprecision(1) << fixed;
-	cout << minn << endl;
+	cout << fixed << setprecision(1) << minn << endl;
 	return 0;
 }
