@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 #define ll long long
-#define MAXN 110
+#define MAXM 110
+#define MAXN 1000010
 #define vi vector<int>
 #define pb push_back
 #define pii pair<int, int>
@@ -12,8 +13,8 @@
 using namespace std;
 
 int N, M, T, t, f;
-ll microwaves[MAXN];
-pair<ll, ll> people[1000010];
+ll microwaves[MAXM];
+pair<ll, ll> people[MAXN];
 
 bool Cmp (pair<ll, ll> &a, pair<ll, ll> &b) {
 	return a.f < b.f;

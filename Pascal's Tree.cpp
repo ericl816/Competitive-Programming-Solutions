@@ -25,7 +25,7 @@ char _;
 #endif
 using namespace std;
 
-inline ll PowMod (ll a, ll b, ll MOD) {
+inline ll PowMod (ll a, ll b) {
   ll val = 1;
   while (b) {
     if (b & 1) val = (val * a) % MOD;

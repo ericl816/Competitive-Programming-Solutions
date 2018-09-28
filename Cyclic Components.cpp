@@ -21,7 +21,8 @@ char _;
 #define umii unordered_map<int, int>
 using namespace std;
 
-/* Solution is simple: 
+/* 
+ * Solution is simple: 
  * A component is cyclic if the degree of each vertex in the component is equal to 2
  * This can be done with a simple DFS
  */

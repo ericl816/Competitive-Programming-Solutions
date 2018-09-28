@@ -5,8 +5,7 @@
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ll long long
-#define MAXN 3110
-#define MOD 1000000007
+#define ull unsigned long long
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
@@ -18,6 +17,7 @@ char _;
 #define s second
 #define mii map<int, int>
 #define umii unordered_map<int, int>
+#define println cout << "\n";
 #ifdef DEBUG
 	#define D(x...) printf(x)
 #else
@@ -25,38 +25,29 @@ char _;
 #endif
 using namespace std;
 
-int T, R, C;
-int comb[MAXN][MAXN];
+int N, K, x;
+vi half1, half2;
+vector<ll> sum1, sum2;
+ll ans;
 
-inline ll PowMod (ll a, ll b) {
-	ll val = 1;
-	while (b) {
-		if (b & 1) val = (val * a) % MOD;
-		a = (a * a) % MOD;
-		b >>= 1;
+inline void Generate () {
+	sum1.pb(0);
+	for (size_t i=0; i<half1.size(); i++) {
+		int len = sum1.size();
+		for (size_t j=0; j<len; j++) {
+			sum1.pb(sum1[j] + half1[i]);
+		}
 	}
-	return val;
-}
-
-inline void Preprocess () {
-	for (int i=1; i<=3100; i++) {
-		for (int j=1; j<=3100; j++) {
-			if (i == j || j == 1) comb[i][j] = 1LL;
-			else comb[i][j] = (comb[i - 1][j] + comb[i - 1][j - 1]) % MOD;
+	sum2.pb(0);
+	for (size_t i=0; i<half2.size(); i++) {
+		int len = sum2.size();
+		for (size_t j=0; j<len; j++) {
+			sum2.pb(sum2[j] + half2[i]);
 		}
 	}
 }
 
-inline ll Solve () {
-	ll ans = 0LL, parity = 1LL;
-	for (int i=0; i<=C; i++) {
-		ans = (ans + (comb[C + 1][i + 1] * (PowMod(PowMod(2, C - i) - 1, R)) % MOD) * parity) % MOD;
-		parity *= -1LL;
-	}
-	return (ans % MOD + MOD) % MOD;
-}
-
-int main () {
+int main (int argc, char const *argv[]) {
 	#ifdef NOT_DMOJ
 	freopen("in.txt", "r", stdin);
 	freopen("out.txt", "w", stdout);
@@ -64,13 +55,26 @@ int main () {
 	cin.sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
-	Preprocess();
-	cin >> T;
-	while (T--) {
-		cin >> R >> C;
-		if (R < C) swap(R, C);
-		cout << Solve() << "\n";
+	cin >> N >> K;
+	for (int i=0; i<(N >> 1); i++) {
+		cin >> x;
+		half1.pb(x);
 	}
+	for (int i=(N >> 1); i<N; i++) {
+		cin >> x;
+		half2.pb(x);
+	}
+	Generate();
+	sort(sum1.begin(), sum1.end());
+	sort(sum2.begin(), sum2.end());
+	// for (auto i : sum1) cout << "1st half" << i << "\n";
+	// for (auto i : sum2) cout << "2nd half" << i << "\n";
+	ll ind = sum2.size();
+	for (size_t i=0; i<sum1.size(); i++) {
+	    while (ind > 0 && sum1[i] + sum2[ind - 1] > K) ind--;
+	    ans += ind;
+	}
+	cout << ans << "\n";
 	return 0;
 }
 

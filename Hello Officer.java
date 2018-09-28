@@ -131,7 +131,6 @@ public class VMSSHelloOfficer {
     
     public static void main(String[] args) throws IOException {
         Reader r = new Reader();
-                
         n = r.nextInt();
         m = r.nextInt();
         b = r.nextInt() - 1; 

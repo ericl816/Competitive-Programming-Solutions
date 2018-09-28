@@ -31,6 +31,23 @@ void Choose () {
 }
 
 ll fun1 (int N);
+ll fun2 (int n, int L);
+
+ll fun1 (int N) {
+	ll &x = memof[N];
+	if (~x) return x;
+	if (N == 0) return x = 1;
+	x = 0;
+	for (int i=0; i<N; i++) {
+		ll left = fun1(i);
+		ll ch = perm[N - 1][i];
+		ll right = fun1(N - i - 1) - fun2(N - i - 1, K);
+		right = (right % MOD + MOD) % MOD;
+		x += (((left * right) % MOD) * ch) % MOD;
+		x %= MOD;
+	}
+	return x;
+}
 
 ll fun2 (int n, int L) {
 	ll &x = memog[n][L];
@@ -43,22 +60,6 @@ ll fun2 (int n, int L) {
 		ll ch = perm[n - 1][i - 1];
 		ll left = fun2(i - 1, L);
 		ll right = fun1(n - i) - fun2(n - i, K);
-		right = (right % MOD + MOD) % MOD;
-		x += (((left * right) % MOD) * ch) % MOD;
-		x %= MOD;
-	}
-	return x;
-}
-
-ll fun1 (int N) {
-	ll &x = memof[N];
-	if (~x) return x;
-	if (N == 0) return x = 1;
-	x = 0;
-	for (int i=0; i<N; i++) {
-		ll left = fun1(i);
-		ll ch = perm[N - 1][i];
-		ll right = fun1(N - i - 1) - fun2(N - i - 1, K);
 		right = (right % MOD + MOD) % MOD;
 		x += (((left * right) % MOD) * ch) % MOD;
 		x %= MOD;

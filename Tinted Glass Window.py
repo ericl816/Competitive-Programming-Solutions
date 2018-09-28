@@ -22,11 +22,11 @@ for i in xrange(1, len(segy)):
     
 yaxis = [0 for i in xrange(len(segy) + 1)]
 
-ans=0
+ans = 0
 for i in xrange(1, len(line)):         
     for j in xrange(1, len(segy)):
         if yaxis[j] >= t:
             ans += (segy[j + 1] - segy[j]) * (line[i][0] - line[i - 1][0])
     for j in xrange(findy[line[i][1]], findy[line[i][2]]):
         yaxis[j] += line[i][3]
-print ans
+print(ans)

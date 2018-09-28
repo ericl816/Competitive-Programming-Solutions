@@ -11,18 +11,6 @@ using namespace std;
 string s, ans;
 bool flag;
 
-void Round (int n) {
-  int size = s.length();
-  if (s[size - n] >= 'a' && s[size - n] <= 'm') s[size - n] = 'a';
-	else if (s[size - n] >= 'n' && s[size - n] <= 'z') {
-	  s[size - n] = 'a';
-	  if (s[size - n - 1] != 'z') {
-  	  	if (s[size - n - 1] != '\0') s[size - n - 1]++;
-  	  	else if (s[size - n - 1] == '\0') flag = 1;
-	  }
-  }
-}
-
 int main () {
 	cin.sync_with_stdio(0);
 	cin.tie(0);

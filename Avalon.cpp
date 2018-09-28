@@ -21,9 +21,9 @@ double ans = 1;
 int main () {
 	cin >> G;
 	for (int i=0; i<G; i++) {
-  	cin >> e >> p;
-  	if (e == p) return 0 * printf("%.10lf\n", 0);
-  	else ans *= ((double) (p - e) / p);
+	  	cin >> e >> p;
+	  	if (e == p) return 0 * printf("%.10lf\n", 0);
+	  	else ans *= ((double) (p - e) / p);
 	}
 	printf("%.10lf\n", ans);
 	return 0;

@@ -20,6 +20,7 @@ char _;
 using namespace std;
 
 /*
+ * DP works like this:
  * DP[0][i] = Length of the longest Zig-Zag subsequence
  * 		ending at index i and last element is greater
  *      than its previous element

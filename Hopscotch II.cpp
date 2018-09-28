@@ -19,7 +19,8 @@ char _;
 #define umii unordered_map<int, int>
 using namespace std;
 
-/* Solution involves using a "Sliding-Range Minimum Query" approach, similar to Pizza Bag
+/* 
+ * Solution involves using a "Sliding-Range Minimum Query" approach, similar to Pizza Bag
  * Use a deque to keep track of the minimum number of steps required
  * Is also a Dynamic Programming problem
  * The K, in the input (can jump at most K steps) makes the Sliding-Range Minimum Query approach very obvious

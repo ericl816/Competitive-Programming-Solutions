@@ -5,14 +5,13 @@
 #define mp make_pair
 #define pb push_back
 #define pii pair<int, int>
-#define q queue<int>
-#define pq priority_queue<int>
 char _;
 using namespace std;
+
 int N, A, B, num;
 vector<pii> arr;
-q keep;
-pq give;
+queue<int> keep;
+priority_queue<int> give;
 
 int main() {
     scan(N);

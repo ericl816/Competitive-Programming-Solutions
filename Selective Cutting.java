@@ -26,11 +26,11 @@ public class DMOPC14SelectiveCutting {
        Arrays.sort(arr);
        int idx = 0;
        for (int i=0; i<Q; i++) {
-           while(N > idx && tree[idx].mass >= arr[i].mass) {
+           while (idx < N && tree[idx].mass >= arr[i].mass) {
            update(tree[idx].idx, tree[idx].mass);
            idx++; 
         }
-           mass[arr[i].idx] = query(arr[i].b + 1) - query(arr[i].a);
+        mass[arr[i].idx] = query(arr[i].b + 1) - query(arr[i].a);
        }
        for (int i=0; i<Q; i++) System.out.println(mass[i]);
     }

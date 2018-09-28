@@ -3,7 +3,7 @@ using namespace std;
 const int MAXN = 52;
 int R, C, S, B, K, M, T, V, c, r, val[MAXN][MAXN], temp[MAXN][MAXN], DP[MAXN][MAXN][MAXN][MAXN];
 
-int solve(int time, int height, int degree, int snow) {
+int solve (int time, int height, int degree, int snow) {
   int &ret = DP[time][height][degree][snow];
   if (~ret) return ret;
   if (degree == 0 || time == R + 1 || snow == 0) return 0;
@@ -11,8 +11,9 @@ int solve(int time, int height, int degree, int snow) {
     for (int i=-M; i<=M; i++) {
       if (height + i >= 1 && height + i <= C) {
           ret = max(ret, solve(time + 1, height + i, degree, snow));
-        if (~val[time + 1][height + i] && temp[time + 1][height + i] < degree) 
-          ret = max(ret, val[time + 1][height + i] + solve(time + 1, height + i, degree - temp[time + 1][height + i], snow - 1));
+          if (~val[time + 1][height + i] && temp[time + 1][height + i] < degree) {
+            ret = max(ret, val[time + 1][height + i] + solve(time + 1, height + i, degree - temp[time + 1][height + i], snow - 1));
+          }
       }
     }
     return ret;

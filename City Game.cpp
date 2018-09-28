@@ -39,7 +39,7 @@ inline void Get_Max_Area (int n) {
 		else {
 			int top_idx = st.top();
 			st.pop();
-			// Calculate the area with hist[tp] stack as smallest bar
+			// Calculate the area with hist[top_idx] stack as smallest bar
 			if (st.empty()) area = hist[top_idx] * idx;
 			else area = hist[top_idx] * (idx - st.top() - 1);
 			ans = max(ans, area);

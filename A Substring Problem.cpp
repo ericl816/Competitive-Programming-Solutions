@@ -28,7 +28,7 @@ int main () {
   cin.tie(0);
   getline(cin, s);
   for (int i=0; i<s.length(); i++) {
-  	for (int j=i + 1; j<=s.length() - i; j++) {
+  	for (int j=1; j<=s.length() - i; j++) {
   		string next = s.substr(i, j);
   		if (isPalindrome(next)) vec.pb(next);
   	}

@@ -16,6 +16,8 @@ char _;
 #define umii unordered_map<int, int>
 using namespace std;
 
+// Problem asks for the LIS
+
 int N, M, a, val, len;
 int DP[MAXN];
 umii um;
@@ -28,11 +30,11 @@ int main() {
     for (int i=0; i<N; i++) cin >> a, um[a] = i;
     cin >> M;
     for (int i=0; i<M; ++i){
-      cin >> val;
-      if (um.count(val)) v.pb(um[val]);
+        cin >> val;
+        if (um.count(val)) v.pb(um[val]);
     }
     for (vi::iterator it = v.lower_bound())
-    for (size_t i=0; i<v.size(); ++i){
+    for (size_t i=0; i<v.size(); ++i) {
         int lo = 1;
         int hi = len;
         while (lo <= hi) {
@@ -44,4 +46,5 @@ int main() {
         len = max(len, lo);
     }
     cout << len << endl;
+    return 0;
 }

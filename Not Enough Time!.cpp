@@ -5,30 +5,27 @@
 char _;
 using namespace std;
 
-int n, t;
-int ans = 0;
-int p [2001][3];
-int v [2001][3];
-int dp [10001];
+int n, t, ans;
+int P[2001][3], V[2001][3];
+int DP[10001];
 
 int main () {
-  scan(n); scan(t);
+  cin >> n >> t;
   for (int i=0; i<n; i++) {
     for (int j=0; j<3; j++) {
-      scan(p[i][j]); scan(v[i][j]);
+      cin >> P[i][j] >> V[i][j];
     }
   }
-  memset(dp, -1, sizeof dp);
-  dp[0] = 0;
+  memset(DP, -1, sizeof(DP));
+  DP[0] = 0;
   for (int i=0; i<n; i++) {
     for (int j=t; j>=0; j--) {
       for (int k=0; k<3; k++) {
-        if (t >= j + p[i][k] && 0 <= dp[j])
-        dp[j + p[i][k]] = max(dp[j] + v[i][k], dp[j + p[i][k]]);
+        if (t >= j + P[i][k] && DP[j] >= 0) DP[j + P[i][k]] = max(DP[j] + V[i][k], DP[j + P[i][k]]);
       }
     }
   }
-  for (int i=0; i<=t; i++)
-  ans = max(ans, dp[i]);
-  printf("%d\n", ans);
+  for (int i=0; i<=t; i++) ans = max(ans, DP[i]);
+  cout << ans << "\n";
+  return 0;
 }

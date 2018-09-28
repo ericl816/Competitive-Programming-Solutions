@@ -45,8 +45,8 @@ int main () {
 		for (int i=N; i; i--) {
 			for (int j=1; j<=N; j++) {
 				if (DP[j][i] == 1) {
-				    DP[j][i] += min(DP[j - 1][i + 1], min(DP[j][i + 1], DP[j + 1][i + 1]));
-					ans += DP[j][i];
+					DP[j][i] += min(DP[j - 1][i + 1], min(DP[j][i + 1], DP[j + 1][i + 1]));
+				    ans += DP[j][i];
 				}
 			}
 		}
