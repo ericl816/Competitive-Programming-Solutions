@@ -6,7 +6,7 @@
 char _;
 #define ll long long
 #define ull unsigned long long
-#define MAXN 110
+#define MAXN 1000010
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
@@ -18,51 +18,43 @@ char _;
 #define s second
 #define mii map<int, int>
 #define umii unordered_map<int, int>
+#define println cout << "\n";
 #ifdef DEBUG
-  #define D(x...) printf(x)
+    #define D(x...) printf(x)
 #else
-  #define D(x...)
+    #define D(x...)
 #endif
 using namespace std;
 
-int N;
-int arr[MAXN][MAXN], grid[MAXN][MAXN];
-
-inline void RotateCW () {
-  for (int i=0; i<N; i++) {
-    for (int j=0; j<N; j++) {
-      grid[i][j] = arr[N - j - 1][i];
-    }
-  }
-  for (int i=0; i<N; i++) {
-    for (int j=0; j<N; j++) {
-      arr[i][j] = grid[i][j];
-    }
-  }
-}
+string s;
+int Q, a, b;
+char c;
+int PSA[30][MAXN];
 
 int main (int argc, char const *argv[]) {
-  #ifdef NOT_DMOJ
-  freopen("in.txt", "r", stdin);
-  freopen("out.txt", "w", stdout);
-  #endif // NOT_DMOJ
-  cin.sync_with_stdio(0);
-  cin.tie(0);
-  cout.tie(0);
-  cin >> N;
-  for (int i=0; i<N; i++) {
-    for (int j=0; j<N; j++) {
-      cin >> arr[i][j];
+    #ifdef NOT_DMOJ
+    freopen("in.txt", "r", stdin);
+    freopen("out.txt", "w", stdout);
+    #endif // NOT_DMOJ
+    cin.sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+    getline(cin, s);
+    cin >> Q;
+    for (size_t i=0; i<s.size(); i++) {
+        if (s[i] != ' ') PSA[s[i] - 'a'][i]++;
     }
-  }
-  while (arr[0][0] >= arr[1][0] || arr[0][0] >= arr[0][1]) RotateCW();
-  for (int i=0; i<N; i++) {
-    for (int j=0; j<N; j++) {
-      cout << arr[i][j] << " ";
+    for (int i=0; i<26; i++) {
+        for (size_t j=1; j<s.size(); j++) {
+            PSA[i][j] += PSA[i][j - 1];
+        }
     }
-    cout << "\n";
-  }
-  return 0;
+    while (Q--) {
+        cin >> a >> b >> c;
+        --a, --b;
+        cout << PSA[c - 'a'][b] - PSA[c - 'a'][a - 1] << "\n";
+    }
+    return 0;
 }
 
 /* 

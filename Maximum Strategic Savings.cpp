@@ -37,8 +37,7 @@ struct Edge {
 vector<Edge> edgelist;
 priority_queue<Edge, vector<Edge>, greater<Edge>> pq;
 
-int N, M, P, Q, a, b, c, x, y, z;
-int edgecnt1, edgecnt2;
+int N, M, P, Q, a, b, c, x, y, z, edgecnt1, edgecnt2;
 ll totalcost, resedge;
 
 struct Disjoint {
@@ -50,7 +49,10 @@ public:
 	Disjoint (int N) : N(N), lead(N + 1), rank(N + 1) { }
 
 	void make_Set () {
-		for (int i=1; i<=N; i++) lead[i] = i;
+		for (int i=1; i<=N; i++) {
+			lead[i] = i;
+			rank[i] = 0;
+		}
 	}
 
 	int Find (int x) {
@@ -92,12 +94,12 @@ int main () {
 	ds2.make_Set();
 	for (int i=1; i<=P; i++) {
 		scan(a); scan(b); scan(c);
-		totalcost += c * N;
+		totalcost += (ll) c * N;
 		edgelist.pb((Edge) {a, b, c, 1});
 	}
 	for (int i=1; i<=Q; i++) {
 		scan(x); scan(y); scan(z);
-		totalcost += z * M;
+		totalcost += (ll) z * M;
 		edgelist.pb((Edge) {x, y, z, 0});
 	}
 	for (Edge &next : edgelist) pq.push(next);

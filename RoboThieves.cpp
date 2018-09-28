@@ -1,7 +1,11 @@
+#pragma GCC optimize "Ofast"
+#pragma GCC optimize "unroll-loops"
+#pragma GCC target "sse,sse2,sse3,sse4,abm,avx,mmx,popcnt,tune=native"
 #include <bits/stdc++.h>
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ll long long
+#define ull unsigned long long
 #define MAXN 110
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)
@@ -14,70 +18,96 @@ char _;
 #define s second
 #define mii map<int, int>
 #define umii unordered_map<int, int>
+#ifdef DEBUG
+	#define D(x...) printf(x)
+#else
+	#define D(x...)
+#endif
 using namespace std;
 
-int N, M, sx, sy, ex, ey;
-int dist[MAXN][MAXN];
+int N, M, sx, sy;
 string s;
-char ch[MAXN][MAXN];
-bool vis[MAXN][MAXN], flag[MAXN][MAXN];
-priority_queue<pii> q;
+char grid[MAXN][MAXN];
+char conveyors[4] = {'L', 'R', 'U', 'D'};
+int movex[4] = {0, 0, -1, 1}, movey[4] = {-1, 1, 0, 0};
+bool flag[MAXN][MAXN], vis[MAXN][MAXN];
+priority_queue<pii> pq;
+int dist[MAXN][MAXN];
 
-inline bool Check (int x, int y) {
-	return x >= 0 && x < N && y >= 0 && y < N;
-}
-
-int main () {
+int main (int argc, char const *argv[]) {
+	#ifdef NOT_DMOJ
+	freopen("in.txt", "r", stdin);
+	freopen("out.txt", "w", stdout);
+	#endif // NOT_DMOJ
 	cin.sync_with_stdio(0);
 	cin.tie(0);
-	int *movex = new int [4] {0, 0, 1, -1};
-	int *movey = new int [4] {1, -1, 0, 0};
-	char *conveyor = new char [4] {'R', 'L', 'D', 'U'};
+	cout.tie(0);
 	cin >> N >> M;
 	for (int i=0; i<N; i++) {
 		cin >> s;
 		for (int j=0; j<M; j++) {
-			ch[i][j] = s[j];
-			if (ch[i][j] == 'S') {
-				sx = i;
-				sy = j;
+			grid[i][j] = s[j];
+			if (grid[i][j] == 'S') {
+				sx = i, sy = j;
 			}
 		}
 	}
 	for (int i=0; i<N; i++) {
 		for (int j=0; j<M; j++) {
-			if (ch[i][j] == 'C') {
-				for (int k=i; k>=0 && ch[k][j] != 'W'; k--) if (ch[k][j] == '.' || ch[k][j] == 'C' || ch[k][j] == 'S') flag[k][j] = 1;
-				for (int k=i; k<N && ch[k][j] != 'W'; k++) if (ch[k][j] == '.' || ch[k][j] == 'C' || ch[k][j] == 'S') flag[k][j] = 1;
-				for (int k=j; k>=0 && ch[i][k] != 'W'; k--) if (ch[i][k] == '.' || ch[i][k] == 'C' || ch[i][k] == 'S') flag[i][k] = 1;
-				for (int k=j; k<M && ch[i][k] != 'W'; k++) if (ch[i][k] == '.' || ch[i][k] == 'C' || ch[i][k] == 'S') flag[i][k] = 1;
+			if (grid[i][j] == 'C') {
+				for (int k=j; k<M && grid[i][k] != 'W'; k++) {
+					if (grid[i][k] == 'S' || grid[i][k] == '.' || grid[i][k] == 'C') flag[i][k] = 1;
+				}
+				for (int k=j; k>=0 && grid[i][k] != 'W'; k--) {
+					if (grid[i][k] == 'S' || grid[i][k] == '.' || grid[i][k] == 'C') flag[i][k] = 1;
+				}
+				for (int k=i; k<N && grid[k][j] != 'W'; k++) {
+					if (grid[k][j] == 'S' || grid[k][j] == '.' || grid[k][j] == 'C') flag[k][j] = 1;
+				}
+				for (int k=i; k>=0 && grid[k][j] != 'W'; k--) {
+					if (grid[k][j] == 'S' || grid[k][j] == '.' || grid[k][j] == 'C') flag[k][j] = 1;
+				}
 			}
 		}
 	}
-	if (!flag[sx][sy]) q.push(mp(sx, sy));
 	memset(dist, INF, sizeof(dist));
-	dist[sx][sy] = 0;
+	if (!flag[sx][sy]) pq.push(mp(sx, sy));
 	vis[sx][sy] = 1;
-	while (!q.empty()) {
-		pii curr = q.top();
-		q.pop();
+	dist[sx][sy] = 0;
+	while (!pq.empty()) {
+		pii curr = pq.top();
+		pq.pop();
 		vis[curr.f][curr.s] = 0;
 		for (int i=0; i<4; i++) {
-			int currx = curr.f + movex[i];
-			int curry = curr.s + movey[i];
-			if (!Check(currx, curry) || ch[currx][curry] == 'W' || flag[currx][curry]) continue;
-			if (ch[curr.f][curr.s] == '.' || ch[curr.f][curr.s] == 'S' || ch[curr.f][curr.s] == conveyor[i]) {
-				int nextcost = dist[curr.f][curr.s] + (ch[curr.f][curr.s] == conveyor[i] ? 0 : 1);
-				if (nextcost < dist[currx][curry]) {
-					dist[currx][curry] = nextcost;
-					if (!vis[currx][curry]) {
-						vis[currx][curry] = 1;
-						q.push(mp(currx, curry));
+			int nextx = curr.f + movex[i], nexty = curr.s + movey[i];
+			// if (flag[nextx][nexty] || grid[nextx][nexty] == 'W' || nextx < 0 || nextx >= N || nexty < 0 || nexty >= M) continue;
+			if (grid[curr.f][curr.s] == '.' || grid[curr.f][curr.s] == 'S' || grid[curr.f][curr.s] == conveyors[i]) {
+				if (flag[nextx][nexty] || grid[nextx][nexty] == 'W' || nextx < 0 || nextx >= N || nexty < 0 || nexty >= M) continue;
+				int nextcost = dist[curr.f][curr.s] + (grid[curr.f][curr.s] == conveyors[i] ? 0 : 1);
+				if (dist[nextx][nexty] > nextcost) {
+					dist[nextx][nexty] = nextcost;
+					if (!vis[nextx][nexty]) {
+						vis[nextx][nexty] = 1;
+						pq.push(mp(nextx, nexty));
 					}
 				}
 			}
 		}
 	}
-	for (int i=0; i<N; i++) for (int j=0; j<M; j++) if (ch[i][j] == '.') cout << (dist[i][j] == INF ? -1 : dist[i][j]) << "\n";
+	for (int i=0; i<N; i++) {
+		for (int j=0; j<M; j++) {
+			if (grid[i][j] == '.') {
+				cout << (dist[i][j] == INF ? -1 : dist[i][j]) << "\n";
+			}
+		}
+	}
 	return 0;
 }
+
+/* 
+ * Look for:
+ * the exact constraints (multiple sets are too slow for n=10^6 :( ) 
+ * special cases (n=1?)
+ * overflow (ll vs int?)
+ * array bounds
+ */

@@ -39,7 +39,7 @@ ll l[MAXM], a[MAXM], b[MAXM], prefix_prod[MAXM], BIT[MAXN];
 unsigned short dim[MAXN];
 ll ans, prod = 1, idx;
 
-void Update (int current_dimension, ll idx, ll val) {
+inline void Update (int current_dimension, ll idx, ll val) {
 	if (current_dimension == N) BIT[idx] += val;
 	else for (int i=a[current_dimension]; i<=l[current_dimension]; i+=i & -i) Update(current_dimension + 1, idx + prefix_prod[current_dimension] * (i - 1), val);
 }
@@ -48,7 +48,7 @@ void Update (int current_dimension, ll idx, ll val) {
  * For each dimension, one needs to add the upperbound indices and then subtract the lowerbound indices
  * Doing this reduces the time complexity and is known as constant-optimization. However the space complexity still remains the same.
  */
-ll Query (int current_dimension, ll idx) {
+inline ll Query (int current_dimension, ll idx) {
 	ll sum = 0;
 	if (current_dimension == N) sum += BIT[idx];
 	else {

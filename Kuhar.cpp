@@ -6,9 +6,9 @@
 char _;
 #define ll long long
 #define ull unsigned long long
+#define MAXM 100010
+#define MAXN 110
 #define INF 0x3f3f3f3f
-#define min(a, b) (a) < (b) ? (a) : (b)
-#define max(a, b) (a) < (b) ? (b) : (a)
 #define vi vector<int>
 #define pb push_back
 #define pii pair<int, int>
@@ -17,6 +17,7 @@ char _;
 #define s second
 #define mii map<int, int>
 #define umii unordered_map<int, int>
+#define println cout << "\n";
 #ifdef DEBUG
 	#define D(x...) printf(x)
 #else
@@ -24,10 +25,27 @@ char _;
 #endif
 using namespace std;
 
-int N, V;
-vi v;
-long double tmp, minn = INF, diff;
-vector<long double> vec;
+int N, M;
+int X[MAXN], Y[MAXN], Sm[MAXN], Pm[MAXN], Sv[MAXN], Pv[MAXN];
+
+inline bool Check (int serving) {
+	ll res = 0LL;
+	for (int i=0; i<N; i++) {
+		int num = serving * X[i] - Y[i];
+		if (num <= 0) continue;
+		int minn = INF;
+		for (int j=0; j * Sm[i]<=num; j++) {
+			int k = (int) ceil(1.0 * max(0, num - j * Sm[i]) / Sv[i]); // # of large servings
+			minn = min(minn, j * Pm[i] + k * Pv[i]);
+		}
+		for (int j=0; j * Sv[i]<=num; j++) {
+			int k = (int) ceil(1.0 * max(0, num - j * Sv[i]) / Sm[i]); // # of small servings
+			minn = min(minn, k * Pm[i] + j * Pv[i]);
+		}
+		res += minn;
+	}
+	return res <= M;
+}
 
 int main (int argc, char const *argv[]) {
 	#ifdef NOT_DMOJ
@@ -37,25 +55,25 @@ int main (int argc, char const *argv[]) {
 	cin.sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
-	cin >> N;
-	while (N--) {
-		cin >> V;
-		v.pb(V);
+	cin >> N >> M;
+	for (int i=0; i<N; i++) {
+		cin >> X[i] >> Y[i] >> Sm[i] >> Pm[i] >> Sv[i] >> Pv[i];
 	}
-	sort(v.begin(), v.end());
-	for (size_t i=0; i<v.size() - 1; i++) {
-		tmp = (v[i] + v[i + 1]) / 2.0;
-		// cout << tmp << endl;
-		diff = 1.0 * abs(v[i] - tmp);
-		vec.pb(diff);
+	int lo = 0, hi = MAXM;
+	while (lo <= hi) {
+		int mid = (lo + hi) >> 1;
+		if (Check(mid)) lo = mid + 1;
+		else hi = mid - 1;
 	}
-	for (size_t i=0; i<vec.size() - 1; i++) {
-		long double sum = vec[i] + vec[i + 1];
-		if (sum < minn) minn = sum;
-	}	
-	cout << fixed << setprecision(1) << minn << "\n";
+	cout << hi << "\n";
 	return 0;
 }
+
+/*
+2 99966
+10 100 96 10 100 11
+10 100 80 10 100 11
+*/
 
 /* 
  * Look for:

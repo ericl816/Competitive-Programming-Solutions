@@ -6,5 +6,5 @@ l=l[1:]
 for i in l:
     if i >= cur+k:
         cur = i
-        cnt +=1
+        cnt += 1
 print cnt

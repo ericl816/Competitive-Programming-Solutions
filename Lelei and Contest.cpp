@@ -5,7 +5,8 @@
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ll long long
-#define MAXN 1000010
+#define ull unsigned long long
+#define MAXN 200010
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
@@ -17,21 +18,22 @@ char _;
 #define s second
 #define mii map<int, int>
 #define umii unordered_map<int, int>
+#define println cout << "\n";
 #ifdef DEBUG
-    #define D(x...) printf(x)
+	#define D(x...) printf(x)
 #else
-    #define D(x...)
+	#define D(x...)
 #endif
 using namespace std;
 
-int N, T, a, b, k, S;
-vi spin;
-ll ans = INF;
+// Using Fermat's Little Theorem and Pascal's Binomial Expansion, the query: (A[l]^M + A[l + 1]^M + ... + A[r]^M) % M becomes (A[l] + A[l + 1] + ... + A[r]) % M
 
-// Use Segment Tree with Lazy Propagation - Range Sum
+int N, M, Q, op, l, r, x;
+ull a[MAXN];
+
 struct Node {
     int l, r;
-    ll val, lazy;
+    ull val, lazy;
 };
 
 struct Seg {
@@ -59,7 +61,7 @@ public:
     inline void Build (int idx, int l, int r) {
         tree[idx].l = l, tree[idx].r = r;
         if (l == r) {
-            tree[idx].val = spin[l];
+            tree[idx].val = a[l];
             return;
         }
         int mid = (l + r) >> 1;
@@ -68,7 +70,7 @@ public:
         Push_Up(idx);
     }
 
-    inline void Update (int idx, int l, int r, int val) {
+    inline void Update (int idx, int l, int r, ull val) {
         Push_Down(idx);
         if (tree[idx].l > r || tree[idx].r < l) return;
         if (tree[idx].l >= l && tree[idx].r <= r) {
@@ -81,7 +83,7 @@ public:
         Push_Up(idx);
     }
 
-    inline ll Query (int idx, int l, int r) {
+    inline ull Query (int idx, int l, int r) {
         Push_Down(idx);
         if (tree[idx].l > r || tree[idx].r < l) return 0;
         if (tree[idx].l >= l && tree[idx].r <= r) return tree[idx].val;
@@ -91,36 +93,29 @@ public:
 
 Seg tree(MAXN);
 
-bool prime[MAXN];
-
-void sieve (int n) {
-    memset(prime, 1, sizeof(prime));
-    prime[1] = 0;
-    for (int i=2; i*i<=n; i++) if (prime[i]) for (int j=i*i; j<=n; j+=i) prime[j] = 0;
-}
-
-int main () {
-    #ifdef NOT_DMOJ
-    freopen("in.txt", "r", stdin);
-    freopen("out.txt", "w", stdout);
-    #endif // NOT_DMOJ
-    cin.sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
-    cin >> N >> T;
-    for (int i=1; i<=N; i++) {
-        cin >> S;
-        spin.pb(S);
-    }
-    tree.Build(1, 0, N - 1);
-    sieve(MAXN);
-    for (int i=1; i<=T; i++) {
-        cin >> a >> b >> k;
-        if (prime[i]) ans = min(ans, (ll) i * (tree.Query(1, a - 1, b - 1) + k));
-        else tree.Update(1, a - 1, b - 1, k);
-    }
-    cout << ans << endl;
-    return 0;
+int main (int argc, char const *argv[]) {
+	#ifdef NOT_DMOJ
+	freopen("in.txt", "r", stdin);
+	freopen("out.txt", "w", stdout);
+	#endif // NOT_DMOJ
+	cin.sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+	cin >> M >> N >> Q;
+	for (int i=1; i<=N; i++) cin >> a[i];
+	tree.Build(1, 1, N);
+	while (Q--) {
+		cin >> op;
+		if (op == 1) {
+			cin >> l >> r >> x;
+			tree.Update(1, l, r, x);
+		}
+		else {
+			cin >> l >> r;
+			cout << (tree.Query(1, l, r) % M) << "\n";
+		}
+	}
+	return 0;
 }
 
 /* 

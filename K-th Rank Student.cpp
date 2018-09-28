@@ -52,15 +52,18 @@ public:
         int c = Find(x);
         int d = Find(y);
         if (Merge(x, y)) {
-            if (rank[c] > rank[d]) swap(c, d);
-                // lead[d] = c;
-                // rank[c] += rank[d];
             for (int i=0; i<rank[c]; i++) {
                 t[d].insert(*t[c].find_by_order(0));
                 t[c].erase(t[c].find_by_order(0));
             }
-            lead[c] = d;
-            rank[d] += rank[c];
+            if (rank[c] > rank[d]) {
+                lead[d] = c;
+                rank[c] += rank[d];
+            }
+            else {
+                lead[c] = d;
+                rank[d] += rank[c];
+            }
         }
     }
     
@@ -73,7 +76,6 @@ Disjoint ds(MAXN);
 
 int main() {
     scanf("%d %d", &N, &M);
-    //ds.make_Set(N);
     for (int i=1; i<=N; i++) {
         scanf("%d", &k);
         ds.make_Set(i, k);

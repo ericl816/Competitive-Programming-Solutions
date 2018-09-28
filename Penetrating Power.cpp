@@ -1,7 +1,8 @@
 #pragma GCC optimize "Ofast"
 #pragma GCC optimize "unroll-loops"
 #pragma GCC target "sse,sse2,sse3,sse4,abm,avx,mmx,popcnt,tune=native"
-#include <bits/stdc++.h>
+// #include <bits/stdc++.h>
+#include "/Users/ericliu/Desktop/Competitive-Programming-Templates/stdc++.h"
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ull unsigned long long
@@ -58,7 +59,7 @@ public:
 			return;
 		}
 		Update(idx << 1, l, r, val);
-		Update(idx << 1 | 1,l, r, val);
+		Update(idx << 1 | 1, l, r, val);
 		Push_Up(idx);
 	}
 

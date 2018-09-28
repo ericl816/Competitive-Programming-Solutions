@@ -34,6 +34,7 @@ vector<pii> adj[MAXN];
  * Subtracts 31 with number of leading zeros (number of zeros before 1 in binary representation of bit)
  * Same as: __builtin_ctz(bit) -> gets number of trailing zeros
  */
+
 inline int Get_FrontBit (int bit) {
 	// return 31 - __builtin_clz(bit);
 	return __builtin_ctz(bit);

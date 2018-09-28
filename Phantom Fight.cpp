@@ -13,9 +13,11 @@
 #define s second
 #define mii map<int, int>
 #define umii unordered_map<int, int>
+#define println cout << "\n";
 using namespace std;
 
-int N, M, s[MAXN], m[MAXN], res, ans;
+int N, M, res, ans;
+int s[MAXN], m[MAXN];
 int DP[MAXN][2]; // Stores the amount of magic
 
 int main () {
@@ -38,10 +40,11 @@ int main () {
 		res ^= 1;
 	}
 	for (int i=0; i<=10000; i++) ans = max(ans, DP[i][res]);
-	for (int i=10000; i>=0; i--)
+	for (int i=10000; i>=0; i--) {
 		if (DP[i][N & 1] == ans) {
 			cout << ans << " " << i << "\n";
 			break;
 		}
+	}
 	return 0;
 }

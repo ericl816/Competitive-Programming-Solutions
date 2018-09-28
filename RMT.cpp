@@ -51,7 +51,7 @@ public:
 	}
 
 	int BigQuery (int a, int b) { //Big Query
-	  int sum;
+		int sum;
 		for (int i=0; i<bigq.s(); i++) {
 		  int lo, hi, mid;
 		  lo = 0;
@@ -80,7 +80,7 @@ BITtree bit (MAXN);
 int main () {
   scan(N); scan(M); scan(Q);
 	for (int i=0; i<N; i++) {
-	  scan(L[i + 1]);
+		scan(L[i + 1]);
 		subs[L[i + 1]].pb(i + 1);
 	}
 	for (int i=0; i<M; i++) {
@@ -92,7 +92,7 @@ int main () {
 		}
 	}
 	for (int i=0; i<N; i++) {
-	  scan(A[i + 1]);
+		scan(A[i + 1]);
 		if (smallq[L[i + 1]]) bit.Update(i + 1, A[i + 1]);
 	}
 	for (int i=0; i<bigq.s(); i++) 
@@ -100,13 +100,13 @@ int main () {
 			for (int k=0; k<subs[bigq[i]].s(); k++) 
 				PSA[bigq[i]].pb(A[subs[bigq[i]][k]] + PSA[bigq[i]].b());
 	for (int i=0; i<Q; i++) {
-	  scan(query);
+		scan(query);
 		if (query == 1) {
-		  scan(l); scan(r);
+			scan(l); scan(r);
 			printf("%d\n", bit.SmallQuery(l, r) + bit.BigQuery(l, r));
 		}
 		else if (query == 2) {
-		  scan(x);
+			scan(x);
 			if (smallq[x]) bit.SmallUpdate(x);
 			else bit.BigUpdate(x);
 		}

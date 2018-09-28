@@ -5,7 +5,6 @@
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ll long long
-#define MAXN 10010
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
@@ -17,10 +16,15 @@ char _;
 #define s second
 #define mii map<int, int>
 #define umii unordered_map<int, int>
+#ifdef DEBUG
+	#define D(x...) printf(x)
+#else
+	#define D(x...)
+#endif
 using namespace std;
 
-int x, n;
-int coins[MAXN], DP[MAXN];
+int N, IRcnt, WAcnt;
+vector<string> codes;
 
 int main () {
 	#ifdef NOT_DMOJ
@@ -30,19 +34,35 @@ int main () {
 	cin.sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
-	memset(DP, INF, sizeof(DP));
-	cin >> x >> n;
-	for (int i=0; i<n; i++) {
-		cin >> coins[i];
-		DP[coins[i]] = 1;
+	cin >> N;
+	while (N--) {
+		string s;
+		cin >> s;
+		if (s == "WA") WAcnt++;
+		codes.pb(s);
 	}
-	for (int i=1; i<=x; i++) {
-		for (int j=0; j<n; j++) {
-			if (i - coins[j] >= 0) {
-				DP[i] = min(DP[i], DP[i - coins[j]] + 1);
-			}
+	int num = floor(WAcnt * 0.3), tmp1 = 0;
+	for (size_t i=0; i<codes.size(); i++) {
+		string &next = codes[i];
+		if (next == "AC") cout << "AC\n";
+		else if (next == "WA") {
+			if (num--> 0) cout << "AC\n";
+			else cout << "WA\n";
 		}
+		else if (next == "IR") {
+			if (++tmp1 <= 10) cout << "AC\n";
+			else if (tmp1 <= 20) cout << "WA\n";
+			else cout << "IR\n";
+		}
+		else cout << "WA\n";
 	}
-	cout << DP[x] << "\n";
 	return 0;
 }
+
+/* 
+ * Look for:
+ * the exact constraints (multiple sets are too slow for n=10^6 :( ) 
+ * special cases (n=1?)
+ * overflow (ll vs int?)
+ * array bounds
+ */

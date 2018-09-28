@@ -49,9 +49,9 @@ int main (int argc, char const *argv[]) {
 	return 0;
 }
 
-/* 
+/*
  * Look for:
- * the exact constraints (multiple sets are too slow for n=10^6 :( ) 
+ * the exact constraints (multiple sets are too slow for n=10^6 :( )
  * special cases (n=1?)
  * overflow (ll vs int?)
  * array bounds

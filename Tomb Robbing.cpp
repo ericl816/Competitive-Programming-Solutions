@@ -19,50 +19,53 @@ char _;
 #define mii map<int, int>
 #define umii unordered_map<int, int>
 #ifdef DEBUG
-  #define D(x...) printf(x)
+	#define D(x...) printf(x)
 #else
-  #define D(x...)
+	#define D(x...)
 #endif
 using namespace std;
 
-int N;
-int arr[MAXN][MAXN], grid[MAXN][MAXN];
+int r, c, ans;
+string s;
+char grid[MAXN][MAXN];
+bool vis[MAXN][MAXN];
+int movex[4] = {0, 0, -1, 1};
+int movey[4] = {-1, 1, 0, 0};
 
-inline void RotateCW () {
-  for (int i=0; i<N; i++) {
-    for (int j=0; j<N; j++) {
-      grid[i][j] = arr[N - j - 1][i];
-    }
-  }
-  for (int i=0; i<N; i++) {
-    for (int j=0; j<N; j++) {
-      arr[i][j] = grid[i][j];
-    }
-  }
+inline void DFS (int a, int b) {
+	vis[a][b] = 1;
+	for (int i=0; i<4; i++) {
+		int nextx = movex[i] + a, nexty = movey[i] + b;
+		if (vis[nextx][nexty] || nextx < 0 || nextx >= r || nexty < 0 || nexty >= c || grid[nextx][nexty] == 'X') continue;
+		DFS(nextx, nexty);
+	}
 }
 
 int main (int argc, char const *argv[]) {
-  #ifdef NOT_DMOJ
-  freopen("in.txt", "r", stdin);
-  freopen("out.txt", "w", stdout);
-  #endif // NOT_DMOJ
-  cin.sync_with_stdio(0);
-  cin.tie(0);
-  cout.tie(0);
-  cin >> N;
-  for (int i=0; i<N; i++) {
-    for (int j=0; j<N; j++) {
-      cin >> arr[i][j];
-    }
-  }
-  while (arr[0][0] >= arr[1][0] || arr[0][0] >= arr[0][1]) RotateCW();
-  for (int i=0; i<N; i++) {
-    for (int j=0; j<N; j++) {
-      cout << arr[i][j] << " ";
-    }
-    cout << "\n";
-  }
-  return 0;
+	#ifdef NOT_DMOJ
+	freopen("in.txt", "r", stdin);
+	freopen("out.txt", "w", stdout);
+	#endif // NOT_DMOJ
+	cin.sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+	cin >> r >> c;
+	for (int i=0; i<r; i++) {
+		cin >> s;
+		for (int j=0; j<c; j++) {
+			grid[i][j] = s[j];
+		}
+	}
+	for (int i=0; i<r; i++) {
+		for (int j=0; j<c; j++) {
+			if (!vis[i][j] && grid[i][j] == '.') {
+				ans++;
+				DFS(i, j);
+			}
+		}
+	}
+	cout << ans << "\n";
+	return 0;
 }
 
 /* 

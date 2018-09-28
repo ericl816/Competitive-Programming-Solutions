@@ -45,7 +45,7 @@ int main () {
   }
   sort(vec.begin(), vec.end());
   // Coordinate compression
-  for (int i=0; i<vec.size(); i++) umap[vec[i]] = i + 1;
+  for (size_t i=0; i<vec.size(); i++) umap[vec[i]] = i + 1;
   for(int i=0; i<N; i++) {
     if (op[i] == 'N') {
       cnt++;

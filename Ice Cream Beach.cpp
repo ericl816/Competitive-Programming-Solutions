@@ -1,7 +1,11 @@
+#pragma GCC optimize "Ofast"
+#pragma GCC optimize "unroll-loops"
+#pragma GCC target "sse,sse2,sse3,sse4,abm,avx,mmx,popcnt,tune=native"
 #include <bits/stdc++.h>
-#define ll long long
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
+#define ll long long
+#define ull unsigned long long
 #define MAXM 25
 #define MAXN 4010
 #define INF 0x3f3f3f3f
@@ -16,13 +20,19 @@ char _;
 #define s second
 #define mii map<int, int>
 #define umii unordered_map<int, int>
+#ifdef DEBUG
+	#define D(x...) printf(x)
+#else
+	#define D(x...)
+#endif
 using namespace std;
 
 // This solution involves using PSA, DP, and Binary Search
 // Also is the very last problem of ECOO 2017 (Round 3 P4)
 
 int N, M;
-ll X[MAXN], F[MAXN], DP[MAXN][MAXM], PSA[MAXN][MAXN], loc[MAXN][MAXN];
+ll X[MAXN], F[MAXN];
+ll DP[MAXN][MAXM], PSA[MAXN][MAXN], loc[MAXN][MAXN];
 
 inline ll Query (int x, int y, int idx) {
 	return PSA[y][idx] - PSA[x - 1][idx];
@@ -30,13 +40,14 @@ inline ll Query (int x, int y, int idx) {
 
 inline ll Get_Loc (int x, int y) {
 	ll currdist = Query(x, y, x);
+	cout << "Curr: " << currdist << "\n";
 	int lo = x + 1, hi = y;
 	while (lo <= hi) {
 		int mid = (lo + hi) >> 1;
-		if (Query(x, y, mid) < Query(x, y, mid - 1)) lo = mid + 1;
+		if (Query(x, y, mid) <= Query(x, y, mid - 1)) lo = mid + 1;
 		else hi = mid - 1;
 	}
-	return min(currdist, Query(x, y, hi));
+	return min(currdist, Query(x, y, lo - 1));
 }
 
 inline void Solve () {
@@ -55,10 +66,23 @@ inline void Solve () {
 	printf("%lld\n", (DP[N][M] + MOD) % MOD);
 }
 
-int main () {
+int main (int argc, char const *argv[]) {
+	#ifdef NOT_DMOJ
+	freopen("in.txt", "r", stdin);
+	freopen("out.txt", "w", stdout);
+	#endif // NOT_DMOJ
 	cin.sync_with_stdio(0);
 	cin.tie(0);
+	cout.tie(0);
 	int test_cases = 10;
 	while (test_cases--) Solve();
 	return 0;
 }
+
+/* 
+ * Look for:
+ * the exact constraints (multiple sets are too slow for n=10^6 :( ) 
+ * special cases (n=1?)
+ * overflow (ll vs int?)
+ * array bounds
+ */

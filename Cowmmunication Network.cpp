@@ -79,64 +79,43 @@ public:
 }; 
 
 Disjoint ds(MAXN);
-Disjoint ds1(MAXN);
-int N, M, A, B, C;
-int indeg[MAXN];
+int N, M, A, B, C, cnt;
 bool flag;
-ll cnt;
-vector<Edge> edgelist, edgelist1;
+vector<Edge> edgelist;
 vector<pii> adj[MAXN];
-priority_queue<Edge, vector<Edge>, greater<Edge>> pq, pq1;
-ll totalcost, totalcost1;
-
-inline void Check () {
-	for (int i=1; i<=N; i++) {
-		if (ds.Merge(1, i)) {
-			flag = 1;
-			break;
-		}
-	}
-	if (flag) {
-	  cout << "Impossible" << endl;
-	  return;
-	}
-}
+priority_queue<Edge, vector<Edge>, greater<Edge>> pq;
+ll totalcost;
 
 int main () {
 	cin.sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
 	ds.make_Set();
-	ds1.make_Set();
 	cin >> N >> M;
 	for (int i=0; i<M; i++) {
 		cin >> A >> B >> C;
-		indeg[A]++;
-		indeg[B]++;
 		adj[A].pb(mp(B, C));
 		adj[B].pb(mp(A, C));
 		edgelist.pb((Edge) {A, B, C});
-		edgelist1.pb((Edge) {B, A, C});
 	}
 	for (Edge next : edgelist) pq.push(next);
-	for (Edge next : edgelist1) pq1.push(next);
 	while (!pq.empty()) {
 		Edge curr = pq.top();
 		pq.pop();
-		if (ds.Merge(curr.a, curr.b) || curr.cost > 0) {
+		if (ds.Merge(curr.a, curr.b)) {
 			ds.Union(curr.a, curr.b);
 			totalcost += curr.cost;
+			cnt++;
+		}
+		else if (curr.cost > 0) totalcost += curr.cost;
+	}
+	for (int i=1; i<=N; i++) {
+		if (ds.Merge(1, i)) {
+			flag = 1;
+			break;
 		}
 	}
-	while (!pq1.empty()) {
-		Edge curr = pq1.top();
-		pq1.pop();
-		if (ds1.Merge(curr.a, curr.b) || curr.cost > 0) {
-			ds1.Union(curr.a, curr.b);
-			totalcost1 += curr.cost;
-		}
-	}
-	Check();
-	if (!flag) cout << (max(totalcost, totalcost1)) << endl;
+	if (cnt ^ N - 1 || flag) cout << "Impossible\n";
+	else cout << totalcost << endl;
 	return 0;
 }

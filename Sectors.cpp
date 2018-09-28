@@ -27,7 +27,7 @@ int main () {
 	for (int i=0; i<K; i++) {
 		cin >> a[i];
 		if (~prev) ans += abs(num[prev] - num[a[i]]);
-		else ans += 1;
+		else ans++;
 		prev = a[i];
  	}
  	cout << ans << endl;

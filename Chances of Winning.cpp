@@ -6,6 +6,7 @@
 char _;
 #define ll long long
 #define ull unsigned long long
+#define MAXN 10
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
@@ -17,6 +18,7 @@ char _;
 #define s second
 #define mii map<int, int>
 #define umii unordered_map<int, int>
+#define println cout << "\n";
 #ifdef DEBUG
 	#define D(x...) printf(x)
 #else
@@ -24,10 +26,32 @@ char _;
 #endif
 using namespace std;
 
-int N, V;
-vi v;
-long double tmp, minn = INF, diff;
-vector<long double> vec;
+int T, G, a, b, sa, sb, idx, ans;
+int scores[MAXN];
+pii games[MAXN];
+bool flag[MAXN][MAXN];
+
+inline void Solve (int num) {
+	if (num == idx) {
+		int res = scores[T];
+		for (int i=0; i<4; i++) {
+			if (i == T) continue;
+			if (scores[i] >= res) return;
+		}
+		ans++;
+		return;
+	}
+	int tmp1 = games[num].f, tmp2 = games[num].s;
+	scores[tmp1] += 3;
+	Solve(num + 1);
+	scores[tmp1] -= 3;
+	scores[tmp2] += 3;
+	Solve(num + 1);
+	scores[tmp2] -= 3;
+	scores[tmp1]++, scores[tmp2]++;
+	Solve(num + 1);
+	scores[tmp1]--, scores[tmp2]--;
+}
 
 int main (int argc, char const *argv[]) {
 	#ifdef NOT_DMOJ
@@ -37,23 +61,27 @@ int main (int argc, char const *argv[]) {
 	cin.sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
-	cin >> N;
-	while (N--) {
-		cin >> V;
-		v.pb(V);
+	cin >> T >> G;
+	--T;
+	for (int i=0; i<G; i++) {
+		cin >> a >> b >> sa >> sb;
+		--a, --b;
+		if (sa > sb) scores[a] += 3;
+		else if (sa < sb) scores[b] += 3;
+		else {
+			scores[a]++, scores[b]++;
+		}
+		flag[a][b] = 1;
 	}
-	sort(v.begin(), v.end());
-	for (size_t i=0; i<v.size() - 1; i++) {
-		tmp = (v[i] + v[i + 1]) / 2.0;
-		// cout << tmp << endl;
-		diff = 1.0 * abs(v[i] - tmp);
-		vec.pb(diff);
+	for (int i=0; i<4; i++) {
+		for (int j=i + 1; j<4; j++) {
+			if (!flag[i][j]) {
+				games[idx++] = mp(i, j);
+			}
+		}
 	}
-	for (size_t i=0; i<vec.size() - 1; i++) {
-		long double sum = vec[i] + vec[i + 1];
-		if (sum < minn) minn = sum;
-	}	
-	cout << fixed << setprecision(1) << minn << "\n";
+	Solve(0);
+	cout << ans << "\n";
 	return 0;
 }
 

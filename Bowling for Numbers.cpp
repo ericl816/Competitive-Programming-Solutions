@@ -42,7 +42,7 @@ int main () {
 			PSA[j] += PSA[j - 1];
 		}
 		for (int j=1; j<=n; j++) val[j] = PSA[j] - PSA[max(0, j - w)];
-		for (int j=1; j<=k; j++) for (int l=1; l<=n; l++) DP[j & 1][l] = max(DP[j & 1][l - 1], DP[(j + 1) & 1][max(0, l - w)] + val[l]);
+		for (int j=1; j<=k; j++) for (int l=1; l<=n; l++) DP[j & 1][l] = max(DP[j & 1][l - 1], DP[(j & 1) ^ 1][max(0, l - w)] + val[l]);
 		cout << DP[k & 1][n] << "\n";
 	}
 	return 0;

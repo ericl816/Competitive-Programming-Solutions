@@ -6,9 +6,8 @@
 char _;
 #define ll long long
 #define ull unsigned long long
+#define MAXN 100010
 #define INF 0x3f3f3f3f
-#define min(a, b) (a) < (b) ? (a) : (b)
-#define max(a, b) (a) < (b) ? (b) : (a)
 #define vi vector<int>
 #define pb push_back
 #define pii pair<int, int>
@@ -17,6 +16,7 @@ char _;
 #define s second
 #define mii map<int, int>
 #define umii unordered_map<int, int>
+#define println cout << "\n";
 #ifdef DEBUG
 	#define D(x...) printf(x)
 #else
@@ -24,10 +24,30 @@ char _;
 #endif
 using namespace std;
 
-int N, V;
-vi v;
-long double tmp, minn = INF, diff;
-vector<long double> vec;
+// Uses only 1 DFS to find the diameter, as opposed to 2
+
+int N, a, b, ans;
+bool path[MAXN], vis[MAXN];
+ll points[MAXN];
+vi adj[MAXN];
+
+inline bool isGood (ll y) {
+	ll det = 1 + y * 4;
+	ll sqr = (ll) sqrt(det);
+	return sqr * sqr == det;
+}
+
+inline pii DFS (int node, int prev, int depth) {
+	vis[node] = 1;
+	path[node] = 0;
+	pii maxx = mp(++depth, node);
+	for (size_t i=0; i<adj[node].size(); i++) {
+		int &next = adj[node][i];
+		if (next == prev) continue;
+		maxx = max(maxx, DFS(next, node, depth));
+	}
+	return maxx;
+}
 
 int main (int argc, char const *argv[]) {
 	#ifdef NOT_DMOJ
@@ -38,22 +58,22 @@ int main (int argc, char const *argv[]) {
 	cin.tie(0);
 	cout.tie(0);
 	cin >> N;
-	while (N--) {
-		cin >> V;
-		v.pb(V);
+	for (int i=0; i<N; i++) {
+		cin >> points[i];
+		path[i] = isGood(points[i]);
 	}
-	sort(v.begin(), v.end());
-	for (size_t i=0; i<v.size() - 1; i++) {
-		tmp = (v[i] + v[i + 1]) / 2.0;
-		// cout << tmp << endl;
-		diff = 1.0 * abs(v[i] - tmp);
-		vec.pb(diff);
+	for (int i=0; i<N - 1; i++) {
+		cin >> a >> b;
+		if (path[--a] && path[--b]) {
+			adj[a].pb(b);
+			adj[b].pb(a);
+		}
 	}
-	for (size_t i=0; i<vec.size() - 1; i++) {
-		long double sum = vec[i] + vec[i + 1];
-		if (sum < minn) minn = sum;
-	}	
-	cout << fixed << setprecision(1) << minn << "\n";
+	for (int i=0; i<N; i++) {
+		if (!path[i]) continue;
+		ans = max(ans, DFS(DFS(i, -1, 0).s, -1, 0).f);
+	}
+	cout << ans << "\n";
 	return 0;
 }
 

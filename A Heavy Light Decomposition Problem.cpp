@@ -31,11 +31,11 @@ vi adj[MAXN];
 int nodes[MAXN], freq[MAXM];
 bool vis[MAXN];
 
-void DFS (int src, int dest, vi tempVec) {
+inline void DFS (int src, int dest, vi tempVec) {
   tempVec.pb(src);
   vis[src] = 1;
-  if (src == dest) for (auto it=tempVec.begin(); it!=tempVec.end(); ++it) traversed.pb(*it);
-  else for (auto it=adj[src].begin(); it!=adj[src].end(); ++it) if (!vis[*it]) DFS(*it, dest, tempVec);
+  if (src == dest) for (auto i : tempVec) traversed.pb(i);
+  else for (auto i : adj[src]) if (!vis[i]) DFS(i, dest, tempVec);
 }
 
 int main () {
@@ -60,13 +60,13 @@ int main () {
     DFS(b, c, temp);
     if (a == 1) {
       double average = 0, tSize = traversed.size();
-      for (auto it=traversed.begin(); it!=traversed.end(); ++it) average += nodes[*it];
+      for (auto i : traversed) average += nodes[i];
       ll ans = round(average / tSize);
       cout << ans << "\n";
     }
     else if (a == 2) {
       vector<double> medianVec;
-      for (auto it=traversed.begin(); it!=traversed.end(); ++it) medianVec.pb(nodes[*it]);
+      for (auto i : traversed) medianVec.pb(nodes[i]);
       sort(medianVec.begin(), medianVec.end());
       int theSize = medianVec.size(), ans = 0;
       if (theSize & 1) ans = medianVec[theSize >> 1];
@@ -76,12 +76,12 @@ int main () {
     else {
       int maxCount = 0, maxIndex;
       memset(freq, 0, sizeof(freq));
-      for (auto it=traversed.begin(); it!=traversed.end(); ++it) {
-        if (++freq[nodes[*it]] > maxCount) {
+      for (auto i : traversed) {
+        if (++freq[nodes[i]] > maxCount) {
           maxCount++;
-          maxIndex = nodes[*it];
+          maxIndex = nodes[i];
         }
-        else if (freq[nodes[*it]] == maxCount) maxIndex = min(maxIndex, nodes[*it]);
+        else if (freq[nodes[i]] == maxCount) maxIndex = min(maxIndex, nodes[i]);
       }
       cout << maxIndex << "\n";
     }

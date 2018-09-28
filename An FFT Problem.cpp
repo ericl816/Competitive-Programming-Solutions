@@ -5,10 +5,9 @@
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ll long long
-#define ull unsigned long long
+#define MAXN 2010
 #define INF 0x3f3f3f3f
-#define min(a, b) (a) < (b) ? (a) : (b)
-#define max(a, b) (a) < (b) ? (b) : (a)
+#define MOD 998244353
 #define vi vector<int>
 #define pb push_back
 #define pii pair<int, int>
@@ -19,29 +18,28 @@ char _;
 #define umii unordered_map<int, int>
 using namespace std;
 
-int N, K;
+int N;
+ll arr[MAXN], DP[MAXN];
 
 int main (int argc, char const *argv[]) {
-	#ifdef NOT_DMOJ
-	freopen("in.txt", "r", stdin);
-	freopen("out.txt", "w", stdout);
-	#endif // NOT_DMOJ
-	cin.sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
-	cin >> N >> K;
-	if (N == K) {
-		for (int i=1; i<=N; i++) cout << i << " ";
-		return 0;
-	}
-	if (round(sqrt(N) > K)) {
-		cout << -1;
-		return 0;
-	}
-	for (int i=N; i>=1; i-=K) {
-		for (int j=max(i - K + 1, 1LL); j<=i; j++) cout << j << " ";
-	}
-	return 0;
+    #ifdef NOT_DMOJ
+    freopen("in.txt", "r", stdin);
+    freopen("out.txt", "w", stdout);
+    #endif // NOT_DMOJ
+    cin.sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+    cin >> N;
+    for (int i=0; i<N; i++) cin >> arr[i];
+    DP[0] = 1LL;
+    for (int i=0; i<N; i++) {
+        for (int j=i; j>=0; j--) {
+            DP[j + 1] = (DP[j + 1] + DP[j] * arr[i]) % MOD;
+        }
+    }
+    for (int i=1; i<=N; i++) cout << (DP[i] + MOD) % MOD << " ";
+    cout << "\n";
+    return 0;
 }
 
 /* 

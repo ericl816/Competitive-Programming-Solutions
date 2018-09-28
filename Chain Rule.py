@@ -8,6 +8,7 @@ for i in range(M):
 	adj[B].append((A, C))
 dist1 = [-1 for i in range(N)]
 dist2 = [-1 for i in range(N)]
+dist1[0] = dist2[-1] = 0
 queue = __import__("collections").deque([(0, 0)])
 while queue:
 	curr, currcost = queue.popleft()
@@ -24,6 +25,4 @@ while queue:
 		if nextcost < dist2[nextnode] or dist2[nextnode] == -1:
 			dist2[nextnode] = nextcost
 			queue.append((nextnode, dist2[nextnode]))
-dist1[0] = 0
-dist2[-1] = 0
 print(max(map(sum, zip(dist1, dist2))))
