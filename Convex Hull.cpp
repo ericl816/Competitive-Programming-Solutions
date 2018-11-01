@@ -17,6 +17,8 @@ char _;
 #define umii unordered_map<int, int>
 using namespace std;
 
+// Time Complexity: O(K(M + NlogN))
+
 struct Edge {
 	int dest, cost, h;
 };
@@ -55,5 +57,5 @@ int main () {
 			}
 		}
 	}
-	return 0 * printf("%d\n", (dist[B][K - 1] == INF ? -1 : dist[B][K - 1]));
+	return !printf("%d\n", (dist[B][K - 1] == INF ? -1 : dist[B][K - 1]));
 }

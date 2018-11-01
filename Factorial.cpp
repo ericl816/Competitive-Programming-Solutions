@@ -1,4 +1,5 @@
-#include <bits/stdc++.h>
+// #include <bits/stdc++.h>
+#include "/Users/ericliu/Desktop/Competitive-Programming-Templates/stdc++.h"
 #define ll long long
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
@@ -45,7 +46,7 @@ inline vector<pair<ll, ll> > Check () {
 }
 
 void Do_Test_Cases () {
-	int TEST_CASES = 5;
+	int TEST_CASES = 10;
 	while (TEST_CASES--) {
 		cin >> K >> M;
 		ll lo = 2, hi = 1e18;
@@ -55,8 +56,8 @@ void Do_Test_Cases () {
 			bool flag = 1;
 			for (size_t i=0; i<factors.size(); i++) {
 				pair<ll, ll> &next = factors[i];
-				ll fact = next.f;
-				ll cnt = 0;
+				ll fact = next.f, cnt = 0;
+				// Get number of prime factors in mid!
 				while (fact < 5e12) {
 					cnt += mid / fact;
 					fact *= next.f;

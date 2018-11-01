@@ -13,10 +13,11 @@
 #define umii unordered_map<int, int>
 using namespace std;
 
-int N, a[MAXN], b[MAXN], hi, lo;
+int N, hi, lo;
+int a[MAXN], b[MAXN];
 int grid[MAXM][MAXM], PSA[MAXM][MAXM];
 
-inline int Query(int x1, int y1, int x2, int y2) {
+inline int Query (int x1, int y1, int x2, int y2) {
     if (x2 < 0 || y2 < 0) return 0;
     int val = PSA[x2][y2];
     if (x1 > 0) val -= PSA[x1 - 1][y2];
@@ -25,7 +26,7 @@ inline int Query(int x1, int y1, int x2, int y2) {
     return val;
 }
 
-int main() {
+int main () {
     scanf("%d", &N);
     for (int i=0; i<N; i++) {
       scanf("%d %d", &a[i], &b[i]);

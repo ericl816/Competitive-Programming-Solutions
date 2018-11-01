@@ -32,10 +32,11 @@ int nodes[MAXN], freq[MAXM];
 bool vis[MAXN];
 
 inline void DFS (int src, int dest, vi tempVec) {
-  tempVec.pb(src);
+  if (vis[src]) return;
   vis[src] = 1;
+  tempVec.pb(src);
   if (src == dest) for (auto i : tempVec) traversed.pb(i);
-  else for (auto i : adj[src]) if (!vis[i]) DFS(i, dest, tempVec);
+  else for (auto i : adj[src]) DFS(i, dest, tempVec);
 }
 
 int main () {
@@ -74,7 +75,7 @@ int main () {
       cout << ans << "\n";
     }
     else {
-      int maxCount = 0, maxIndex;
+      int maxCount = 0, maxIndex = 0;
       memset(freq, 0, sizeof(freq));
       for (auto i : traversed) {
         if (++freq[nodes[i]] > maxCount) {

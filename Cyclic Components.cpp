@@ -45,7 +45,7 @@ inline void DFS (int node, int prev) {
     }
 }
 
-int main() {
+int main () {
     cin.sync_with_stdio(0);
     cin.tie(0);
     cout.tie(0);

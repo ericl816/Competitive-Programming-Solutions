@@ -28,7 +28,7 @@ inline int Solve (int x, int y) {
 	if (x < 0 || y < 0) return 0;
 	int &res = DP[x][y];
 	if (~res) return res;
-	if (S[x] !- T[y] && ((S[x] == 'W' && A[x] > B[y]) || (T[y] == 'W' && A[x] < B[y]))) res = Solve(x - 1, y - 1) + A[x] + B[y];
+	if (S[x] != T[y] && ((S[x] == 'W' && A[x] > B[y]) || (T[y] == 'W' && A[x] < B[y]))) res = Solve(x - 1, y - 1) + A[x] + B[y];
 	return res = max(res, max(Solve(x - 1, y), Solve(x, y - 1)));
 }
 

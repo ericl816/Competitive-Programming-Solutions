@@ -43,9 +43,9 @@ int main () {
             continue;
         }
         int lca = LCA(u, v);
-      // Case 1: (u is visited before v)
+        // Case 1: (u is visited before v)
         if (DFN[u] < DFN[v]) printf("%d\n", DFN[v] - DFN[lca] - depth[u] + depth[lca]);
-      // Case 2: Get size of subtree
+        // Case 2: Get size of subtree
         else {
             auto it = occ[lca].lower_bound(DFN[u]);
             // Leaf node

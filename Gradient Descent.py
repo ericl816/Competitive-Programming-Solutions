@@ -6,7 +6,7 @@ hi_x = R
 lo_y = 1
 hi_y = C
 min_score = {}
-MAXX = 1L << 30
+maxx = 1L << 30
 
 def Query (a, b):
 	print "?", a, b
@@ -15,7 +15,7 @@ def Query (a, b):
 
 def Check (a, b):
 	if a > R or b > C: 
-		min_score[a, b] = MAXX
+		min_score[a, b] = maxx
 	else: 
 		Query(a, b)
 

@@ -27,7 +27,9 @@ char _;
 #endif
 using namespace std;
 
-/* Find the number of ways in which K kings can be placed on an NxM chessboard so that no two kings are not in adjacent squares.
+/* 
+ * Find the number of ways in which K kings can be placed on an N x M chessboard
+ * so that no two kings are not in adjacent squares.
  * Source: http://codeforces.com/problemsets/acmsguru/problem/99999/223
  * Use Bitmask DP
  */

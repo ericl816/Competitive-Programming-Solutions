@@ -16,6 +16,12 @@ char _;
 #define s second
 #define mii map<int, int>
 #define umii unordered_map<int, int>
+#define DEBUG 1
+#ifdef DEBUG
+    #define D(x...) printf(x)
+#else
+    #define D(x...)
+#endif
 using namespace std;
 
 int N;
@@ -34,6 +40,7 @@ int main (int argc, char const *argv[]) {
     DP[0] = 1LL;
     for (int i=0; i<N; i++) {
         for (int j=i; j>=0; j--) {
+            // D("%lld %lld %lld\n", DP[j + 1], DP[j], arr[i]);
             DP[j + 1] = (DP[j + 1] + DP[j] * arr[i]) % MOD;
         }
     }

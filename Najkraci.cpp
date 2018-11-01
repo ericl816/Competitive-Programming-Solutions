@@ -34,8 +34,8 @@ struct Edge {
 	}
 };
 
-int N, M, O, D, L, from[MAXN], to[MAXN], dist[MAXN], num[MAXN];
-ll len[MAXN];
+int N, M, O, D, L, from[MAXN], to[MAXN], dist[MAXN];
+ll num[MAXN], len[MAXN];
 vector<Edge> adj[MAXN];
 bool vis[MAXN], vis1[MAXN];
 priority_queue<pii, vector<pii>, greater<pii>> pq;
@@ -87,13 +87,13 @@ void SSSP (int src) {
 			if (dist[currnode] < nextcost) continue;
 			from[curr] = (from[curr] + from[currnode]) % MOD;
 			len[currnode] = (ll) ((ll) from[currnode] * (ll) to[curr]) % MOD;
-			num[curridx] = (int) (num[curridx] + len[currnode]) % MOD;
+			num[curridx] = (ll) (num[curridx] + len[currnode]) % MOD;
 		}
 	}
 }
 
 inline void Solve () {
-	for (int i=0; i<M; i++) printf("%d\n", (num[i] + MOD) % MOD);
+	for (int i=0; i<M; i++) printf("%lld\n", (num[i] + MOD) % MOD);
 }
 
 int main () {

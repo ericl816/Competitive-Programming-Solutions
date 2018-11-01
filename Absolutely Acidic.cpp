@@ -8,11 +8,10 @@
 #define f first
 #define s second
 #define mii map<int, int>
-#define umii unordered_map<int, int>
 using namespace std;
 
 int N, R, ans;
-umii freq;
+mii freq;
 priority_queue<pii> pq;
 
 int main () {

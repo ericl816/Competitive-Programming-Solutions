@@ -80,7 +80,6 @@ int main (int argc, char const *argv[]) {
 		vis[curr.f][curr.s] = 0;
 		for (int i=0; i<4; i++) {
 			int nextx = curr.f + movex[i], nexty = curr.s + movey[i];
-			// if (flag[nextx][nexty] || grid[nextx][nexty] == 'W' || nextx < 0 || nextx >= N || nexty < 0 || nexty >= M) continue;
 			if (grid[curr.f][curr.s] == '.' || grid[curr.f][curr.s] == 'S' || grid[curr.f][curr.s] == conveyors[i]) {
 				if (flag[nextx][nexty] || grid[nextx][nexty] == 'W' || nextx < 0 || nextx >= N || nexty < 0 || nexty >= M) continue;
 				int nextcost = dist[curr.f][curr.s] + (grid[curr.f][curr.s] == conveyors[i] ? 0 : 1);

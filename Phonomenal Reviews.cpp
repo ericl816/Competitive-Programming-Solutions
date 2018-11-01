@@ -1,56 +1,102 @@
-#include<bits/stdc++.h>
+#pragma GCC optimize "Ofast"
+#pragma GCC optimize "unroll-loops"
+#pragma GCC target "sse,sse2,sse3,sse4,abm,avx,mmx,popcnt,tune=native"
+#include <bits/stdc++.h>
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
+#define ll long long
+#define ull unsigned long long
+#define MAXN 100010
+#define INF 0x3f3f3f3f
+#define min(a, b) (a) < (b) ? (a) : (b)
+#define max(a, b) (a) < (b) ? (b) : (a)
+#define vi vector<int>
 #define pb push_back
+#define pii pair<int, int>
+#define mp make_pair
+#define f first
+#define s second
+#define mii map<int, int>
+#define umii unordered_map<int, int>
+#define DEBUG 1
+#ifdef DEBUG
+    #define D(x...) printf(x)
+#else
+    #define D(x...)
+#endif
 using namespace std;
-const int MAXN = 100010;
-int N, M, pho, a, b, r, paths = 0;
-vector<int> v[MAXN];
-bool u[MAXN];
-bool p[MAXN];
-bool k[MAXN];
-int d[MAXN];
 
-bool DFS(int N) {
-    if (u[N]) return 0;
-    u[N] = 1;
-    k[N] = p[N];
-    for (int i=0; i<v[N].size(); i++) {
-        if (!u[v[N][i]]) {
-            DFS(v[N][i]);
-            k[N] = k[N] || k[v[N][i]];
-            if (k[v[N][i]]) paths++;
+int N, M, root, x, y, cnt, maxx;
+bool isPho[MAXN], vis[MAXN];
+vi adj[MAXN], path[MAXN];
+int dist[MAXN];
+
+inline void DFS1 (int node, int prev) {
+    if (vis[node]) return;
+    vis[node] = 1;
+    if (dist[node] > maxx && isPho[node]) {
+        maxx = dist[node];
+        root = node;
+    }
+    for (size_t i=0; i<adj[node].size(); i++) {
+        int &next = adj[node][i];
+        if (next == prev) continue;
+        dist[next] = dist[node] + 1;
+        DFS1(next, node);
+        if (isPho[next] || path[next].size()) {
+            path[node].pb(next);
+            path[next].pb(node);
+            ++cnt;
         }
     }
-    return k[N];
+    vis[node] = 0;
 }
 
-void DFS2(int N, int D) {
-    if (u[N] || !k[N]) return;
-    u[N] = 1;
-    d[N] = D;
-    if (d[N] > d[r]) r = N;
-    for (int i=0; i<v[N].size(); i++) DFS2(v[N][i], D+1);
-    
+inline void DFS2 (int node, int prev) {
+    if (vis[node]) return;
+    vis[node] = 1;
+    if (dist[node] > maxx) {
+        maxx = dist[node];
+        root = node;
+    }
+    for (size_t i=0; i<path[node].size(); i++) {
+        int &next = path[node][i];
+        if (next == prev) continue;
+        dist[next] = dist[node] + 1;
+        DFS2(next, node);
+    }
 }
 
-int main() {
-    scan(N);
-    scan(M);
-    for (int i=0; i<M; i++) {
-        scan(pho);
-        p[pho] = 1;
+int main (int argc, char const *argv[]) {
+    #ifdef NOT_DMOJ
+    freopen("in.txt", "r", stdin);
+    freopen("out.txt", "w", stdout);
+    #endif // NOT_DMOJ
+    cin.sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+    cin >> N >> M;
+    while (M--) {
+        cin >> root;
+        isPho[root] = 1;
     }
-    for (int i=0; i<N - 1; i++) {
-        scan(a);
-        scan(b);
-        v[a].pb(b);
-        v[b].pb(a);
+    for (int i=1; i<N; i++) {
+        cin >> x >> y;
+        adj[x].pb(y);
+        adj[y].pb(x);
     }
-    DFS(pho);
-    memset(u, 0, sizeof u);
-    DFS2(pho, 0);
-    memset(u, 0, sizeof u);
-    DFS2(r, 0);
-    printf("%d\n", (paths << 1) - d[r]);
+    DFS1(root, -1);
+    dist[root] = 0;
+    maxx = 0;
+    DFS2(root, -1);
+    cout << ((cnt << 1) - maxx) << "\n";
+    return 0;
 }
+
+/* 
+ * Look for:
+ * the exact constraints (multiple sets are too slow for n=10^6 :( ) 
+ * special cases (n=1?)
+ * overflow (ll vs int?)
+ * array bounds
+ */

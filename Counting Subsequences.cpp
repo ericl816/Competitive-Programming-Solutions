@@ -5,6 +5,9 @@
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ll long long
+#define ull unsigned long long
+#define MAXN 100010
+#define MOD 10007
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
@@ -16,14 +19,18 @@ char _;
 #define s second
 #define mii map<int, int>
 #define umii unordered_map<int, int>
+#ifdef DEBUG
+	#define D(x...) printf(x)
+#else
+	#define D(x...)
+#endif
 using namespace std;
 
-// Count the number of subsequences whose sum equals to 47
+string s;
+int prevv[MAXN];
+ll DP[MAXN];
 
-int T;
-ll N, a;
-
-int main () {
+int main (int argc, char const *argv[]) {
 	#ifdef NOT_DMOJ
 	freopen("in.txt", "r", stdin);
 	freopen("out.txt", "w", stdout);
@@ -31,18 +38,22 @@ int main () {
 	cin.sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
-	cin >> T;
-	while (T--) {
-		ll ans = 0, sum = 0;
-		map<ll, ll> dict;
-		dict[0] = 1LL;
-		cin >> N;
-		while (N--) {
-			sum += a;
-			ans += dict[sum - 47];
-			dict[sum]++;
-		}
-		printf("%lld\n", ans);
+	cin >> s;
+	DP[0] = 1LL;
+	memset(prevv, -1, sizeof(prevv));
+	for (size_t i=1; i<=s.size(); i++) {
+		DP[i] = (DP[i - 1] << 1) % MOD;
+		if (~prevv[s[i - 1]]) DP[i] = ((DP[i] % MOD - DP[prevv[s[i - 1]]] % MOD) + MOD) % MOD;
+		prevv[s[i - 1]] = i - 1;
 	}
+	cout << ((DP[s.size()] + MOD) % MOD) - 1 << "\n";
 	return 0;
 }
+
+/* 
+ * Look for:
+ * the exact constraints (multiple sets are too slow for n=10^6 :( ) 
+ * special cases (n=1?)
+ * overflow (ll vs int?)
+ * array bounds
+ */

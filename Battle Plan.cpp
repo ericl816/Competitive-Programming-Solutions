@@ -21,14 +21,14 @@ struct Node {
 } tree[MAXN << 2];
 
 int N;
-ll p[MAXN], d[MAXN], c[MAXN], cost[MAXN], depth[MAXN], currdepth[MAXN];
+ll p[MAXN], d[MAXN], c[MAXN], cost[MAXN], depth[MAXN], vert[MAXN];
 vi adj[MAXN];
 
 inline void Push_Up (int idx) {
 	tree[idx].minn = min(tree[idx << 1].minn, tree[idx << 1 | 1].minn);
 }
 
-void Build (int idx, int l, int r) {
+inline void Build (int idx, int l, int r) {
 	tree[idx].l = l;
 	tree[idx].r = r;
 	if (l == r) {
@@ -41,18 +41,19 @@ void Build (int idx, int l, int r) {
 	Push_Up(idx);
 }
 
-void Update (int idx, int val, int pos) {
+inline void Update (int idx, int pos, int val) {
 	if (tree[idx].l == tree[idx].r) {
 		tree[idx].minn = val;
 		return;
 	}
 	int mid = (tree[idx].l + tree[idx].r) >> 1;
-	if (pos <= mid) Update(idx << 1, val, pos);
-	else Update(idx << 1 | 1, val, pos);
+	if (pos <= mid) Update(idx << 1, pos, val);
+	else Update(idx << 1 | 1, pos, val);
 	Push_Up(idx);
 }
 
-ll Query (int idx, int val) {
+// Returns deepest (rightmost) node with cost less than current cost (val)
+inline ll Query (int idx, int val) {
 	if (val <= tree[idx].minn) return -INF;
 	if (tree[idx].l == tree[idx].r) return tree[idx].l;
 	// Check recursively if the right side has a minimum less than the current cost/val - order should matter
@@ -60,37 +61,38 @@ ll Query (int idx, int val) {
 	else return Query(idx << 1, val);
 }
 
-/* DFS function calculates the depth in the tree at the given node, using a Segment Tree which
+/* 
+ * DFS function calculates the depth in the tree at the given node, using a Segment Tree which
  * helps find the first ancestor with a fuel cost strictly less than the current planet/node.
  * The indices of the Segment Tree represent the depth in the tree (index 1 = top of tree).
  * Each node of the Segment Tree will record the minimum fuel cost of a single planet/node in its range.
  * Here, we update the Segment Tree at the index equal to the depth of the node, to the node's fuel cost
  */
 inline void DFS (int idx, int node, int prev) {
-	currdepth[idx] = node;
+	vert[idx] = node;
 	if (node ^ N) {
 		depth[idx] = depth[idx - 1] + d[node];
-		int val = Query(1, c[node]);
-		cost[node] = cost[currdepth[val]] + (ll) c[node] * (depth[idx] - depth[val]);
+		int deepestnode = Query(1, c[node]);
+		cost[node] = cost[vert[deepestnode]] + (ll) c[node] * abs(depth[idx] - depth[deepestnode]);
 	}
-	Update(1, c[node], idx);
+	Update(1, idx, c[node]);
 	for (size_t i=0; i<adj[node].size(); i++) {
 		int &next = adj[node][i];
 		if (next == prev) continue;
 		DFS(idx + 1, next, node);
 	}
-	Update(1, INF, idx);
+	Update(1, idx, INF); // Reset so that future queries will not be affected
 }
 
 int main () {
 	scan(N);
-	for (int i=1; i<=N - 1; i++) {
+	for (int i=1; i<N; i++) {
 		scan(p[i]); scan(d[i]); scan(c[i]);
 		adj[p[i]].pb(i);
 	}
 	Build(1, 1, N);
-	Update(1, 0, 1);
+	Update(1, 1, 0);
 	DFS(1, N, -1);
-	for (int i=1; i<=N - 1; i++) printf("%lld\n", cost[i]);
+	for (int i=1; i<N; i++) printf("%lld\n", cost[i]);
 	return 0;
 }

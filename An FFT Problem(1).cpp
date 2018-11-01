@@ -28,8 +28,8 @@ char _;
 using namespace std;
 
 int N;
-ll arr[MAXN], DP[MAXN];
-vector<ll> ans;
+ll arr[MAXN];
+ll DP[2][MAXN];
 
 int main (int argc, char const *argv[]) {
     #ifdef NOT_DMOJ
@@ -40,21 +40,15 @@ int main (int argc, char const *argv[]) {
     cin.tie(0);
     cout.tie(0);
     cin >> N;
-    for (int i=0; i<N; i++) {
-        cin >> arr[i];
-        arr[i] = (((arr[i] + MOD) % MOD) + MOD) % MOD;
-    }
-    for (int i=0; i<=N; i++) DP[i] = 1LL;
-    for (int i=0; i<N; i++) {
-        for (int j=0; j<=N - i - 1; j++) {
-            DP[j] = (((DP[j + 1] + MOD) % MOD * (arr[j] + MOD) % MOD) + MOD) % MOD;
+    for (int i=1; i<=N; i++) cin >> arr[i];
+    DP[0][0] = 1LL;
+    for (int i=1; i<=N; i++) {
+        for (int j=0; j<=N; j++) {
+            if (!j) DP[i & 1][j] = DP[(i & 1) ^ 1][j];
+            else DP[i & 1][j] = (DP[(i & 1) ^ 1][j] + DP[(i & 1) ^ 1][j - 1] * arr[i]) % MOD;
         }
-        for (int j=N - i - 2; j>=0; j--) {
-            DP[j] = (((DP[j] + MOD) % MOD + (DP[j + 1] + MOD) % MOD) + MOD) % MOD;
-        }
-        ans.pb((DP[0] + MOD) % MOD);
     }
-    for (auto i : ans) cout << i << " ";
+    for (int i=1; i<=N; i++) cout << (DP[N & 1][i] + MOD) % MOD << " ";
     cout << "\n";
     return 0;
 }

@@ -51,16 +51,14 @@ public class DMOPC2013Contest1P4AFK {
 					System.out.println(curr.steps >= 60 ? "#notworth" : curr.steps);
 					break;
 				}
-
 				for (int i = 0; i < 4; i++) {
 					int currx = curr.x + movex[i];
 					int curry = curr.y + movey[i];
-				if (currx < 0 || curry < 0 || currx >= w || curry >= l || visited[currx][curry] || grid[currx][curry] == 'X')
-						continue;
-					q.offer(new Point(currx, curry, curr.steps + 1));
-					visited[currx][curry] = true;
+					if (currx < 0 || curry < 0 || currx >= w || curry >= l || visited[currx][curry] || grid[currx][curry] == 'X') continue;
+						q.offer(new Point(currx, curry, curr.steps + 1));
+						visited[currx][curry] = true;
+					}
 				}
-			}
 			if (!done) 
 				System.out.println("#notworth");
 		}

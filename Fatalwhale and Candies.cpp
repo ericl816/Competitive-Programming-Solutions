@@ -27,13 +27,12 @@ int main () {
 	DP[0][0] = 0;
 	for (int i=1; i<P; i++) DP[i][0] = -INF;
 	for (int i=1; i<=N; i++) {
-		for (int j=0; j<P; j++) 
-			DP[j][1] = max(DP[j][0], DP[(j - rem[i] + P) % P][0] + s[i]);
+		for (int j=0; j<P; j++) DP[j][1] = max(DP[j][0], DP[(j - rem[i] + P) % P][0] + s[i]);
 		if (i ^ N) for (int j=0; j<P; j++) DP[j][0] = DP[j][1];
 	}
-	cout << DP[0][1] << endl;
+	cout << DP[0][1] << "\n";
 	for (int i=N, res = 0; i>=1; i--) {
-		//res = 0;
+		// res = 0;
 		for (int j=0; j<P; j++) {
 			if (DP[res][1] == DP[(j - rem[i] + P) % P][0] + s[i] && DP[res][1] ^ DP[res][0]) {
 				res = (j - rem[i] + P) % P;
@@ -45,9 +44,9 @@ int main () {
 	  		for (int j=0; j<P; j++) DP[j][1] = DP[j][0];
 	  		for (int j=0; j<P; j++) DP[(j - rem[i - 1] + P) % P][0] = DP[j][1] - s[i - 1];
 	}
-	cout << candies.size() << endl;
+	cout << candies.size() << "\n";
 	sort(candies.begin(), candies.end());
-	for (size_t i=0; i<candies.size(); i++) cout << candies[i] << " ";
+	for (auto i : candies) cout << i << " ";
 	/*
 		psa[i] += s[i] + psa[i - 1];
 		if (psa[i] % P == 0) {

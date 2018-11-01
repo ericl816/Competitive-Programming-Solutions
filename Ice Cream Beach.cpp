@@ -40,14 +40,14 @@ inline ll Query (int x, int y, int idx) {
 
 inline ll Get_Loc (int x, int y) {
 	ll currdist = Query(x, y, x);
-	cout << "Curr: " << currdist << "\n";
+	// cout << "Curr: " << currdist << "\n";
 	int lo = x + 1, hi = y;
 	while (lo <= hi) {
 		int mid = (lo + hi) >> 1;
 		if (Query(x, y, mid) <= Query(x, y, mid - 1)) lo = mid + 1;
 		else hi = mid - 1;
 	}
-	return min(currdist, Query(x, y, lo - 1));
+	return min(currdist, Query(x, y, hi));
 }
 
 inline void Solve () {
