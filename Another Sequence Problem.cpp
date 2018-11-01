@@ -39,6 +39,7 @@ int M, K, a;
 ll N, ans;
 vll v(MAXN), freq(MAXN);
 
+// Perform matrix multiplication
 inline vll Multiply (vll &A, vll &B) {
   vll prod(A.size(), 0);
   for (size_t i=0; i<A.size(); i++) {
