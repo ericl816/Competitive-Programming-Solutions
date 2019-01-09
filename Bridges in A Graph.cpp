@@ -69,7 +69,10 @@ inline int TarjansDFS (vi adj[], int node, int prev) {
 			par[next] = node;
 			TarjansDFS(adj, next, node);
 			low[node] = min(low[node], low[next]);
-			if (DFN[next] == low[next]) cnt++;
+			if (DFN[next] == low[next]) {
+				cnt++;
+				s.insert(next);
+			}
 		}
 		else if (par[node] ^ next) low[node] = min(low[node], DFN[next]); 
 	}
@@ -94,7 +97,7 @@ int main () {
 			adj[x].pb(y);
 			adj[y].pb(x);
 		}
-		cout << TarjansDFS(adj, 0, -1) << endl;
+		cout << TarjansDFS(adj, 0, -1) << "\n";
 	}
 	return 0;
 }

@@ -29,8 +29,8 @@ inline ll Solve (ll x, ll y) {
   if (~res) return res;
   ll curr = -INF;
   for (int i=0; i<n; i++) {
-    if (!weights[y][i] || x & 1 << i) continue;
-    curr = max(curr, Solve(x | 1 << i, i) + weights[y][i]);
+    if (!weights[y][i] || x & (1 << i)) continue;
+    curr = max(curr, Solve(x | (1 << i), i) + weights[y][i]);
   }
   return res = curr;
 }

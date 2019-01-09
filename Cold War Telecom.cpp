@@ -46,6 +46,6 @@ int main () {
 	memset(vis, 0, sizeof(vis));
 	for (int i=0; i<N; i++) if (!vis[i]) TarjansDFS(i, -1);
 	printf("%d\n", crucial.size());
-	for (int nodes : crucial) printf("%d\n", nodes);
+	for (auto it=crucial.begin(); it!=crucial.end(); it++) printf("%d\n", *it);
 	return 0;
 }

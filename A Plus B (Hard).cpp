@@ -409,16 +409,12 @@ template<class T> bigint operator + (const T & a, const bigint & b) { return big
 template<class T> bigint operator - (const T & a, const bigint & b) { return bigint(a) - b;  }
 template<class T> bigint operator ^ (const T & a, const bigint & b) { return bigint(a) ^ b;  }
 
-int N;
 bigint a, b;
 
 int main() {
   cin.sync_with_stdio(0);
   cin.tie(0);
-  cin >> N;
-  while (N--) {
-    cin >> a >> b;
-    cout << (a + b) << endl;
-  }
+  cin >> a >> b;
+  cout << (a + b) << endl;
   return 0;
 }

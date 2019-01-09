@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 #define ll long long
 #define MAXN 100010
-#define INF 1e20
+#define INF 0x3f3f3f3f
 #define pb push_back
 #define pii pair<int, int>
 #define f first

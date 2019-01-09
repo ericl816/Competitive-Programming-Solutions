@@ -6,13 +6,14 @@
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ll long long
-#define MAXN 1000010
-#define SEED 131
-#define MOD 1000000007
+#define ull unsigned long long
+#define MAXM 1010
+#define MAXN 5010
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
 #define vi vector<int>
+#define vll vector<ll>
 #define pb push_back
 #define pii pair<int, int>
 #define mp make_pair
@@ -20,18 +21,23 @@ char _;
 #define s second
 #define mii map<int, int>
 #define umii unordered_map<int, int>
+#define DEBUG 1
+#ifdef DEBUG
+	#define D(x...) printf(x)
+#else
+	#define D(x...)
+#endif
 using namespace std;
 
-string s, t;
-ll hashed[MAXN], qpow[MAXN];
+inline int GCD (int a, int b) { return b == 0 ? a : GCD(b, a % b); }
+inline int LCM (int a, int b) { return a * b / GCD(a, b); }
 
-// Use this to get the hash of the current substring
-inline ll Get_Hash_Substr (ll a, ll b) {
-	ll len = b - a + 1;
-	return hashed[b] - (hashed[a - 1] * qpow[len]);
-}
+// https://judge.mcpt.ca/problem/jdcc17c1s3
+int N, T, sum;
+int K[MAXN];
+priority_queue<int> pq;
 
-int main () {
+int main (int argc, char const *argv[]) {
 	#ifdef NOT_DMOJ
 	freopen("in.txt", "r", stdin);
 	freopen("out.txt", "w", stdout);
@@ -39,29 +45,22 @@ int main () {
 	cin.sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
-	cin >> s >> t;
-	qpow[0] = hashed[0] = 1LL;
-	for (size_t i=1; i<=s.size(); i++) {
-		hashed[i] = hashed[i - 1] * SEED + s[i - 1] - 'a' + 1;
-		qpow[i] = qpow[i - 1] * SEED;
+	cin >> N >> T;
+	for (int i=0; i<N; i++) {
+		cin >> K[i];
+		pq.push(K[i]);
 	}
-	ll val = t[0] - 'a' + 1;
-	for (size_t i=1; i<t.size(); i++) {
-		val = val * SEED + t[i] - 'a' + 1;
-	}
-	int len = t.size();
-	for (int l=1, r=l + len - 1; r<=s.size(); l++, r++) {
-		if (Get_Hash_Substr(l, r) == val) {
-			cout << l - 1 << "\n";
-			return 0;
-		}
-	}
-	cout << -1 << "\n";
+	for (int i=0)
+	cout << sum << "\n";
 	return 0;
 }
 
-/*
-higuyshowsitgoinghiguys
-higuys
-Ans: 0
-*/
+// 3 4 10 20
+
+/* 
+ * Look for:
+ * the exact constraints (multiple sets are too slow for n=10^6 :( ) 
+ * special cases (n=1?)
+ * overflow (ll vs int?)
+ * array bounds
+ */
