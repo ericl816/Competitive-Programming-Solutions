@@ -30,10 +30,10 @@ ll solve (int cur) {
 }
 
 int main () {
-scan(n);
-memset(dp, -1, sizeof(dp));
-for (int i=0; i<n; i++) {
-scan(arr[i].r); scan(arr[i].l); scan(arr[i].h);
-}
-printf("%lld\n", solve(0));
+  scan(n);
+  memset(dp, -1, sizeof(dp));
+  for (int i=0; i<n; i++) {
+    scan(arr[i].r); scan(arr[i].l); scan(arr[i].h);
+  }
+  printf("%lld\n", solve(0));
 }

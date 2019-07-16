@@ -12,11 +12,10 @@ string a, b;
 void solve (int a, int b) {
 	  for(int j=0; j<=a; j++) {
 			for(int k=0; k<=b; k++) {
-				 if (j == 0) dp[j][k] = k * i;
+				if (j == 0) dp[j][k] = k * i;
 				else if (k == 0) dp[j][k] = j * d;
-				else if (ch1[j-1] == ch2[k-1]) dp[j][k] = dp[j-1][k-1];
-				else 
-					dp[j][k] = min(min(dp[j][k-1] + i, dp[j-1][k-1] + r), dp[j-1][k] + d);
+				else if (ch1[j-1] == ch2[k - 1]) dp[j][k] = dp[j - 1][k - 1];
+				else dp[j][k] = min(min(dp[j][k - 1] + i, dp[j - 1][k - 1] + r), dp[j - 1][k] + d);
 			}
 		}
 	}

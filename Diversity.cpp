@@ -20,6 +20,6 @@ int main () {
 		   if (vec[i] ^ vec[i - 1]) cnt++;
 		   if (cnt >= k) break;
 		}
-	  cout << k - cnt;
+		cout << k - cnt;
 	}
 }

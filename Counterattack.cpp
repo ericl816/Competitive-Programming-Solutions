@@ -57,14 +57,14 @@ int main () {
 		cin >> A >> B >> L;
 		A--; B--;
 		adj1[A].pb(mp(B, L));
-		adj1[B].pb(mp(A, L));
+		adj2[B].pb(mp(A, L));
 		vec.pb((Edge) {A, B, L});
 		vec.pb((Edge) {B, A, L});
 	}
 	memset(length1, INF, sizeof(length1));
 	memset(length2, INF, sizeof(length2));
 	SSSP(0, length1, adj1);
-	SSSP(N - 1, length2, adj1);
+	SSSP(N - 1, length2, adj2);
 	for (size_t i=0; i<vec.size(); i++) {
 		Edge &next = vec[i];
 		int length = length1[next.a] + length2[next.b] + next.dist;

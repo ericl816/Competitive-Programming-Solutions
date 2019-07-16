@@ -1,4 +1,6 @@
 #include <bits/stdc++.h>
+#define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
+char _;
 #define ll long long
 #define MAXN 210
 #define INF 0x3f3f3f3f
@@ -20,15 +22,13 @@ int C[MAXN], D[MAXN], orchids[MAXN], num[MAXN];
 int Q[MAXN][MAXN];
 
 int main () {
-    cin.sync_with_stdio(0);
-    cin.tie(0);
-    cin >> N >> M;
-    for (int i=1; i<=N; i++) cin >> C[i];
+    scan(N); scan(M);
+    for (int i=1; i<=N; i++) scan(C[i]);
     for (int i=0; i<M; i++) {
-        cin >> D[i];
-        for (int j=1; j<=N; j++) cin >> Q[i][j];
+        scan(D[i]);
+        for (int j=1; j<=N; j++) scan(Q[i][j]);
     }
-    for (int i=1; i<=N; i++) cin >> orchids[i];
+    for (int i=1; i<=N; i++) scan(orchids[i]);
     for (int i=0; i<(1 << M); i++) {
         memset(num, 0, sizeof(num));
         cost = 0;
@@ -46,6 +46,5 @@ int main () {
         minn = min(minn, cost);
         outer: continue;
     }
-    cout << minn << endl;
-    return 0;
+    return !printf("%d\n", minn);
 }

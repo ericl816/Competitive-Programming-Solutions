@@ -25,12 +25,12 @@ vector<pii> adj[MAXN];
 queue<int> q;
 bool vis[MAXN];
 
-void SSSP (int src) {
+void SSSP () {
 	memset(dist, INF, sizeof(dist));
 	memset(vis, 0, sizeof(vis));
-	dist[src] = 0;
-	vis[src] = 1;
-	q.push(src);
+	dist[0] = 0;
+	vis[0] = 1;
+	q.push(0);
 	while (!q.empty()) {
 		int curr = q.front();
 		q.pop();
@@ -59,10 +59,7 @@ int main () {
 		adj[u].pb(mp(v, w));
 		adj[v].pb(mp(u, w));
 	}
-	SSSP(0);
-	for (int i=0; i<N; i++) {
-		if (dist[i] == INF) cout << -1 << endl;
-		else cout << dist[i] << endl;
-	}
+	SSSP();
+	for (int i=0; i<N; i++) cout << (dist[i] == INF ? -1 : dist[i]) << "\n";
 	return 0;
 }

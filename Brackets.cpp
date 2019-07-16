@@ -13,7 +13,8 @@
 using namespace std;
 
 string s;
-int res1, res2, seq[MAXN];
+int res1, res2;
+int seq[MAXN];
 
 int main () {
 	cin.sync_with_stdio(0);
@@ -28,17 +29,17 @@ int main () {
 		res2 = 0;
 		for (int j=0; j<i; j++) {
 			res2 += s[j] == '(' ? 1 : -1;
-			if (res2 < 0) res2 = -INF / 2;
+			if (res2 < 0) res2 = -INF >> 1;
 		}
 		for (int k=i; k<s.length(); k++) {
 			if (res2 == seq[k]) { // If # of brackets matches
-				cout << "possible" << endl;
+				cout << "possible" << "\n";
 				return 0;
 			}
 			res2 += s[k] == ')' ? 1 : -1;
-			if (res2 < 0) res2 = -INF / 2;
+			if (res2 < 0) res2 = -INF >> 1;
 			if (res2 == seq[k + 1]) { // If # of brackets matches
-				cout << "possible" << endl;
+				cout << "possible" << "\n";
 				return 0;
 			}
 		}

@@ -11,7 +11,7 @@ const int MAXN = 50001;
 vii vec[MAXN];
 ll N, x, y, arr[MAXN], sum[MAXN], len, cnt;
 
-void DFS(int par, int root) {
+inline void DFS (int par, int root) {
       arr[root] = 0; 
       sum[root] = 1;
       for (int i=0; i<vec[root].size(); i++) {
@@ -41,5 +41,5 @@ int main () {
     vec[y].pb(x);
   }
   DFS(0, 1);
-  printf("%lld\n", cnt);
+  return !printf("%lld\n", cnt);
 }

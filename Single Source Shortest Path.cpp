@@ -1,7 +1,8 @@
 #pragma GCC optimize "Ofast"
 #pragma GCC optimize "unroll-loops"
 #pragma GCC target "sse,sse2,sse3,sse4,abm,avx,mmx,popcnt,tune=native"
-#include <bits/stdc++.h>
+// #include <bits/stdc++.h>
+#include "/Users/ericliu/Desktop/Competitive-Programming-Templates/stdc++.h"
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ll long long
@@ -18,9 +19,11 @@ char _;
 #define mii map<int, int>
 #define umii unordered_map<int, int>
 using namespace std;
-int N, M, u, v, w, dist[MAXN];
+
+int N, M, u, v, w;
+int dist[MAXN];
 vector<pii> adj[MAXN];
-priority_queue<pii, vector<pii>, greater<pii>> pq;
+priority_queue<pii, vector<pii>, greater<pii> > pq;
 
 void Dijkstras () {
 	memset(dist, INF, sizeof(dist));
@@ -51,9 +54,6 @@ int main () {
 		adj[v].pb(mp(u, w));
 	}
 	Dijkstras();
-	for (int i=0; i<N; i++) {
-		if (dist[i] == INF) cout << -1 << endl;
-		else cout << dist[i] << endl;
-	}
+	for (int i=0; i<N; i++) cout << (dist[i] == INF ? -1 : dist[i]) << "\n";
 	return 0;
 }

@@ -37,6 +37,12 @@ int main () {
         sum += x;
         maxx = max(maxx, x);
     }
+    /*
+    Much simpler version down below...
+    if (sum & 1 || sum < maxx * 2) cout << "NO" << endl;
+    else cout << "YES" << endl;
+    */
+
     sum -= maxx;
     for (int i=0; i<N; i++) if (b[i] > sum) flag = 1;
     if ((sum + maxx) & 1) flag = 1;

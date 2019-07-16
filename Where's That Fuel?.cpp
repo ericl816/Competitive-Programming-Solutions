@@ -20,6 +20,8 @@ char _;
 #define umii unordered_map<int, int>
 using namespace std;
 
+// CCO greedy problem
+
 int N, P, A, B, pos, ans = 1;
 vector<pii> planets;
 

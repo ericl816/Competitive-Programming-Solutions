@@ -1,97 +1,106 @@
+#pragma GCC optimize "Ofast"
+#pragma GCC optimize "unroll-loops"
+#pragma GCC target "sse,sse2,sse3,sse4,abm,avx,mmx,popcnt,tune=native"
 #include <bits/stdc++.h>
+#define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
+char _;
+#define ll long long
+#define ull unsigned long long
 #define MAXN 100010
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
-#define ll long long
-#define vi vector <int>
+#define vi vector<int>
+#define vll vector<ll>
 #define pb push_back
-#define pii pair <int, int>
+#define pii pair<int, int>
 #define mp make_pair
 #define f first
 #define s second
+#define mii map<int, int>
+#define umii unordered_map<int, int>
+#define DEBUG 1
+#ifdef DEBUG
+  #define D(x...) printf(x)
+#else
+  #define D(x...)
+#endif
 using namespace std;
 
-int N, v, ans1, ans2, expression[MAXN], num[MAXN];
-char op;
-string s, s1;
-vi vec[MAXN];
-pii DP[MAXN];
-bool vis[MAXN], root;
+inline int GCD (int a, int b) { return b == 0 ? a : GCD(b, a % b); }
+inline int LCM (int a, int b) { return a * b / GCD(a, b); }
+inline ll PowMod (ll a, ll b, ll MOD) { ll val = 1; while (b) { if (b & 1) val = (val * a) % MOD; a = (a * a) % MOD; b >>= 1; } return val; }
 
-void DFS(int node, int par) {
-    if (vis[node]) return;
-    vis[node] = 1;
-    num[node] = 1;
-    if (vec[node].size() == 0 && root) { 
-        if (expression[node] == 1) DP[node] = mp(0, 1);
-        else if (expression[node] == 2) DP[node] = mp(0, 0); 
-        else DP[node] = mp(1, 1);
-    } 
-    else if (expression[node] == 1) {
-        pii child1, child2;
-        child2 = mp(1, 1);
-        for (size_t i=0; i<vec[node].size(); i++) {
-            int &next = vec[node][i];
-            if (next == par) continue;
-            if (!vis[next]) {
-                DFS(next, node);
-                num[node] += num[next];
-                child1.f += DP[next].f;
-                child1.s += DP[next].s;
-                child2.f += (num[next] - DP[next].s); 
-                child2.s += (num[next] - DP[next].f);
-            }
-     }
-     DP[node].f = min(child1.f, child2.f);
-     DP[node].s = max(child1.s, child2.s);
-    } 
-    else if (expression[node] == 2) {
-        for (size_t i=0; i<vec[node].size(); i++) {
-            int &next = vec[node][i];
-            if (next == par) continue;
-            if (!vis[next]) {
-                DFS(next, node);
-                num[node] += num[next];
-                DP[node].f += DP[next].f;
-                DP[node].s += DP[next].s;
-          }
-        }
+int N, v, minn, maxx;
+string op, s;
+int par[MAXN];
+int DP[2][2][MAXN];
+bool AC[MAXN], que[MAXN], vis[MAXN];
+vi adj[MAXN];
+
+inline void DFS (int node, int prev) {
+  if (vis[node]) return;
+  vis[node] = 1;
+  DP[0][0][node] = DP[1][0][node] = 1;
+  for (auto i : adj[node]) {
+    if (i == prev) continue;
+    DFS(i, node);
+    if (que[i]) {
+      DP[0][0][node] += min(DP[0][0][i], DP[0][1][i]);
+      DP[0][1][node] += min(DP[0][0][i], DP[0][1][i]);
+      DP[1][0][node] += max(DP[1][0][i], DP[1][1][i]);
+      DP[1][1][node] += max(DP[1][0][i], DP[1][1][i]);
     }
     else {
-        DP[node] = mp(1, 1);
-        for (size_t i=0; i<vec[node].size(); i++) {
-            int &next = vec[node][i];
-            if (next == par) continue;
-            if (!vis[next]) {
-              DFS(next, node);
-              num[node] += num[next];
-              DP[node].f += (num[next] - DP[next].s);
-              DP[node].s += (num[next] - DP[next].f);
-           }
-        }
-   }
+      DP[0][AC[node]][node] += DP[0][AC[node] ^ AC[i] ^ 1][i];
+      DP[0][AC[node] ^ 1][node] += DP[0][AC[node] ^ AC[i]][i];
+      DP[1][AC[node]][node] += DP[1][AC[node] ^ AC[i] ^ 1][i];
+      DP[1][AC[node] ^ 1][node] += DP[1][AC[node] ^ AC[i]][i];
+    }
+  }
 }
 
-int main() {
+int main (int argc, char const *argv[]) {
+  #ifdef NOT_DMOJ
+  freopen("in.txt", "r", stdin);
+  freopen("out.txt", "w", stdout);
+  #endif // NOT_DMOJ
   cin.sync_with_stdio(0);
   cin.tie(0);
+  cout.tie(0);
   cin >> N;
   for (int i=1; i<=N; i++) {
     cin >> op;
-    if (op == 'C') {
-      cin >> s;
-      expression[i] = (s == "?" ? 1 : (s == "AC" ? 2 : 3));
-      root = 1;
-    } 
-    else if (op == 'E') {
-      cin >> v >> s1;
-      vec[v].pb(i);
-      expression[i] = (s1 == "?" ? 1 : (s1 == "AC" ? 2 : 3));
+    if (op == "C") cin >> s;
+    else {
+      cin >> v >> s;
+      par[i] = v;
+      adj[v].pb(i);
+    }
+    AC[i] = s == "AC";
+    que[i] = s == "?";
+  }
+  for (int i=1; i<=N; i++) {
+    if (!par[i]) {
+      DFS(i, -1);
+      if (que[i]) {
+        minn += min(DP[0][0][i], DP[0][1][i]);
+        maxx += max(DP[1][0][i], DP[1][1][i]);
+      }
+      else {
+        minn += DP[0][AC[i]][i];
+        maxx += DP[1][AC[i]][i];
+      }
     }
   }
-  expression[0] = 2;
-  for (int i=1; i<=N; i++) if (root) vec[0].pb(i);
-  DFS(0, -1);
-  return 0 * printf("%d %d\n", DP[0].f, DP[0].s);
+  cout << minn << " " << maxx << "\n";
+  return 0;
 }
+
+/* 
+ * Look for:
+ * the exact constraints (multiple sets are too slow for n=10^6 :( ) 
+ * special cases (n=1?)
+ * overflow (ll vs int?)
+ * array bounds
+ */

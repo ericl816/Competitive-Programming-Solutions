@@ -1,7 +1,8 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
+#define MAXN 100010
 using namespace std;
 
-int N, K = 0, sum1 = 0, sum2 = 0, arr1[100010], arr2[100010];
+int N, K, sum1, sum2, arr1[MAXN], arr2[MAXN];
 
 int main () {
   scanf("%d", &N);

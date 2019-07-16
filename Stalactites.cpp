@@ -1,56 +1,99 @@
-#include<iostream>
-#define ull unsigned long long 
-#define scan(x) do{while((_n=getchar_unlocked())<45);if(_n-45)x=_n;else x=getchar_unlocked();for(x-=48;47<(_=getchar_unlocked());x=(x<<3)+(x<<1)+_-48);if(_n<46)x=-x;}while(0)
-char _, _n;
-
+#pragma GCC optimize "Ofast"
+#pragma GCC optimize "unroll-loops"
+#pragma GCC target "sse,sse2,sse3,sse4,abm,avx,mmx,popcnt,tune=native"
+#include <bits/stdc++.h>
+#define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
+char _;
+#define ll long long
+#define ull unsigned long long
+#define MAXN 310
+#define INF 0x3f3f3f3f
+#define min(a, b) (a) < (b) ? (a) : (b)
+#define max(a, b) (a) < (b) ? (b) : (a)
+#define vi vector<int>
+#define pb push_back
+#define pii pair<int, int>
+#define mp make_pair
+#define f first
+#define s second
+#define mii map<int, int>
+#define umii unordered_map<int, int>
+#ifdef DEBUG
+  #define D(x...) printf(x)
+#else
+  #define D(x...)
+#endif
 using namespace std;
 
-int n, q, x, y, z, l, x1, y1, z1, x2, y2, z2;
-char ch;
-long BIT [251][251][251];
+int N, Q, C, X, Y, Z, L, X1, Y1, Z1;
+ll ans;
+char op;
 
-void update (int x, int y, int z, int val) {
-  for (int i = x; i <= n; i += (i & -i)){
-    for (int j=y; j <= n; j += (j & -j)){
-      for (int k = z; k <= n; k += (k & -k)){
-        BIT[i][j][k] += val;
+struct BIT {
+private:
+  int N;
+  ll tree[MAXN][MAXN][MAXN];
+
+public:
+  BIT (int N) : N(N) { }
+
+  inline void Update (int x, int y, int z, int val) {
+    for (int i=x; i<=N; i += i & -i) {
+      for (int j=y; j<=N; j += j & -j) {
+        for (int k=z; k<=N; k += k & -k) {
+          tree[i][j][k] += val;
+        }
       }
     }
   }
-} 
 
-long query (int x, int y, int z) {
-  long ans = 0;
-  for (int i = x; i > 0; i -= (i & -i)){
-    for (int j = y; j > 0; j -= (j & -j)){
-      for (int k = z; k > 0; k -= (k & -k)){
-          ans += BIT[i][j][k];
+  inline ll Query (int x, int y, int z) {
+    ll sum = 0;
+    for (int i=x; i; i -= i & -i) {
+      for (int j=y; j; j -= j & -j) {
+        for (int k=z; k; k -= k & -k) {
+          sum += tree[i][j][k];
+        }
       }
     }
+    return sum;
   }
-  return ans;
-}
 
-long query1 (int x1, int y1, int z1, int x2, int y2, int z2) {
-  long area = (query(x2, y2, z2) - query(x1, y2, z2) - query(x2, y1, z2) - query(x2, y2, z1) + query(x1, y1, z2) + query(x2, y1, z1) + query(x1, y2, z1) - query(x1, y1, z1));
-  return area;
-}
+  inline ll Query (int x1, int y1, int z1, int x2, int y2, int z2) {
+    return Query(x2, y2, z2) - Query(x1, y2, z2) - Query(x2, y1, z2) - Query(x2, y2, z1) + Query(x1, y1, z2) + Query(x2, y1, z1) + Query(x1, y2, z1) - Query(x1, y1, z1);
+  }
+};
 
-int main () {
-  scan(n); 
-  scan(q);
-  ull sum = 0;
-  for (int i = 0; i < q; i++){
-    scanf(" %c", &ch);
-    if (ch == 'C'){
-      scan(x); scan(y); scan(z); scan(l);
-      update (x, y, z, l - query1 (x - 1, y - 1, z - 1, x, y, z));
+BIT tree(MAXN);
+
+int main (int argc, char const *argv[]) {
+  #ifdef NOT_DMOJ
+  freopen("in.txt", "r", stdin);
+  freopen("out.txt", "w", stdout);
+  #endif // NOT_DMOJ
+  cin.sync_with_stdio(0);
+  cin.tie(0);
+  cout.tie(0);
+  cin >> N >> Q;
+  while (Q--) {
+    cin >> op >> X >> Y >> Z;
+    if (op == 'C') {
+      cin >> L;
+      tree.Update(X, Y, Z, L - tree.Query(X - 1, Y - 1, Z - 1, X, Y, Z));
     }
     else {
-      scan(x1); scan(y1); scan(z1); scan(x2); scan(y2); scan(z2);
-      int temp1 = x1 - 1, temp2 = y1 - 1, temp3 = z1 - 1;
-      sum += query1 (temp1, temp2, temp3, x2, y2, z2);
+      cin >> X1 >> Y1 >> Z1;
+      ans += tree.Query(X - 1, Y - 1, Z - 1, X1, Y1, Z1);
     }
   }
-  printf("%1lu\n", sum);
+  cout << ans << "\n";
+  return 0;
 }
+
+/* 
+ * Look for:
+ * the exact constraints (multiple sets are too slow for n=10^6 :( ) 
+ * special cases (n=1?)
+ * overflow (ll vs int?)
+ * array bounds
+ */

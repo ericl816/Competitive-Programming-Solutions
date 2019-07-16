@@ -1,8 +1,7 @@
 #pragma GCC optimize "Ofast"
 #pragma GCC optimize "unroll-loops"
 #pragma GCC target "sse,sse2,sse3,sse4,abm,avx,mmx,popcnt,tune=native"
-// #include <bits/stdc++.h>
-#include "/Users/ericliu/Desktop/Competitive-Programming-Templates/stdc++.h"
+#include <bits/stdc++.h>
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ll long long
@@ -39,11 +38,11 @@ public:
 	inline void make_Set () {
 		for (int i=1; i<=N; i++) {
 			lead[i] = i;
-			rank[i] = 0;
+			rank[i] = 1;
 		}
 	}
 	
-	inline inline int Find (int x) {
+	inline int Find (int x) {
 		while (x ^ lead[x]) {
 			lead[x] = lead[lead[x]];
 			x = lead[x];
@@ -58,30 +57,28 @@ public:
 	inline void Union (int x, int y) {
 		int c = Find(x);
 		int d = Find(y);
-		if (c ^ d) {
+		if (Merge(x, y)) {
 			if (rank[c] > rank[d]) {
-				lead[d] = c;
 				rank[c] += rank[d];
+				lead[d] = c;
 			}
 			else {
-				lead[c] = d;
 				rank[d] += rank[c];
+				lead[c] = d;
 			}
 		}
 	}
 
-	inline int getSize (int x) {
-		return lead[x];
+	inline int Cnt (int x) {
+		return rank[x];
 	}
 };
 
-Disjoint ds(MAXN);
+// Output one integer, the number of paths in the forest of trees.
 
+Disjoint ds(MAXN);
 int N, M, a, b;
 ll sum;
-vi adj[MAXN];
-ll DP[MAXN];
-bool vis[MAXN];
 
 int main (int argc, char const *argv[]) {
 	#ifdef NOT_DMOJ
@@ -95,11 +92,13 @@ int main (int argc, char const *argv[]) {
 	cin >> N >> M;
 	for (int i=0; i<M; i++) {
 		cin >> a >> b;
-		adj[a].pb(b);
-		adj[b].pb(a);
 		if (ds.Merge(a, b)) ds.Union(a, b);
 	}
-	for (int i=1; i<=N; i++) sum += ds.getSize(i);
+	for (int i=1; i<=N; i++) {
+		if (ds.Find(i) == i) {
+			sum += (ll) ds.Cnt(i) * ds.Cnt(i);
+		}
+	}
 	cout << sum << "\n";
 	return 0;
 }

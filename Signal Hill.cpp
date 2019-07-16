@@ -15,7 +15,7 @@ bool adj[MAXN][MAXN];
 vector<pair<pii, int>> beacons;
 int B, Q, x, y, r, a, b;
 
-inline bool Check (const int &x, const int &y, const int &r) {
+inline bool Dist (const int &x, const int &y, const int &r) {
 	return x * x + y * y <= r * r;
 }
 
@@ -29,17 +29,19 @@ int main () {
 	}
 	for (int i=0; i<B; i++) {
 		for (int j=0; j<B; j++) {
-			adj[i][j] = Check(beacons[i].f.s - beacons[j].f.s, beacons[i].f.f - beacons[j].f.f, beacons[i].s);
+			adj[i][j] = Dist(beacons[i].f.f - beacons[j].f.f, beacons[i].f.s - beacons[j].f.s, beacons[i].s);
 		}
 	}
-	for (int i=0; i<B; i++)
-		for (int j=0; j<B; j++)
-			for (int k=0; k<B; k++)
+	for (int i=0; i<B; i++) {
+		for (int j=0; j<B; j++) {
+			for (int k=0; k<B; k++) {
 				adj[j][k] |= adj[j][i] && adj[i][k];
+			}
+		}
+	}
 	for (int i=0; i<Q; i++) {
 		cin >> a >> b;
-		a--; b--;
-		cout << (adj[a][b] ? "YES" : "NO") << endl;
+		cout << (adj[--a][--b] ? "YES" : "NO") << endl;
 	}
 	return 0;
 }

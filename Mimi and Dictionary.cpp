@@ -29,7 +29,7 @@ inline bool isPalindrome (int idx) {
 }
 
 inline bool Hash (int idx) {
-    ll hash1 = 0, hash2 = 0, res = 1;
+    ll hash1 = 0LL, hash2 = 0LL, res = 1LL;
     for (int i=0; i<idx; i++) {
         hash1 = (hash1 * SEED) % MOD;
         hash1 = (hash1 + s[i] - 'a' + 1) % MOD;

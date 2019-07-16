@@ -10,18 +10,17 @@
 #define f first
 #define s second
 #define msll map<string, ll>
-#define umsll unordered_map<string, ll>
 #define sll set<ll>
 using namespace std;
 
 int F, N, dist, energy;
-ll e[MAXN], d[MAXN], cnt;
+ll cnt;
+ll e[MAXN], d[MAXN];
 string s, t;
 msll val;
-vector<pllll> type;
-sll si;
+pair<ll, ll> type[MAXN];
 
-bool compare (const pllll &a, const pllll &b) {
+inline bool cmp (const pllll &a, const pllll &b) {
 	return a.s < b.s;
 }
 
@@ -36,18 +35,13 @@ int main () {
 	cin >> N;
 	for (int i=0; i<N; i++) {
 		cin >> t >> d[i];
-		ll energy = val[t];
-		ll dist = d[i];
-		type.pb(mp(energy, dist));
+		type[i] = mp(val[t], d[i]);
 	}
-	sort(type.begin(), type.end(), compare);
+	sort(type, type + N, cmp);
 	for (int i=0; i<N; i++) {
-		if (dist ^ type[i].s && 0 > energy - type[i].s + dist) break;
-		else if (dist == type[i].s) energy += type[i].f;
-		else {
-			energy -= type[i].s - dist - type[i].f;
-			dist = type[i].s;
-		}
+		if (dist ^ type[i].s && type[i].s > energy) break;
+		energy += type[i].f;
+		dist = type[i].s;
 		cnt++;
 	}
 	cout << cnt << "\n";

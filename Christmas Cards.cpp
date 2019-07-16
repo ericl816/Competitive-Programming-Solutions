@@ -21,7 +21,7 @@ ull Solve (int a, int b) {
 }
 
 int main () {
-	scan(n);
+    scan(n);
     memset(DP, -1, sizeof(DP));
     for (int i=0; i<n; i++) {
         scan(arr[i].f); 

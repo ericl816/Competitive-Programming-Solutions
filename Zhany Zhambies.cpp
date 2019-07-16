@@ -20,8 +20,8 @@ struct Coor {
 };
 
 bool Cmp (pii &a, pii &b) {
-  if (a.f == b.f) return a.s < b.s;
-  return a.f < b.f;
+	if (a.f == b.f) return a.s < b.s;
+	return a.f < b.f;
 }
 
 int N, X, T, I, J, bullets, xcoor = 1, moves, dist;

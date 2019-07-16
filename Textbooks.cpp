@@ -88,7 +88,7 @@ int Query (int idx, int l, int r) {
 int N, size; 
 set<int> coor; 
 umii arr; 
-vi v; 
+vi v;
 ll ans;
 
 int main() {
@@ -110,6 +110,6 @@ int main() {
         int r = arr[textbook[i].l];
         Update(1, l, r, textbook[i].w + Query(1, l, r));
     }
-    for (int i=1; i<=size - 1; i++) ans = (ans + (1LL * (v[i] - v[i - 1]) * Query(1, i, i)) % MOD) % MOD;
-    printf("%lld\n", ans % MOD);
+    for (int i=1; i<size; i++) ans = (ans + (1LL * (v[i] - v[i - 1]) * Query(1, i, i)) % MOD) % MOD;
+    return !printf("%lld\n", ans % MOD);
 }

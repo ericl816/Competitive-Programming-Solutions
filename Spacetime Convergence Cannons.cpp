@@ -42,7 +42,7 @@ ll ans;
 BIT tree(MAXN << 1);
 long double ang[MAXN << 1];
 long double deltay, deltax, theta1, theta2;
-vector<pair<long double, long double>> loc;
+vector<pair<long double, long double> > loc;
 pii query[MAXN];
 
 int main () {

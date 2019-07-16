@@ -77,16 +77,15 @@ int main (int argc, char const *argv[]) {
 	cin.sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
-	cin >> N;
+	cin >> N >> Q;
 	for (int i=1, x; i<=N; i++) {
 		cin >> x;
 		m.pb(mp(x, i));
 	}
 	sort(m.begin(), m.end(), Cmp1);
-	cin >> Q;
 	for (int i=0; i<Q; i++) {
 		cin >> a >> b >> q;
-		queries.pb(mp(mp(q, i), mp(a, b)));
+		queries.pb(mp(mp(q, i), mp(a + 1, b + 1)));
 	}
 	sort(queries.begin(), queries.end(), Cmp2);
 	for (auto i : queries) {

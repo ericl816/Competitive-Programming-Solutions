@@ -24,7 +24,7 @@ char _;
 #endif
 using namespace std;
 
-// Use Non-Recursive Seg Tree!
+// Use Iterative Seg Tree!
 
 int N, M, i, S, num;
 pii arr[MAXN]; 

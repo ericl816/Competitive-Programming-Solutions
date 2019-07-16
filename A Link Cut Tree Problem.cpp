@@ -86,7 +86,7 @@ vector<pii> adj[MAXN];
 vector<Edge> edgelist;
 priority_queue<Edge, vector<Edge>, greater<Edge>> pq;
 int N, M, Q, op;
-bool exists=;
+bool exists;
 
 inline void Build_MST () {
 	ds.make_Set();

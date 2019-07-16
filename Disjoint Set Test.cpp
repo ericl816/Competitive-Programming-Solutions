@@ -42,7 +42,7 @@ public:
 	void Union (int x, int y) {
 		int c = Find(x);
 		int d = Find(y);
-		if (c ^ d) {
+		if (Merge(x, y)) {
 			if (rank[c] > rank[d]) {
 			  lead[d] = c;
 			  rank[c] += rank[d];

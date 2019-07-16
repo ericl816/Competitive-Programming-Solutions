@@ -51,6 +51,7 @@ public:
 };
 
 BIT tree(MAXN);
+
 int N;
 int arr[MAXN], ord[MAXN], DP[MAXN];
 mii sour;

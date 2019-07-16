@@ -49,6 +49,6 @@ int main () {
 		for (int j=compress[coor[i].y1]; j<compress[coor[i].y2]; j++) sweep[j] += coor[i].tint;
 		for (int j=0; j<yseg.size(); j++) if (sweep[j] >= T) area += (ll) (coor[i + 1].x - coor[i].x) * (yseg[j + 1] - yseg[j]);
 	}
-	cout << area << endl;
+	cout << area << "\n";
 	return 0;
 }

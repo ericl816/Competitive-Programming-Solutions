@@ -50,7 +50,7 @@ int main () {
 	sort(queries.begin(), queries.end(), Cmp);
 	for (int i=1; i<=N; i++) {
 		for (int j=1; j<=MAXM; j++) {
-			DP[i & 1][j] = max(DP[(i + 1) & 1][j], DP[i & 1][j - 1]);
+			DP[i & 1][j] = max(DP[(i & 1) ^ 1][j], DP[i & 1][j - 1]);
 			pair<int, pii> &next = queries[i];
 			int v = next.f;
 			int s = next.s.f;

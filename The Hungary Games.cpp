@@ -61,8 +61,7 @@ int main () {
 	cin >> N >> M;
 	for (int i=0; i<M; i++) {
 		cin >> A >> B >> L;
-		--A, B--;
-		adj1[A].pb(mp(B, L));
+		adj1[--A].pb(mp(--B, L));
 		adj2[B].pb(mp(A, L));
 		vec.pb((Edge) {A, B, L});
 	}

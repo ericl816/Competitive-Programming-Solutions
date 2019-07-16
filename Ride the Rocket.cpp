@@ -12,6 +12,8 @@
 #define umii unordered_map<int, int>
 using namespace std;
 
+// Greedy algorithms
+
 ll N, P, B, C, M, W, ans, capacity, numbuses, buscost, walkcost;
 vi D, T;
 
@@ -50,8 +52,7 @@ int main () {
 		walkcost = W * (D[i] - 1);
 		if (walkcost <= buscost) ans += walkcost;
 		else if (walkcost > buscost) {
-			capacity--;
-			if (capacity == 0) {
+			if (--capacity == 0) {
 				numbuses++;
 				capacity = C;
 			}

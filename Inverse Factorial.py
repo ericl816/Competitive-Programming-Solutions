@@ -1,9 +1,9 @@
 import math
 import sys
-input = sys.stdin.readline
+raw_input = sys.stdin.readline
 
 arr = ["1", "2", "6", "24", "120"]
-n = input().strip()
+n = raw_input().strip()
 if n in arr:
   print(arr.index(n) + 1)
   

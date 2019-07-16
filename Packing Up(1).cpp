@@ -34,7 +34,7 @@ inline double Slope (const pair<ll, ll> &a, const pair<ll, ll> &b) {
 }
 
 /* 
- * Solution IS the intended solution, as it uses the Convex Hull Trick
+ * Convex Hull Trick is the intended solution to this question
  */
 
 int main () {

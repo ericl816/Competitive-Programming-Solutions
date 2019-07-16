@@ -47,9 +47,7 @@ inline void Dijkstra (int node) {
 				cnt[i.f] = cnt[curr.s];
 				pq.push(mp(dist[i.f], i.f));
 			}
-			else if (dist[i.f] == dist[curr.s] + i.s) {
-				cnt[i.f] += cnt[curr.s];
-			}
+			else if (dist[i.f] == dist[curr.s] + i.s) cnt[i.f] += cnt[curr.s];
 		}
 	}
 }
