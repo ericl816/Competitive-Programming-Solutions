@@ -1,10 +1,6 @@
 # Competitive-Programming-Solutions
 Repository consists of solutions to various problems that can be found on online judges and programming platforms such as Codeforces, HackerEarth, DMOJ and WCIPEG. Note that these solutions are meant to be for reference only.
 
-**About Me:**
-- Started competitive programming in March 2018
-- Solved over 1000 problems on various judges using Python, Java, and C++
-
 **Contests:**
 - ECOO 2018 Boardwide (4th/70 Teams)
 - ECOO 2018 Regionals (90th percentile)
