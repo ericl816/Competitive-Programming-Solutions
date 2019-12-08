@@ -12,7 +12,8 @@ Repository consists of solutions to various problems that can be found on online
 - USACO December Contest 2018, Gold Division (1000/1000)
 - USACO December Contest 2018, Promotion to Platinum Division
 - USACO January Contest 2019, Platinum Division (80th percentile worldwide)
-- ECOO 2019 Round 1 (4th/75 Teams)
+- ECOO 2019 Boardwide (4th/75 Teams)
+- ECOO 2018 Regionals (80th percentile)
 - Google Code Jam Qualifying Round 2019 (95th percentile worldwide)
 
 *This directory will be organized into separate folders for each online judge containing their respective solutions in the future.*
