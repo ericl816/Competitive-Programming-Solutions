@@ -1,5 +1,5 @@
 # Competitive-Programming-Solutions
-Repository consists of solutions to various problems that can be found on online judges and programming platforms such as Codeforces, HackerEarth, DMOJ and WCIPEG. Note that these solutions are meant to be for reference only.
+Repository consists of solutions to various problems that can be found on online judges and programming platforms such as Codeforces, HackerEarth, DMOJ, SPOJ and WCIPEG. Note that these solutions are meant to be for reference only.
 
 **Contests:**
 - ECOO 2018 Boardwide (4th/70 Teams)
@@ -15,5 +15,7 @@ Repository consists of solutions to various problems that can be found on online
 - ECOO 2019 Boardwide (4th/75 Teams)
 - ECOO 2019 Regionals (80th percentile)
 - Google Code Jam Qualifying Round 2019 (95th percentile worldwide)
+
+*This directory, despite being comprehensive, is still missing solutions to problems submitted on some of the online judges mentioned above.*
 
 *~~This directory will be organized into separate folders for each online judge containing their respective solutions in the future.~~*
