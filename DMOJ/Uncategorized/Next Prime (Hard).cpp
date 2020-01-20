@@ -1,0 +1,49 @@
+#include <bits/stdc++.h>
+#define ull unsigned long long
+#define ll long long
+using namespace std;
+
+inline ull mulMod (ull a, ull b, ull mod) {
+    ull x = 0, y = a % mod;
+    while (b) {
+        if (b & 1) x = (x + y) % mod;
+        y = (y << 1) % mod;
+        b >>= 1;
+    }
+    return x % mod;
+}
+
+inline ull powMod(ull base, ull pow, ull mod) {
+    ull x = 1, y = base;
+    while (pow) {
+        if (pow & 1) x = mulMod(x, y, mod);
+        y = mulMod(y, y, mod);
+        pow >>= 1;
+    }
+    return x % mod;
+}
+
+inline bool Miller (ull n, int iterations) {
+    if (n < 2 || (n ^ 2 && !(n & 1))) return 0;
+    ull s = n - 1;
+    while (!(s & 1)) s >>= 1;
+    srand(time(0));
+    for (int i=0; i<iterations; i++) {
+        ull temp = s, r = powMod(rand() % (n - 1) + 1, temp, n);
+        while (temp ^ n - 1 && r ^ 1 && r ^ n - 1) {
+            r = mulMod(r, r, n);
+            temp <<= 1;
+        }
+        if (r ^ n - 1 && !(temp & 1)) return 0;
+    }
+    return 1;
+}
+
+ull N;
+
+int main() {
+    scanf("%llu", &N);
+    while (!Miller(N, 5)) N++;
+    printf("%llu\n", N);
+    return 0;
+}

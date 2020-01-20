@@ -16,4 +16,4 @@ Repository consists of solutions to various problems that can be found on online
 - ECOO 2019 Regionals (80th percentile)
 - Google Code Jam Qualifying Round 2019 (95th percentile worldwide)
 
-*This directory will be organized into separate folders for each online judge containing their respective solutions in the future.*
+*~~This directory will be organized into separate folders for each online judge containing their respective solutions in the future.~~*
