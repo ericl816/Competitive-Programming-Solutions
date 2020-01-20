@@ -418,7 +418,7 @@ int main() {
   cin >> N;
   while (N--) {
     cin >> a >> b;
-    cout << (a + b) << endl;
+    cout << a + b << "\n";
   }
   return 0;
 }

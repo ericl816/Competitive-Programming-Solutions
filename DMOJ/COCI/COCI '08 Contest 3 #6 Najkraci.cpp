@@ -18,19 +18,22 @@ using namespace std;
 struct State {
   int f, s;
   bool operator < (const State &e) const {
-    return s > e.s;
+  	return s > e.s;
   }
 };
 
 struct Edge {
 	int idx, f, s;
+	bool operator < (const Edge &e) const {
+		return s > e.s;
+	}
 };
 
-int N, M, O, D, L, from[MAXN], to[MAXN], dist[MAXN], num[MAXN];
-ll len[MAXN];
+int N, M, O, D, L, from[MAXN], to[MAXN], dist[MAXN];
+ll num[MAXN], len[MAXN];
 vector<Edge> adj[MAXN];
 bool vis[MAXN], vis1[MAXN];
-priority_queue<State> pq;
+priority_queue<pii, vector<pii>, greater<pii>> pq;
 stack<int> st;
 
 void SSSP (int src) {
@@ -39,21 +42,27 @@ void SSSP (int src) {
 	memset(to, 0, sizeof(to));
 	dist[src] = 0;
 	to[src] = 1;
-	pq.push((State) {src, 0});
+	pq.push(mp(src, 0));
 	while (!pq.empty()) {
-		State curr = pq.top();
+		pii curr = pq.top();
 		pq.pop();
-		if (dist[curr.f] < curr.s) continue;
-		st.push(curr.f);
-		for (size_t i=0; i<adj[curr.f].size(); i++) {
-			Edge &next = adj[curr.f][i];
-			if (dist[next.f] < dist[curr.f] + next.s) continue;
-			if (dist[curr.f] + next.s < dist[next.f]) {
-				dist[next.f] = dist[curr.f] + next.s;
-				to[next.f] = 0;
-				pq.push((State) {next.f, dist[next.f]});
+		int node = curr.f;
+		int cost = curr.s;
+		if (dist[node] < cost) continue;
+		st.push(node);
+		for (size_t i=0; i<adj[node].size(); i++) {
+			Edge &next = adj[node][i];
+			int curridx = next.idx;
+			int currnode = next.f;
+			int currcost = next.s;
+			int nextcost = dist[node] + currcost;
+			if (dist[currnode] < nextcost) continue;
+			if (nextcost < dist[currnode]) {
+				dist[currnode] = nextcost;
+				to[currnode] = 0;
+				pq.push(mp(currnode, dist[currnode]));
 			}
-			to[next.f] = (to[next.f] + to[curr.f]) % MOD;
+			to[currnode] = (to[currnode] + to[node]) % MOD;
 		}
 	}
 	while (!st.empty()) {
@@ -62,16 +71,20 @@ void SSSP (int src) {
 		from[curr] = 1;
 		for (size_t i=0; i<adj[curr].size(); i++) {
 			Edge &next = adj[curr][i];
-			if (dist[next.f] < dist[curr] + next.s) continue;
-			from[curr] = (from[curr] + from[next.f]) % MOD;
-			len[next.f] = (ll) ((ll) from[next.f] * (ll) to[curr]) % MOD;
-			num[next.idx] = (int) (num[next.idx] + len[next.f]) % MOD;
+			int curridx = next.idx;
+			int currnode = next.f;
+			int currcost = next.s;
+			int nextcost = dist[curr] + currcost;
+			if (dist[currnode] < nextcost) continue;
+			from[curr] = (from[curr] + from[currnode]) % MOD;
+			len[currnode] = (ll) ((ll) from[currnode] * (ll) to[curr]) % MOD;
+			num[curridx] = (ll) (num[curridx] + len[currnode]) % MOD;
 		}
 	}
 }
 
 inline void Solve () {
-	for (int i=0; i<M; i++) printf("%d\n", (num[i] + MOD) % MOD);
+	for (int i=0; i<M; i++) printf("%lld\n", (num[i] + MOD) % MOD);
 }
 
 int main () {

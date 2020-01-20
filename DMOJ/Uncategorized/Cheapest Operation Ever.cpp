@@ -24,7 +24,6 @@ inline ll solve(int n) {
 
 int main() {
     scan(N); scan(H);
-    if (N == 5 && H == 10) return 0;
     memset(dp, -1, sizeof dp);
     for (int i=1; i<=N; i++) scan(arr[i]);
     return !printf("%lld\n", solve(1));

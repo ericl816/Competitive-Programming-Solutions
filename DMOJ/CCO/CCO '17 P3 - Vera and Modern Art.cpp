@@ -84,6 +84,7 @@ int main () {
 		scan(x); scan(y); scan(v);
 		events.pb((Events) {1, Return_Index(x).f, Return_Index(y).f, Return_Index(y).s, v});
 		events.pb((Events) {2, Return_Index(x).s, Return_Index(y).f, Return_Index(y).s, -v});
+		// Use maps and sets for coordinate compression
 		xcoor.insert(Return_Index(x).f);
 		xcoor.insert(Return_Index(x).s);
 		ycoor.insert(Return_Index(y).f);

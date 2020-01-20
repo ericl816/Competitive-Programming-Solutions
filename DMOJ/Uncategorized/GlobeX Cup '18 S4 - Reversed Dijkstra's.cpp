@@ -37,8 +37,7 @@ vi adj[MAXN];
 bool vis[MAXN][MAXM];
 
 inline void DFS (int node, int prev, int mask, int len) {
-	if (vis[node][mask] || !minn) return;
-	vis[node][mask] = 1;
+	if (!minn) return;
 	if (node == B) {
 		int val = abs(V - len);
 		if (val < minn) {
@@ -48,6 +47,8 @@ inline void DFS (int node, int prev, int mask, int len) {
 		else if (val == minn) ans = min(ans, len);
 		return;
 	}
+	if (vis[node][mask]) return;
+	vis[node][mask] = 1;
 	for (auto i : adj[node]) {
 	    int res = 1 << i;
 		if (!(mask & res)) DFS(i, node, mask | res, len + 1);

@@ -23,7 +23,7 @@ struct Node {
     int l, r, val;
 };
 
-int depth[MAXN], par[MAXN], subtree_size[MAXN], head[MAXN], chain[MAXN], vert[MAXN], weight[MAXN], ind[MAXN], arr[MAXN];
+int depth[MAXN], par[MAXN], subtree_size[MAXN], head[MAXN], chain[MAXN], vert[MAXN], weight[MAXN], ind[MAXN];
 int idx, chainNum;
 int N, Q, a, b, c;
 vector<pii> adj[MAXN];
@@ -38,27 +38,27 @@ inline pair<ll, ll> maxPair (const pair<ll, ll> &a, const pair<ll, ll> &b) {
 
 inline void maxsegUpdate (int idx, int val) {
     idx += N - 1;
-    segmax[idx] = mp(val, 0);
+    segmax[idx] = mp(val, -INF);
     for (int i=idx >> 1; i; i >>= 1) segmax[i] = maxPair(segmax[i << 1], segmax[i << 1 | 1]);
 }
 
 inline pair<ll, ll> maxsegQuery (int l, int r, int idx = 1) {
     l += N - 1;
     r += N - 1;
-    pair<ll, ll> left_ans = mp(0, 0), right_ans = mp(0, 0);
+    pair<ll, ll> maxans = mp(-INF, -INF);
     while (l <= r) {
         if (l & 1) {
-            left_ans = maxPair(left_ans, segmax[l]);
+            maxans = maxPair(maxans, segmax[l]);
             l++;
         }
         if (!(r & 1)) {
-            right_ans = maxPair(right_ans, segmax[r]);
+            maxans = maxPair(maxans, segmax[r]);
             r--;
         }
         l >>= 1;
         r >>= 1;
     }
-    return maxPair(left_ans, right_ans);
+    return maxans;
 }
 
 inline void DFS (int node, int prev, int val) {
@@ -93,14 +93,14 @@ inline void HLD (int node, int prev) {
         HLD(next.f, node);
     }
 }
-
+    
 inline void InitHLD () {
     chainNum = 0;
     idx = 1;
     memset(head, -1, sizeof(head));
     DFS(0, -1, 0);
     HLD(0, -1);
-    for (int i=0; i<N; i++) segmax[i + N] = mp(weight[vert[i + 1]], 0);
+    for (int i=1; i<=N; i++) segmax[i + N - 1] = mp(weight[vert[i]], -INF);
     for (int i=N - 1; i>0; i--) segmax[i] = maxPair(segmax[i << 1], segmax[i << 1 | 1]);
 }
 
@@ -119,7 +119,7 @@ inline void HLD_Update (int x, int y, int val) {
 }
 
 inline pair<ll, ll> HLD_Query (int x, int y) {
-    pair<ll, ll> maxedge = pair<ll, ll>(0LL, 0LL);
+    pair<ll, ll> maxedge = pair<ll, ll>(-INF, -INF);
     while (chain[x] ^ chain[y]) {
         maxedge = maxPair(maxedge, maxsegQuery(ind[head[chain[x]]], ind[x]));
         x = par[head[chain[x]]];
@@ -134,7 +134,6 @@ inline pair<ll, ll> Query_Path (int x, int y) {
     if (depth[x] + depth[y] - (depth[lca] << 1) < 2) return mp(-1, -1);
     return maxPair(HLD_Query(x, lca), HLD_Query(y, lca));
 }
-
 
 int main () {
     cin.sync_with_stdio(0);
@@ -153,24 +152,3 @@ int main () {
     }
     return 0;
 }
-
-/*
-5
-1 2 2
-2 3 3
-3 4 4
-3 5 7
-4
-1 5
-1 2
-1 3
-2 4
-
-4
-1 2 2
-2 3 3
-3 4 4
-2
-1 3
-2 4
-*/

@@ -21,8 +21,6 @@ vector<pii> adj[MAXN];
 
 inline void BFS1 (int src) {
 	queue<int> q;
-	// memset(dist, INF, sizeof(dist));
-	// memset(vis, 0, sizeof(vis));
 	vis[src] = 1;
 	dist[src] = 0;
 	q.push(src);
@@ -49,8 +47,6 @@ inline void BFS1 (int src) {
 
 inline void BFS2 (int src) {
 	queue<pii> q;
-	// memset(dist, INF, sizeof(dist));
-	// memset(vis, 0, sizeof(vis));
 	dist[src] = 0;
 	q.push(mp(src, -1));
 	maxdist = 0;
@@ -109,4 +105,16 @@ int travelTime (int N, int M, int L, int A[], int B[], int T[]) {
 	if (radii.size() >= 2) ans = max(ans, radii[0] + radii[1] + L);
 	if (radii.size() >= 3) ans = max(ans, radii[1] + radii[2] + (L << 1));
 	return ans;
+}
+
+int main () {
+	cin.sync_with_stdio(0);
+	cin.tie(0);
+	cin >> N >> M >> L;
+	for (int i=0; i<M; i++) {
+		cin >> a >> b >> t;
+		x[i] = a; y[i] = b; z[i] = t;
+	}
+	cout << travelTime(N, M, L, x, y, z) << endl;
+	return 0;
 }

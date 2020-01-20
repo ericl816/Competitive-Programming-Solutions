@@ -26,7 +26,7 @@ def saveProblem(group, name, language, text):
     f.write(text.encode('cp1252', errors='replace').decode('cp1252'))
     f.close()
 header = {
-    "Cookie":"__cfduid=d24085283f5042dbca39eb825bd6505bf1560397725; csrftoken=MBldH9WRLawANp3O8wo9MrFod9Gg12OUQ83Qri9JQQGPtwme19LXZmH2kBeOMd5z; _ga=GA1.2.2146370845.1560397726; sessionid=zn62d66eo8p95d903suo0fdpag4mpjwp; _gid=GA1.2.660928067.1577586666; _gat=1" #whatever your Cookie header is
+    "Cookie":"placeholder; csrftoken=placeholder; _ga=placeholder; sessionid=placeholder; _gid=placeholder; _gat=placeholder" #whatever your Cookie header is
     }
 
 def getSubmission(submissionId):
@@ -42,7 +42,7 @@ def better(a, b):
         return a
     return b
 
-username = "eric574" #whatever your username is
+username = "eric574" # whatever your username is
 subs = requests.get("https://dmoj.ca/api/user/submissions/"+username).json() # a map from the submission id to the submission data
 #remove submissions with compile errors or aborted submissions, because those can have null time, points, or memory
 subs = {i:subs[i] for i in subs if subs[i]["status"] == "D"}

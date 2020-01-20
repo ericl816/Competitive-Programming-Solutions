@@ -31,7 +31,6 @@ inline bool Cmp (pii &a, pii &b) {
 }
 
 inline void DFS (int node, int height) {
-	// depth[node] = height++;
 	nodes[node].s = height++;
 	for (size_t i=0; i<adj[node].size(); i++) {
 		int &next = adj[node][i];
@@ -44,8 +43,7 @@ inline void DFS (int node, int height) {
 
 inline void Mark_Nodes (int node, int targ) {
 	if (targ == -1) return;
-	vis1[node] = 1;
-	vis2[node] = 1;
+	vis1[node] = vis2[node] = 1;
 	for (int i=0; i<adj[node].size(); i++) {
 		int &next = adj[node][i];
 		if (!vis1[next]) Mark_Nodes(next, targ - 1);
@@ -58,7 +56,7 @@ inline int Get_Center (int node, int targ) {
 
 inline int Check (int targ) {
 	memset(vis2, 0, sizeof(vis2));
-	cnt = 0, center = 0;
+	cnt = center = 0;
 	for (int i=0; i<N; i++) {
 		if (!vis2[nodes[i].f]) {
 			memset(vis1, 0, sizeof(vis1));
@@ -75,8 +73,7 @@ int main () {
 	for (int i=0; i<N; i++) nodes.pb(mp(i, 0));
 	for (int i=1; i<N; i++) {
 		scan(u); scan(v);
-		u--; v--;
-		adj[u].pb(v);
+		adj[--u].pb(--v);
 		adj[v].pb(u);
 	}
 	DFS(0, -1);
@@ -84,8 +81,8 @@ int main () {
 	int lo = 0, hi = MAXN;
 	while (lo <= hi) {
 		int mid = (lo + hi) >> 1;
-		if (Check(mid) <= S) hi = mid - 1;
-		else lo = mid + 1;
+		if (S < Check(mid)) lo = mid + 1;
+		else hi = mid - 1;
 	}
     return !printf("%d\n", lo);
 }

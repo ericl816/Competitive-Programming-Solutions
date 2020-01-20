@@ -34,9 +34,9 @@ inline int GCD (int a, int b) { return b == 0 ? a : GCD(b, a % b); }
 inline int LCM (int a, int b) { return a * b / GCD(a, b); }
 inline ll PowMod (ll a, ll b, ll mod) { ll val = 1; while (b) { if (b & 1) val = (val * a) % mod; a = (a * a) % mod; b >>= 1; } return val; }
 
-int N, val1, val2;
+int N, s1, s2;
 int A[MAXN];
-vi v;
+vi V;
 
 int main (int argc, char const *argv[]) {
     #ifdef NOT_DMOJ
@@ -49,22 +49,22 @@ int main (int argc, char const *argv[]) {
     cin >> N;
     for (int i=0; i<N; i++) {
         cin >> A[i];
-        val1 += A[i];
+        s1 += A[i];
     }
     for (int i=0; i<N; i++) {
-        v.pb(A[i]);
-        while (v.size() > 2 && v[v.size() - 2] >= v[v.size() - 3] && v[v.size() - 2] >= v[v.size() - 1]) {
-            int res = v[v.size() - 3] - v[v.size() - 2] + v[v.size() - 1];
-            for (int j=0; j<3; j++) v.pop_back();
-            v.pb(res);
+        V.pb(A[i]);
+        while (V.size() > 2 && V[V.size() - 3] <= V[V.size() - 2] && V[V.size() - 2] >= V[V.size() - 1]) {
+            int res = V[V.size() - 3] - V[V.size() - 2] + V[V.size() - 1];
+            V.pop_back(), V.pop_back(), V.pop_back();
+            V.pb(res);
         }
     }
-    sort(allof(v), greater<int>());
-    for (size_t i=0; i<v.size(); i++) {
-        if (i & 1) val2 -= v[i];
-        else val2 += v[i];
+    sort(allof(V), greater<int>());
+    for (size_t i=0; i<V.size(); i++) {
+        if (i & 1) s2 -= V[i];
+        else s2 += V[i];
     }
-    cout << ((val1 + val2) >> 1) << "\n";
+    cout << ((s1 + s2) >> 1) << "\n";
     return 0;
 }
 

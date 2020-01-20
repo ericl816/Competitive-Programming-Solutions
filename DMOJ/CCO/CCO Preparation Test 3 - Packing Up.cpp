@@ -9,7 +9,6 @@ char _;
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
-#define t(x) (x) * (x)
 #define vi vector<int>
 #define pb push_back
 #define pii pair<int, int>
@@ -25,13 +24,8 @@ char _;
 #endif
 using namespace std;
 
-ll N, L;
-ll C[MAXN], DP[MAXN], PSA[MAXN];
-deque<pair<ll, ll> > mq;
-
-inline double Slope (const pair<ll, ll> &a, const pair<ll, ll> &b) {
-	return (double) (a.f - b.f) / (double) (a.s - b.s);
-}
+int N, L, last;
+ll C[MAXN], x, DP[MAXN], psa[MAXN];
 
 int main () {
 	#ifdef NOT_DMOJ
@@ -42,20 +36,23 @@ int main () {
 	cin.tie(0);
 	cout.tie(0);
 	cin >> N >> L;
+	psa[0] = 0;
 	for (int i=1; i<=N; i++) {
 		cin >> C[i];
-		PSA[i] = PSA[i - 1] + C[i];
+		psa[i] += psa[i - 1] + C[i];
 	}
-	mq.pb(mp(0, 0));
+	memset(DP, INF, sizeof(DP));
+	DP[0] = 0;
 	for (int i=1; i<=N; i++) {
-		ll gap = PSA[i] + i - L - 1;
-		while (mq.size() >= 2 && Slope(mq[1], mq[0]) <= gap * 2) mq.pop_front();
-		DP[i] = t(gap - mq.front().s) - t(mq.front().s) + mq.front().f;
-		pair<ll, ll> line = pair<ll, ll>(DP[i] + t(PSA[i] + i), PSA[i] + i);
-		while (mq.size() >= 2 && Slope(line, mq[mq.size() - 1]) <= Slope(mq[mq.size() - 1], mq[mq.size() - 2])) mq.pop_back();
-		mq.pb(line);
+		for (int j=last; j<i; j++) {
+			x = psa[i] - psa[j] + i - j - 1;
+			if (DP[i] > DP[j] + pow((x - L), 2)) {
+				DP[i] = DP[j] + pow((x - L), 2);
+				last = j;
+			}
+		}
 	}
-	cout << DP[N] << "\n";
+	cout << DP[N] << endl;
 	return 0;
 }
 

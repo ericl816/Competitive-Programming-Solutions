@@ -6,7 +6,7 @@
 char _;
 #define ll long long
 #define ull unsigned long long
-#define MAXN 1000010
+#define MAXN 1000005
 #define MOD 1000000007
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (begin) ? (a) : (b)

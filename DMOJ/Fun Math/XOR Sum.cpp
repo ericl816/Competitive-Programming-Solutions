@@ -33,9 +33,8 @@ inline int GCD (int a, int b) { return b == 0 ? a : GCD(b, a % b); }
 inline int LCM (int a, int b) { return a * b / GCD(a, b); }
 inline ll PowMod (ll a, ll b, ll mod) { ll val = 1; while (b) { if (b & 1) val = (val * a) % mod; a = (a * a) % mod; b >>= 1; } return val; }
 
-int N;
-int a[MAXN];
-ll maxx, minn;
+int N, a;
+ll tot, res;
 
 int main (int argc, char const *argv[]) {
 	#ifdef NOT_DMOJ
@@ -47,11 +46,11 @@ int main (int argc, char const *argv[]) {
 	cout.tie(0);
 	cin >> N;
 	for (int i=0; i<N; i++) {
-		cin >> a[i];
-		maxx += a[i];
-		minn ^= a[i];
+		cin >> a;
+		tot += a;
+		res ^= a;
 	}
-	cout << maxx - minn << "\n";
+	cout << tot - res << "\n";
 	return 0;
 }
 

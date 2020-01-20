@@ -1,2 +1,8 @@
-#include "game.h" 
-void initialize(int n) {}int cnt[1504];int hasEdge(int u, int v) {return ++cnt[u > v ? u : v] == (u > v ? u : v);}
+#include "game.h"
+#define MAXN 1504
+void initialize(int n) {}
+int cnt[MAXN];
+int hasEdge(int u, int v) {
+    int w = (u > v ? u : v);
+    return ++cnt[w] == w;
+}

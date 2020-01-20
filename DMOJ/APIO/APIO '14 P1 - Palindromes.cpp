@@ -72,22 +72,22 @@ ll ans;
 string s;
 
 int main (int argc, char const *argv[]) {
-	#ifdef NOT_DMOJ
-	freopen("in.txt", "r", stdin);
-	freopen("out.txt", "w", stdout);
-	#endif // NOT_DMOJ
-	cin.sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
-	cin >> s;
-	for (size_t i=0; i<s.size(); i++) {
-	    tree.insert(s[i]);
-	    tree.cnt[tree.last]++;
-	}
-	for (int i=tree.nodes - 1; i>1; i--) tree.cnt[tree.link[i]] += tree.cnt[i];
-	for (int i=2; i<tree.nodes; i++) ans = max(ans, 1LL * tree.len[i] * tree.cnt[i]);
-	cout << ans << "\n";
-	return 0;
+  #ifdef NOT_DMOJ
+  freopen("in.txt", "r", stdin);
+  freopen("out.txt", "w", stdout);
+  #endif // NOT_DMOJ
+  cin.sync_with_stdio(0);
+  cin.tie(0);
+  cout.tie(0);
+  cin >> s;
+  for (size_t i=0; i<s.size(); i++) {
+      tree.insert(s[i]);
+      tree.cnt[tree.last]++;
+  }
+  for (int i=tree.nodes - 1; i>1; i--) tree.cnt[tree.link[i]] += tree.cnt[i];
+  for (int i=2; i<tree.nodes; i++) ans = max(ans, 1LL * tree.len[i] * tree.cnt[i]);
+  cout << ans << "\n";
+  return 0;
 }
 
 /* 

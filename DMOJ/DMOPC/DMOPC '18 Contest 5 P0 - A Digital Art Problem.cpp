@@ -34,7 +34,8 @@ inline int LCM (int a, int b) { return a * b / GCD(a, b); }
 inline ll PowMod (ll a, ll b, ll mod) { ll val = 1; while (b) { if (b & 1) val = (val * a) % mod; a = (a * a) % mod; b >>= 1; } return val; }
 
 string s;
-long double a, b, c, d, e, f, R, G, B;
+long double a, b, c, d, e, f;
+long double R, G, B;
 
 int main (int argc, char const *argv[]) {
 	#ifdef NOT_DMOJ

@@ -21,7 +21,6 @@ char _;
 #define mii map<int, int>
 #define umii unordered_map<int, int>
 #define allof(x) x.begin(), x.end()
-#define DEBUG 1
 // #define NOT_DMOJ 0
 #ifdef DEBUG
 	#define D(x...) printf(x)
@@ -36,7 +35,17 @@ inline ll PowMod (ll a, ll b, ll mod) { ll val = 1; while (b) { if (b & 1) val =
 
 int N, K;
 int a[MAXN];
-ll DP[MAXN], res[MAXN], suff_max[MAXN];
+ll DP[MAXN];
+int segmax[MAXM][MAXN];
+
+inline int Query (int l, int r) {
+	int SIZE = log(r - l + 1) / log(2);
+	return max(segmax[SIZE][l], segmax[SIZE][r - (1 << SIZE) + 1]);
+}
+
+inline int getLimit (int x) {
+	return K * ((x + K - 1) / K - 1);
+} 
 
 int main (int argc, char const *argv[]) {
 	#ifdef NOT_DMOJ
@@ -47,44 +56,29 @@ int main (int argc, char const *argv[]) {
 	cin.tie(0);
 	cout.tie(0);
 	cin >> N >> K;
-	for (int i=0; i<N; i++) cin >> a[i];
-	// Easy case
+	for (int i=1; i<=N; i++) {
+		cin >> a[i];
+		segmax[0][i] = a[i];
+	}
 	if (K >= N) {
 		int maxx = 0;
-		for (int i=0; i<N; i++) maxx = max(maxx, a[i]);
+		for (int i=1; i<=N; i++) maxx = max(maxx, a[i]);
 		cout << maxx << "\n";
 		return 0;
 	}
-	DP[0] = 1LL * a[0];
-	for (int i=1; i<K; i++) DP[i] = max(DP[i - 1], 1LL * a[i]);
-	for (int i=K; i<N; i+=K) {
-		suff_max[i - 1] = res[i - 1] = DP[i - 1];
-		for (int j=i - 2; j>=i - K; j--) suff_max[j] = max(suff_max[j + 1], DP[j]);
-		int curr = a[i - 1];
-		for (int j=i - 2; j>=i - K; j--) {
-			res[j] = max(res[j + 1], DP[j] + curr);
-			curr = max(curr, a[j]);
-		}
-		curr = 0;
-		for (int j=i; j<min(N, i + K); j++) {
-			curr = max(curr, a[j]);
-			DP[j] = max(res[j - K], suff_max[j - K] + curr);
+	for (int i=1; i<=(32 - __builtin_clz(N)); i++) {
+		for (int j=1; j + (1 << i) - 1<=N; j++) {
+			segmax[i][j] = max(segmax[i - 1][j], segmax[i - 1][j + (1 << (i - 1))]);
 		}
 	}
-	// for (int i=0; i<N; i++) D("%d %lld\n", i, DP[i]);
-	cout << DP[N - 1] << "\n";
+	for (int i=1, j=0; i<=N; i++) {
+		if (j < i - K) j = i - K;
+		while (j < getLimit(i) && DP[j] + Query(j + 1, i) <= DP[j + 1] + Query(j + 2, i)) j++;
+		DP[i] = max(DP[i], DP[j] + Query(j + 1, i));
+	}
+	cout << DP[N] << "\n";
 	return 0;
 }
-
-/*
-5 3
-2 5 7 1 4
-Ans: 12
-
-5 4
-1 3 5 10 11
-Ans: 21
-*/
 
 /* 
  * Look for:

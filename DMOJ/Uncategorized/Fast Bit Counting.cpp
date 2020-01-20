@@ -1,1 +1,1 @@
-int setbits(unsigned long long n) {return __builtin_popcountll(n);}
+int setbits(unsigned long long n){return __builtin_popcountll(n);}

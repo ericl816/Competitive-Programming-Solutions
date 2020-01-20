@@ -20,7 +20,6 @@ char _;
 #define mii map<int, int>
 #define umii unordered_map<int, int>
 #define allof(x) x.begin(), x.end()
-#define DEBUG 1
 // #define NOT_DMOJ 0
 #ifdef DEBUG
 	#define D(x...) printf(x)
@@ -38,20 +37,15 @@ string s;
 int DP[MAXN][MAXN][MAXN][2];
 
 inline int Solve (int l, int r, int cnt, bool take) {
-	if (l > r) {
-		return cnt < K ? INF : 1;
-		// cout << "Return\n";
-	}
+	if (l > r) return cnt < K ? INF : 1;
 	int &res = DP[l][r][cnt][take];
-	// D("%d\n", res);
+	D("%d\n", res);
 	if (~res) return res;
 	int val = INF;
 	bool flag = s[l] == 'G';
 	if (flag == take) val = Solve(l + 1, r, cnt + 1, take);
-	for (int i=l; i<r; i++) {
-		val = min(val, min(Solve(l, i, 0, 0), Solve(l, i, 0, 1)) + Solve(i + 1, r, cnt, take));
-	}
-	// D("%d\n", val);
+	for (int i=l; i<r; i++) val = min(val, min(Solve(l, i, 0, 0), Solve(l, i, 0, 1)) + Solve(i + 1, r, cnt, take));
+	D("%d\n", val);
 	return res = val;
 }
 

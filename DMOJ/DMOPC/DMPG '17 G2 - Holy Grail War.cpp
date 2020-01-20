@@ -31,22 +31,13 @@ public:
 		if (r.sum == -INF) return l;
 		Node next;
 		next.sum = l.sum + r.sum;
-
 		next.lval = max(l.lval, l.sum + r.lval);
 		next.rval = max(r.rval, r.sum + l.rval);
-
 		next.ans = max(next.lval, next.rval);
 		next.ans = max(next.ans, next.sum);
 		next.ans = max(next.ans, l.rval + r.lval);
 		next.ans = max(next.ans, l.ans);
 		next.ans = max(next.ans, r.ans);
-
-		/*
-		next.ans = max(next.sum, max(l.ans, r.ans));
-		next.lval = max(l.lval, l.sum + r.lval);
-		next.rval = max(r.rval, r.sum + l.rval);
-		next.ans = max(max(next.ans, l.rval + r.lval), max(next.lval, next.rval));
-		*/
 		return next;
 	}
 
@@ -77,7 +68,7 @@ public:
 		Update(idx << 1 | 1, mid + 1, r, arridx);
 		tree[idx] = PushUp(tree[idx << 1], tree[idx << 1 | 1]);
 	}
-
+	
 	Node Query (int idx, int l, int r, int l1, int r1) {
 		if (r1 < l || l1 > r) return Node {-INF, -INF, -INF, -INF};
 		if (l >= l1 && r <= r1) return tree[idx];

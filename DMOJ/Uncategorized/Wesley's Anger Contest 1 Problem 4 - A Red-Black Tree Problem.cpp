@@ -40,6 +40,7 @@ char ch;
 bool flag[MAXN], vis[MAXN];
 ll ans;
 ll DP[MAXN][MAXN][MAXM][MAXM];
+ll merged[MAXN][MAXM][MAXM];
 vi adj[MAXN];
 
 inline void DFS (int node, int prev) {
@@ -49,14 +50,22 @@ inline void DFS (int node, int prev) {
 	for (auto next : adj[node]) {
 		if (next == prev) continue;
 		DFS(next, node);
-		for (int i=K; i>=0; i--) {
-			for (int j=K - i; j>=0; j--) {
-				for (int k=2; k>=0; k--) {
-					for (int l=2; l>=0; l--) {
-						for (int m=2; m>=0; m--) {
-							for (int n=2; n>=0; n--) {
-								DP[node][i + j][min(k + l, 2)][min(m + n, 2)] += DP[node][i][k][m] * DP[next][j][l][n];
-								DP[node][i + j][min(k + l, 2)][min(m + n, 2)] %= MOD;
+		for (int i=0; i<=K; i++) {
+			for (int j=0; j<=2; j++) {
+				for (int k=0; k<=2; k++) {
+					merged[i][j][k] = DP[node][i][j][k];
+					DP[node][i][j][k] = 0;
+				}
+			}
+		}
+		for (int i=0; i<=2; i++) {
+			for (int j=0; j<=2; j++) {
+				for (int k=0; k<=K; k++) {
+					for (int l=0; l<=2; l++) {
+						for (int m=0; m<=2; m++) {
+							for (int n=0; k + n<=K; n++) {
+								DP[node][k + n][min(i + l, 2)][min(j + m, 2)] += merged[k][i][j] * DP[next][n][l][m];
+								DP[node][k + n][min(i + l, 2)][min(j + m, 2)] %= MOD;
 							}
 						}
 					}
@@ -64,6 +73,7 @@ inline void DFS (int node, int prev) {
 			}
 		}
 	}
+	DP[node][0][0][0] = 1;
 }
 
 int main (int argc, char const *argv[]) {

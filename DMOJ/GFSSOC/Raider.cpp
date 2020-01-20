@@ -29,7 +29,7 @@ inline void TarjansDFS (int node, int prev) {
     processed[node] = 1;
     for (size_t i=0; i<adj[node].size(); i++) {
         int &next = adj[node][i];
-        // if (next == prev) continue;
+        if (next == prev) continue;
         if (!DFN[next]) {
             TarjansDFS(next, node);
             low[node] = min(low[node], low[next]);
@@ -63,7 +63,6 @@ void Reconstruct_DAG () {
     }
 }
 
-// First stores maximal amount of coins, second stores number of distinct paths to do so
 pii Solve (int node, bool choose) {
     if (node == comp[N]) {
         if (choose) return pii(total[node], 1);

@@ -1,10 +1,7 @@
 #include <bits/stdc++.h>
 #define ll long long
-#define mii map<int, int>
-#define lb lower_bound
 #define s second
-#define b begin
-#define e end
+#define mii map<int, int>
 using namespace std;
 
 int N, num;
@@ -16,9 +13,9 @@ int main() {
    for (int i=0; i<N; i++) {
       scanf("%d", &num);
       int depth = 0;
-      auto it = tree.lb(num);
-      if (it != tree.e()) depth = max(depth, it->s + 1);
-      if (it != tree.b()) depth = max(depth, (--it)->s + 1);
+      auto it = tree.lower_bound(num);
+      if (it != tree.end()) depth = max(depth, it->s + 1);
+      if (it != tree.begin()) depth = max(depth, (--it)->s + 1);
       tree[num] = depth;
       ans += depth;
       printf("%lld\n", ans);

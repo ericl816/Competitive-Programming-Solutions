@@ -6,6 +6,7 @@
 char _;
 #define ll long long
 #define ull unsigned long long
+#define MAXM 1000010
 #define MAXN 200010
 #define MOD 1000000007
 #define INF 0x3f3f3f3f3f3f3f
@@ -21,7 +22,7 @@ char _;
 #define mii map<int, int>
 #define umii unordered_map<int, int>
 #define allof(x) x.begin(), x.end()
-#define DEBUG 1
+#define DEBUG 0
 // #define NOT_DMOJ 0
 #ifdef DEBUG
 	#define D(x...) printf(x)
@@ -34,10 +35,11 @@ inline int GCD (int a, int b) { return b == 0 ? a : GCD(b, a % b); }
 inline int LCM (int a, int b) { return a * b / GCD(a, b); }
 inline ll PowMod (ll a, ll b, ll mod) { ll val = 1; while (b) { if (b & 1) val = (val * a) % mod; a = (a * a) % mod; b >>= 1; } return val; }
 
-int N, P, M, ans;
-pair<ll, ll> p[MAXN];
-ll a[MAXN], b[MAXN], PSA1[MAXN], PSA2[MAXN];
+int N, P, M, u, v, ans;
+int a[MAXN], b[MAXN];
+pii p[MAXN];
 ll minn = INF;
+ll PSA1[MAXM], PSA2[MAXM], sum1[MAXM], sum2[MAXM];
 
 int main (int argc, char const *argv[]) {
 	#ifdef NOT_DMOJ
@@ -48,30 +50,32 @@ int main (int argc, char const *argv[]) {
 	cin.tie(0);
 	cout.tie(0);
 	cin >> N >> P >> M;
-	for (int i=1; i<=N; i++) cin >> p[i].f >> p[i].s;
-	for (int i=1; i<=P; i++) cin >> a[i];
-	for (int i=1; i<=M; i++) cin >> b[i];
-	sort(a + 1, a + P + 1, greater<ll>());
-	sort(b + 1, b + M + 1, greater<ll>());
-	for (int i=1; i<MAXN; i++) PSA1[i] = PSA1[i - 1] + a[i];
-	for (int i=1; i<MAXN; i++) PSA2[i] = PSA2[i - 1] + b[i];
-	for (int i=1; i<=N; i++) {
-		int idx1 = lower_bound(a + 1, a + P + 1, p[i].f, greater<ll>()) - a, idx2 = lower_bound(b + 1, b + M + 1, p[i].s, greater<ll>()) - b;
-		ll sum = PSA1[idx1 - 1] - (idx1 - 1) * p[i].f + PSA2[idx2 - 1] - (idx2 - 1) * p[i].s;
-		// D("%d %lld\n", i, sum);
+	for (int i=0; i<N; i++) {
+		cin >> u >> v;
+		p[i] = mp(u, v);
+	}
+	for (int i=0; i<P; i++) {
+		cin >> a[i];
+		sum1[a[i]]++;
+	}
+	for (int i=0; i<M; i++) {
+		cin >> b[i];
+		sum2[b[i]]++;
+	}
+	for (int i=MAXM - 2; i>=1; i--) {
+		sum1[i] += sum1[i + 1];
+		PSA1[i] += PSA1[i + 1] + sum1[i];
+		sum2[i] += sum2[i + 1];
+		PSA2[i] += PSA2[i + 1] + sum2[i];
+	}
+	for (int i=0; i<N; i++) {
+		ll sum = PSA1[p[i].f + 1] + PSA2[p[i].s + 1];
+		if (DEBUG) D("%d %lld\n", i, sum);
 		if (minn > sum) {
 			minn = sum;
-			ans = i;
+			ans = i + 1;
 		}
 	}
 	cout << ans << "\n";
 	return 0;
 }
-
-/* 
- * Look for:
- * the exact constraints (multiple sets are too slow for n=10^6 :( ) 
- * special cases (n=1?)
- * overflow (ll vs int?)
- * array bounds
- */

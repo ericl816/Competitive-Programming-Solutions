@@ -39,6 +39,6 @@ int main () {
 	}
 	TarjansDFS(1, -1);
 	for (int i=1; i<=n; i++) for (int &next : adj[i]) if (low[i] ^ low[next]) cnt[low[i]]++;
-	for (int i=1; i<=n; i++) if (cnt[i]) ans++;
+	for (int i=1; i<=n; i++) if (cnt[i] == 1) ans++;
 	return 0 * printf("%d\n", (ans + 1) >> 1);
 }

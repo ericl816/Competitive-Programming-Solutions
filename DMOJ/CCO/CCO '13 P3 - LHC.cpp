@@ -20,8 +20,7 @@ ll num[MAXN], sum[MAXN];
 inline void DFS (int node, int prev) {
 	num[node] = 0;
 	sum[node] = 1;
-	for (size_t i=0; i<adj[node].size(); i++) {
-		int &next = adj[node][i];
+	for (int &next : adj[node]) {
 		if (next == prev) continue;
 		DFS(next, node);
 		if (len < num[node] + num[next] + 1) {

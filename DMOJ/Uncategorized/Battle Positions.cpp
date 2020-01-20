@@ -2,7 +2,7 @@
 
 using namespace std;
 
-int I, N, J, X, Y, K, arr [100001], ans = 0;
+int I, N, J, X, Y, K, arr [100001], temp = 0, ans = 0;
 
 void calc () {
   for (int i=0; i<I; i++) {

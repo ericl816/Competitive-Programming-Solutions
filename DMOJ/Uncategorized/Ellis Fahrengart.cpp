@@ -1,6 +1,4 @@
 #include <bits/stdc++.h>
-#define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
-char _;
 #define ll long long 
 #define MAXN 100010
 #define SIZE 316
@@ -14,21 +12,21 @@ char _;
 #define umii unordered_map<int, int>
 using namespace std;
 
+// Mo's Algorithm
+
 struct Array {
 	int l, r, idx;
 };
 
-bool BlkCompare (Array &a, Array &b) {
-  if (a.l / SIZE ^ b.l / SIZE) return a.l < b.l;
-  else if (a.r / SIZE ^ b.r / SIZE) return a.r < b.r;
-  else return a.l < b.l && a.r < b.r;
+inline bool BlkCompare (Array &a, Array &b) {
+	return (a.l / SIZE ^ b.l / SIZE) ? a.l < b.l : a.r < b.r;
 }
 
 int N, Q, lidx = 1, ridx, A[MAXN];
 ll ans[MAXN], arr[MAXN], num;
 vector<Array> vec;
 pii seq[MAXN];
-//mii arr;
+//umii arr;
 
 struct RMQ {
 private:
@@ -52,16 +50,18 @@ public:
 RMQ tree(MAXN);
 
 int main () {
-	scan(N);
-	for (int i=0; i<N; i++) {
-		scan(A[i + 1]);
-		seq[i + 1] = mp(A[i + 1], i + 1);
+	cin.sync_with_stdio(0);
+	cin.tie(0);
+	cin >> N;
+	for (int i=1; i<=N; i++) {
+		cin >> A[i];
+		seq[i] = mp(A[i], i);
 	}
 	sort(seq + 1, seq + N + 1);
-	for (int i=0; i<N; i++) arr[seq[i + 1].s] = i + 1;
-	scan(Q);
+	for (int i=1; i<=N; i++) arr[seq[i].s] = i;
+	cin >> Q;
 	for (int a=0, i, j; a<Q; a++) {
-		scan(i); scan(j);
+		cin >> i >> j;
 		vec.pb((Array) {i, j, a});
 	}
 	sort(vec.begin(), vec.end(), BlkCompare); 
@@ -89,6 +89,6 @@ int main () {
 		}
 		ans[next.idx] = num;
 	}
-	for (int i=0; i<Q; i++) printf("%lld\n", ans[i]);
+	for (int i=0; i<Q; i++) cout << ans[i] << "\n";
 	return 0;
 }

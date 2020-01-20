@@ -13,7 +13,7 @@ typedef struct {
 } Matrix;
 ull N, a, b, c, d;
 
-inline Matrix Fib (ull n) {
+Matrix Fib (ull n) {
     if (!n) return (Matrix) {0, 1};
     else {
         Matrix ret = Fib (n >> 1);
@@ -31,7 +31,7 @@ inline void read() {
     N -= '0';
     _ = getchar();
     while (_ >= '0') {
-        N = (N * 10 + _ - '0') % MOD1;
+        N = ((N << 3) + (N << 1) + _ - '0') % MOD1;
         _ = getchar();
     }
 }

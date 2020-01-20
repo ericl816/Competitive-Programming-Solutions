@@ -6,7 +6,7 @@
 char _;
 #define ll long long
 #define MAXM 510
-#define MAXN 10010
+#define MAXN 11010
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)
 #define max(a, b) (a) < (b) ? (b) : (a)
@@ -35,13 +35,13 @@ inline int Solve (int balls, int width) {
 	if (~val) return val;
 	int pos = max(0, width - w);
 	int score = PSA[width] - PSA[pos];
-	// cout << score << "\n";
+	D("%d\n", score);
 	val = max(Solve(balls, width - 1), Solve(balls - 1, pos) + score);
 	if (balls >= 2) {
 		int sum = 0;
 		for (int i=pos; i && i - pos + w - 1; i--) {
 			sum += pins[i];
-			// cout << sum << "\n";
+			D("%d\n", sum);
 			val = max(val, Solve(balls - 2, i - 1) + score + sum);
 		}
 	}

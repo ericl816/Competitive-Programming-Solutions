@@ -43,9 +43,7 @@ inline bool Cmp2 (const pii &a, const pii &b) {
 
 inline ll Dist (ll midx, ll midy) {
 	ll res = 0LL;
-	for (int i=0; i<N; i++) {
-		res += max(abs(midx - x[i]), abs(midy - y[i]));
-	}
+	for (int i=0; i<N; i++) res += max(abs(midx - x[i]), abs(midy - y[i]));
 	return res;
 }
 
@@ -66,10 +64,9 @@ int main (int argc, char const *argv[]) {
 	ll midx = points[(N - 1) >> 1].f;
 	sort(points, points + N, Cmp2);
 	ll midy = points[(N - 1) >> 1].s;
-	// cout << midx << " " << midy << endl;
-	ll origx = midx;
-	midx = (midx + midy) >> 1;
-	midy = origx - midx;
+	ll origx = midx, origy = midy;
+	midx = (origx + origy) >> 1;
+	midy = (origx - origy) >> 1;
 	ans = Dist(midx, midy);
 	ans = min(ans, Dist(midx + 1, midy));
 	ans = min(ans, Dist(midx - 1, midy));
@@ -79,14 +76,6 @@ int main (int argc, char const *argv[]) {
 	return 0;
 }
 
-/*
-4
-1 1
-1 3
-1 2
-1 10
-Ans: 10
-*/
 
 /* 
  * Look for:

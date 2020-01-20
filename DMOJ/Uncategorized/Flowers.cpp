@@ -9,8 +9,6 @@ char _;
 #define MAXN 200010
 #define MOD 1000000007
 #define INF 0x3f3f3f3f
-#define min(a, b) (a) < (b) ? (a) : (b)
-#define max(a, b) (a) < (b) ? (b) : (a)
 #define vi vector<int>
 #define vll vector<ll>
 #define pb push_back
@@ -79,13 +77,6 @@ int main (int argc, char const *argv[]) {
 	cout << ans << "\n";
 	return 0;
 }
-
-/*
-5
-1 2 3 4 5
-1000000000 1000000000 1000000000 1000000000 1000000000
-Ans: 5000000000
-*/
 
 /* 
  * Look for:

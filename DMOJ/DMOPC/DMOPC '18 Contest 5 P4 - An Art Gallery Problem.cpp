@@ -35,16 +35,24 @@ inline ll PowMod (ll a, ll b, ll mod) { ll val = 1; while (b) { if (b & 1) val =
 
 int N;
 string A, B;
+map<string, bool> dict;
 
-inline int Cheese (string &s) {
-	int res = 0;
-	for (size_t i=0; i<s.size(); i++) {
-		if (s[i] == 'A') {
-			if (i & 1) ++res;
-			else --res;
+inline void DFS (string s) {
+	dict[s] = 1;
+	for (size_t i=1; i<s.size(); i++) {
+		if (s[i - 1] == s[i]) {
+			if (s[i] == 'A') {
+				s[i] = s[i - 1] = 'F';
+				if (!dict.count(s)) DFS(s);
+				s[i] = s[i - 1] = 'A';
+			}
+			else {
+				s[i] = s[i - 1] = 'A';
+				if (!dict.count(s)) DFS(s);
+				s[i] = s[i - 1] = 'F';
+			}
 		}
 	}
-	return res;
 }
 
 int main (int argc, char const *argv[]) {
@@ -56,7 +64,9 @@ int main (int argc, char const *argv[]) {
 	cin.tie(0);
 	cout.tie(0);
 	cin >> N >> A >> B;
-	cout << (Cheese(A) == Cheese(B) ? "YES\n" : "NO\n");
+	int cheese;
+	for (int i=0; i<N; i++) cheese += (A[i] != B[i]) ? 1 : 0;
+	cout << (cheese & 1 ? "NO\n" : "YES\n");
 	return 0;
 }
 

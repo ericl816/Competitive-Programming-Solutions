@@ -40,9 +40,7 @@ long double C, want;
 long double bright[MAXN * MAXN];
 
 inline bool Error (long double x, long double y) {
-	long double z = x - y;
-	if (z < 0) z *= -1;
-	return z < EPS;
+	return abs(x - y) <= EPS;
 }
 
 inline long double Comp (long double lo, long double hi) {

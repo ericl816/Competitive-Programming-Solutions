@@ -24,118 +24,6 @@ char _;
 #endif
 using namespace std;
 
-struct Node {
-    int val, p, sz, lazy;
-    Node *l, *r;
-    ll psum, ssum, tsum, bsum;
-    bool rev, prop;
-    Node (int i) : val(i), p(rand()), sz(1), lazy(0), psum(i), ssum(i), tsum(i), bsum(i), rev(0), prop(0), l(0), r(0) { }
-} *root;
-
-inline int sz (Node *n) {
-    return n ? n-> sz : 0LL;
-}
-
-inline ll psum (Node *n) {
-    return n ? n->psum : 0LL;
-}
-
-inline ll ssum (Node *n) {
-    return n ? n->ssum : 0LL;
-}
-
-inline ll tsum (Node *n) {
-    return n ? n->tsum : 0LL;
-}
-
-inline ll bsum (Node *n) {
-    return n ? n->bsum : -INF;
-}
-
-inline ll maxsum (ll x) {
-    return max(0LL, x);
-}
-
-inline void push (Node *n) {
-    if (!n) return;
-    if (n->prop) {
-        n->val = n->lazy;
-        n->psum = n->ssum = n->bsum = 1LL * (n->lazy <= 0 ? 1LL : n->sz) * n->lazy;
-        n->tsum = 1LL * n->sz * n->lazy;
-        if (n->l) {
-            n->l->lazy = n->lazy;
-            n->l->prop = 1;
-        }
-        if (n->r) {
-            n->r->lazy = n->lazy;
-            n->r->prop = 1;
-        }
-        n->prop = 0;
-    }
-    if (n->rev) {
-        swap(n->l, n->r);
-        swap(n->psum, n->ssum);
-        if (n->l) n->l->rev ^= 1;
-        if (n->r) n->r->rev ^= 1;
-        n->rev = 0;
-    }
-}
-
-inline void update (Node *n) {
-    if (!n) return;
-    ll lbsum = n->val;
-    n->bsum = n->val;
-    n->tsum = n->val;
-    push(n->l);
-    push(n->r);
-    if (n->l) {
-        n->psum = max(psum(n->l), tsum(n->l) + n->val + maxsum(psum(n->r)));
-        n->bsum = max(n->bsum, max(bsum(n->l), ssum(n->l) + n->val));
-        n->tsum += tsum(n->l);
-        lbsum += ssum(n->l);
-    }
-    else n->psum = n->val + maxsum(psum(n->r));
-    if (n->r) {
-        n->ssum = max(ssum(n->r), tsum(n->r) + n->val + maxsum(ssum(n->l)));
-        n->bsum = max(n->bsum, max(bsum(n->r), max(lbsum + psum(n->r), n->val + psum(n->r))));
-        n->tsum += tsum(n->r);
-    }
-    else n->ssum = n->val + maxsum(ssum(n->l));
-    n->sz = sz(n->l) + 1 + sz(n->r);
-}
-
-inline void merge (Node *&n, Node *l, Node *r) {
-    push(l);
-    push(r);
-    if (!l || !r) n = l ? l : r;
-    else if (l->p > r->p) {
-        merge(l->r, l->r, r);
-        n = l;
-    }
-    else {
-        merge(r->l, l, r->l);
-        n = r;
-    }
-    update(n);
-}
-
-inline void split (Node *n, Node *&l, Node *&r, int key) {
-    push(n);
-    if (!n) l = r = 0;
-    else if (sz(n->l) < key) {
-        split(n->r, n->r, r, key - sz(n->l) - 1);
-        l = n;
-    }
-    else {
-        split(n->l, l, n->l, key);
-        r = n;
-    }
-    update(n);
-}
-
-int N, Q, a, b, c;
-string s;
-
 template <class T> struct is_iterator {
     template <class U, typename enable_if<!is_convertible<U, const char*>::value, int>::type = 0>
     constexpr static auto has_indirection(int) -> decltype(*declval<U>(), bool()) { return true; }
@@ -644,6 +532,118 @@ void flush() { output->flush(); }
  * - Iterator first, int count
  ******************************************************************************/
 
+
+struct Node {
+    int val, p, sz, lazy;
+    Node *l, *r;
+    ll psum, ssum, tsum, bsum;
+    bool rev, prop;
+    Node (int i) : val(i), p(rand()), sz(1), lazy(0), psum(i), ssum(i), tsum(i), bsum(i), rev(0), prop(0), l(0), r(0) { }
+} *root;
+
+inline int sz (Node *n) {
+    return n ? n-> sz : 0LL;
+}
+
+inline ll psum (Node *n) {
+    return n ? n->psum : 0LL;
+}
+
+inline ll ssum (Node *n) {
+    return n ? n->ssum : 0LL;
+}
+
+inline ll tsum (Node *n) {
+    return n ? n->tsum : 0LL;
+}
+
+inline ll bsum (Node *n) {
+    return n ? n->bsum : -INF;
+}
+
+inline ll maxsum (ll x) {
+    return max(0LL, x);
+}
+
+inline void push (Node *n) {
+    if (!n) return;
+    if (n->prop) {
+        n->val = n->lazy;
+        n->psum = n->ssum = n->bsum = 1LL * (n->lazy <= 0 ? 1LL : n->sz) * n->lazy;
+        n->tsum = 1LL * n->sz * n->lazy;
+        if (n->l) {
+            n->l->lazy = n->lazy;
+            n->l->prop = 1;
+        }
+        if (n->r) {
+            n->r->lazy = n->lazy;
+            n->r->prop = 1;
+        }
+        n->prop = 0;
+    }
+    if (n->rev) {
+        swap(n->l, n->r);
+        swap(n->psum, n->ssum);
+        if (n->l) n->l->rev ^= 1;
+        if (n->r) n->r->rev ^= 1;
+        n->rev = 0;
+    }
+}
+
+inline void update (Node *n) {
+    if (!n) return;
+    ll lbsum = n->val;
+    n->bsum = n->val;
+    n->tsum = n->val;
+    push(n->l);
+    push(n->r);
+    if (n->l) {
+        n->psum = max(psum(n->l), tsum(n->l) + n->val + maxsum(psum(n->r)));
+        n->bsum = max(n->bsum, max(bsum(n->l), ssum(n->l) + n->val));
+        n->tsum += tsum(n->l);
+        lbsum += ssum(n->l);
+    }
+    else n->psum = n->val + maxsum(psum(n->r));
+    if (n->r) {
+        n->ssum = max(ssum(n->r), tsum(n->r) + n->val + maxsum(ssum(n->l)));
+        n->bsum = max(n->bsum, max(bsum(n->r), max(lbsum + psum(n->r), n->val + psum(n->r))));
+        n->tsum += tsum(n->r);
+    }
+    else n->ssum = n->val + maxsum(ssum(n->l));
+    n->sz = sz(n->l) + 1 + sz(n->r);
+}
+
+inline void merge (Node *&n, Node *l, Node *r) {
+    push(l);
+    push(r);
+    if (!l || !r) n = l ? l : r;
+    else if (l->p > r->p) {
+        merge(l->r, l->r, r);
+        n = l;
+    }
+    else {
+        merge(r->l, l, r->l);
+        n = r;
+    }
+    update(n);
+}
+
+inline void split (Node *n, Node *&l, Node *&r, int key) {
+    push(n);
+    if (!n) l = r = 0;
+    else if (sz(n->l) < key) {
+        split(n->r, n->r, r, key - sz(n->l) - 1);
+        l = n;
+    }
+    else {
+        split(n->l, l, n->l, key);
+        r = n;
+    }
+    update(n);
+}
+
+int N, Q, a, b, c;
+string s;
 Node *l, *mid, *r;
 
 int main (int argc, char const *argv[]) {
@@ -654,9 +654,9 @@ int main (int argc, char const *argv[]) {
     input.reset(new InputFile(stdin, 0));
     output.reset(new OutputFile());
     read(N, Q, s);
-    for (size_t i=0; i<s.size(); i++) merge(root, root, new Node(s[i] == '1' ? 1 : -INF));
+    for (int i=0; i<s.size(); i++) merge(root, root, new Node(s[i] == '1' ? 1 : -INF));
     while (Q--) {
-        read(a, b, c); // NOTE: c is inclusive
+        read(a, b, c);
         split(root, l, mid, b);
         split(mid, mid, r, c);
         if (a == 1 && mid) mid->rev ^= 1;
@@ -666,22 +666,3 @@ int main (int argc, char const *argv[]) {
     }
     return 0;
 }
-
-/*
-4 3
-0101
-2 1 3
-1 2 2
-2 1 3
-Ans:
-1
-2
-*/
-
-/* 
- * Look for:
- * the exact constraints (multiple sets are too slow for n=10^6 :( ) 
- * special cases (n=1?)
- * overflow (ll vs int?)
- * array bounds
- */

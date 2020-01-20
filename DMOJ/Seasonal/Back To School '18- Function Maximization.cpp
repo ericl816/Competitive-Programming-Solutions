@@ -27,12 +27,9 @@ char _;
 #endif
 using namespace std;
 
-// Keep in mind that the values for n range from [K, K + 5000]
-// Using Wilson's theorem, the function f(x) reduces to x if x is prime, or ?1 otherwise.
-
 int N, Q, op, l, r, v;
 ll K;
-ull n[MAXN];
+ll n[MAXN];
 bitset<MAXM> primes;
 
 inline ull mulMod (ull a, ull b, ull mod) {
@@ -85,7 +82,6 @@ private:
 public:
     Seg(int N) : N(N), tree(N << 2) { }
 
-    // Bitshift left if lazy > 0, right if lazy < 0
     inline void Push_Down (int idx) {
         if (tree[idx].lazy > 0) tree[idx].val <<= tree[idx].lazy;
         else if (tree[idx].lazy < 0) tree[idx].val >>= abs(tree[idx].lazy);

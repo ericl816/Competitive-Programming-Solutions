@@ -24,6 +24,7 @@ char _;
     #define D(x...)
 #endif
 using namespace std;
+
 struct Edge {
     int a, b, c;
     bool oldedge;
@@ -33,8 +34,10 @@ struct Edge {
         return c < e.c;
     }
 };
+
 int N, M, D, A, B, C, maxcost, days, cnt;
 vector<Edge> edges;
+
 struct Disjoint {
 private:
     int N;
@@ -75,13 +78,10 @@ public:
             }
         }
     }
-
-    inline bool Join (int x, int y) {
-        if (Merge(x, y)) return lead[Find(x)] = Find(y);
-        return 0;
-    }
 };
+
 Disjoint ds(MAXN);
+
 int main (int argc, char const *argv[]) {
     #ifdef NOT_DMOJ
     freopen("in.txt", "r", stdin);
@@ -109,10 +109,12 @@ int main (int argc, char const *argv[]) {
     ds.make_Set();
     for (size_t i=0; i<edges.size(); i++) {
         Edge &next = edges[i];
-        if (ds.Merge(next.a, next.b)) if (next.c < maxcost || (next.c == maxcost && next.oldedge)) ds.Union(next.a, next.b);
-        else if (next.c <= D && next.oldedge) {
-            days--;
-            break;
+        if (ds.Merge(next.a, next.b)) {
+            if (next.c < maxcost || (next.c == maxcost && next.oldedge)) ds.Union(next.a, next.b);
+            else if (next.c <= D && next.oldedge) {
+                cout << days - 1 << "\n";
+                return 0;
+            }
         }
     }
     cout << days << "\n";

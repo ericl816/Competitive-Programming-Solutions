@@ -16,6 +16,8 @@ char _;
 #define umii unordered_map<int, int>
 using namespace std;
 
+// Use DP
+
 int N, T, M, S, coins, h, ans;
 int V[MAXM], C[MAXM];
 int dp1[MAXN], dp2[MAXN], nextt[MAXN], value[MAXN];

@@ -1,6 +1,8 @@
 #pragma GCC optimize "Ofast"
 #pragma GCC optimize "unroll-loops"
-#pragma GCC target "sse,sse2,sse3,sse4,abm,avx,mmx,popcnt,tune=native"
+#pragma GCC optimize "omit-frame-pointer"
+#pragma GCC optimize "prefetch-loop-arrays"
+#pragma GCC target "sse,sse2,sse3,sse4,abm,avx,aes,sse4a,sse4.1,sse4.2,mmx,popcnt,tune=native"
 #include <bits/stdc++.h>
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
@@ -8,8 +10,6 @@ char _;
 #define MAXN 1000010
 #define INF 0x3f3f3f3f
 #define MOD 1000000007
-#define min(a, b) (a) < (b) ? (a) : (b)
-#define max(a, b) (a) < (b) ? (b) : (a)
 #define vi vector<int>
 #define pb push_back
 #define pii pair<int, int>
@@ -28,7 +28,7 @@ public:
 struct Node { 
 public:
     int l, r, val, lazy; 
-} Seg[MAXN * 6]; 
+} Seg[MAXN << 3]; 
 
 void Push_Up (int idx) {
     Seg[idx].val = max(Seg[idx << 1].val, Seg[idx << 1 | 1].val);
@@ -83,25 +83,25 @@ int Query (int idx, int l, int r) {
     if (r <= mid) return Query(idx << 1, l, r);
     else if (l > mid) return Query(idx << 1 | 1, l, r);
     else return max(Query(idx << 1, l, mid), Query(idx << 1 | 1, mid + 1, r));
-  }
+}
 
 int N, size; 
 set<int> coor; 
 umii arr; 
-vi v; 
+vi v;
 ll ans;
 
 int main() {
     scan(N);
     for (int i=1; i<=N; i++) {
         scan(textbook[i].s); scan(textbook[i].l); scan(textbook[i].w);
-        ans = (ans - 1ll * textbook[i].l * textbook[i].w % MOD + MOD) % MOD; 
+        ans = (ans - 1LL * textbook[i].l * textbook[i].w % MOD + MOD) % MOD; 
         textbook[i].l += textbook[i].s;
-        coor.insert(textbook[i].s); 
+        coor.insert(textbook[i].s);
         coor.insert(textbook[i].l);
     }
     for (int i : coor) {
-        arr[i] = size++; 
+        arr[i] = size++;
         v.pb(i);
     }
     Build(1, 1, size);
@@ -110,6 +110,6 @@ int main() {
         int r = arr[textbook[i].l];
         Update(1, l, r, textbook[i].w + Query(1, l, r));
     }
-    for (int i=1; i<=size - 1; i++) ans = (ans + (1ll * (v[i] - v[i - 1]) * Query(1, i, i)) % MOD) % MOD;
-    printf("%lld\n", ans % MOD);
+    for (int i=1; i<size; i++) ans = (ans + (1LL * (v[i] - v[i - 1]) * Query(1, i, i)) % MOD) % MOD;
+    return !printf("%lld\n", ans % MOD);
 }

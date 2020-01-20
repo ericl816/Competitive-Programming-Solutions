@@ -32,7 +32,7 @@ int M, K, a;
 ll N, ans;
 vll v(MAXN), freq(MAXN);
 
-inline vll Multiply (vll A, vll B) {
+inline vll Multiply (vll &A, vll &B) {
   vll prod(A.size(), 0);
   for (size_t i=0; i<A.size(); i++) {
     for (size_t j=0; j<B.size(); j++) {
@@ -69,11 +69,6 @@ int main (int argc, char const *argv[]) {
   cout << ((ans + MOD) % MOD) << "\n";
   return 0;
 }
-
-/*
-2 3 4
-1 3 2 0
-*/
 
 /* 
  * Look for:

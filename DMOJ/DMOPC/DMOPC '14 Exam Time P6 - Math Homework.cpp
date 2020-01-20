@@ -29,13 +29,13 @@ int T, R, C;
 int comb[MAXN][MAXN];
 
 inline ll PowMod (ll a, ll b) {
-  ll val = 1;
-  while (b) {
-    if (b & 1) val = (val * a) % MOD;
-    a = (a * a) % MOD;
-    b >>= 1;
-  }
-  return val;
+	ll val = 1;
+	while (b) {
+		if (b & 1) val = (val * a) % MOD;
+		a = (a * a) % MOD;
+		b >>= 1;
+	}
+	return val;
 }
 
 inline void Preprocess () {

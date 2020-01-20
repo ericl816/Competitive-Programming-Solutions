@@ -26,8 +26,9 @@ map<int, ll> cnt[MAXN];
 int A[MAXN], B[MAXN], XOR[MAXN];
 bool vis[MAXN];
 vi order;
+vi ids[MAXN];
 ll sum;
-ll ans[MAXN];
+vector<ll> ans;
 
 struct Disjoint {
 private:
@@ -42,6 +43,7 @@ public:
 			lead[i] = i;
 			rank[i] = 0;
 			cnt[i][XOR[i]] = 1LL;
+			ids[i].pb(i);
 		}
 	}
 
@@ -61,6 +63,14 @@ public:
 		int a = Find(x);
 		int b = Find(y);
 		if (Merge(x, y)) {
+			if (ids[a].size() > ids[b].size()) swap(a, b);
+			for (auto i : ids[a]) {
+				sum += cnt[b][XOR[i]];
+			}
+			for (auto i : ids[a]) {
+				cnt[b][XOR[i]]++;
+				ids[b].pb(i);
+			}
 			if (rank[a] > rank[b]) {
 				lead[b] = a;
 				rank[a] += rank[b];
@@ -71,22 +81,18 @@ public:
 			}
 		}
 	}
-	
-	int Size (int n) {
-	    return rank[n];
-	}
 };
 
 Disjoint ds(MAXN);
 
-inline void DFS (int node, int prev) {
+inline void DFS (int node, int prev, int val) {
 	if (vis[node]) return;
 	vis[node] = 1;
+	XOR[node] = val;
 	for (size_t i=0; i<adj[node].size(); i++) {
 		pii &next = adj[node][i];
 		if (next.f == prev) continue;
-		XOR[next.f] = XOR[node] ^ next.s;
-		DFS(next.f, node);
+		DFS(next.f, node, val ^ next.s);
 	}
 }
 
@@ -99,7 +105,7 @@ int main () {
     	adj[--A[i]].pb(mp(--B[i], Z));
     	adj[B[i]].pb(mp(A[i], Z));
     }
-    DFS(0, -1);
+    DFS(0, -1, 0);
     for (int i=0, x; i<N - 1; i++) {
     	cin >> x;
     	order.pb(--x);
@@ -109,18 +115,12 @@ int main () {
     for (size_t i=0; i<order.size(); i++) {
     	int &next = order[i];
     	if (ds.Merge(A[next], B[next])) {
-    		int id1 = ds.Find(A[next]), id2 = ds.Find(B[next]);
-    		// cout << id1 << " " << id2 << "\n";
-    		if (ds.Size(id2) > ds.Size(id1)) swap(id1, id2);
     		ds.Union(A[next], B[next]);
-    		for (pair<int, ll> state : cnt[id2]) {
-    			sum += cnt[id1][state.f] * state.s;
-    			cnt[id1][state.f] += state.s;
-    		}
-    		ans[i] = sum;
+    		ans.pb(sum);
     	}
     }
-    for (int i=1; i<N; i++) cout << ans[N - i - 1] << "\n";
-    cout << 0 << "\n";
+    reverse(ans.begin(), ans.end());
+    ans.pb(0);
+    for (auto i : ans) cout << i << "\n";
     return 0;
 }

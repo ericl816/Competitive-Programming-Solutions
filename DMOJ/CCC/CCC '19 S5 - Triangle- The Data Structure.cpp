@@ -54,7 +54,6 @@ inline int Query (int x, int y) {
     return maxx;
 }
 
-
 int main (int argc, char const *argv[]) {
 	#ifdef NOT_DMOJ
 	freopen("in.txt", "r", stdin);
@@ -64,29 +63,19 @@ int main (int argc, char const *argv[]) {
 	cin.tie(0);
 	cout.tie(0);
 	cin >> N >> K;
-	for (int i=1; i<=N; i++) {
-		for (int j=1; j<=i; j++) {
-			cin >> a[i][N - j + 1];
+	for (int row=1; row<=N; row++) {
+		for (int col=1; col<=row; col++) {
+			cin >> a[row][N - col + 1];
 		}
 	}
-	for (int i=0; i<N; i++) {
-		for (int j=0; j<=i; j++) Update(N - i + j, N - j, a[N - i + j][N - j]);
-		int len = i - K + 1;
-		for (int j=0; j<=len; j++) ans += Query(N - len + j, N - j);
+	for (int diag=0; diag<N; diag++) {
+		for (int col=0; col<=diag; col++) Update(N - diag + col, N - col, a[N - diag + col][N - col]);
+		int subtriangle_diag = diag - K + 1;
+		for (int col=0; col<=subtriangle_diag; col++) ans += Query(N - subtriangle_diag + col, N - col);
 	}
 	cout << ans << "\n";
 	return 0;
 }
-
-/*
-4 2
-3
-1 2
-4 2 1
-6 1 4 2
-
-Ans: 23
-*/
 
 /* 
  * Look for:

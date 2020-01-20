@@ -30,7 +30,7 @@ ll iswolf, notwolf;
 char op;
 vi accus_adj[MAXN], defend_adj[MAXN];
 int indeg[MAXN], outdeg[MAXN];
-ll DP[2][MAXN][MAXN]; // 1 = iswolf, 0 = notwolf
+ll DP[2][MAXN][MAXN]; // [iswolf][node ID][# of wolves]
 
 inline ll Solve () {
 	for (int i=N; i>=0; i--) {

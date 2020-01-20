@@ -31,8 +31,10 @@ inline int GCD (int a, int b) { return b == 0 ? a : GCD(b, a % b); }
 inline int LCM (int a, int b) { return a * b / GCD(a, b); }
 inline ll PowMod (ll a, ll b, ll MOD) { ll val = 1; while (b) { if (b & 1) val = (val * a) % MOD; a = (a * a) % MOD; b >>= 1; } return val; }
 
-int N, Q, l, r, k;
-int A[MAXN];
+int N, Q, k;
+int A[MAXN], l[MAXN], r[MAXN];
+ll ans[MAXN];
+pii m[MAXN], queries[MAXN];
 
 struct BIT {
 private:
@@ -58,17 +60,6 @@ public:
 };
 
 BIT tree(MAXN);
-ll ans[MAXN];
-vector<pii> m;
-vector<pair<pii, pii> > queries;
-
-inline bool Cmp1 (const pii &a, const pii &b) {
-	return a.f < b.f;
-}
-
-inline bool Cmp2 (const pair<pii, pii> &a, const pair<pii, pii> &b) {
-	return a.f.f < b.f.f;
-}
 
 int main (int argc, char const *argv[]) {
 	#ifdef NOT_DMOJ
@@ -81,21 +72,22 @@ int main (int argc, char const *argv[]) {
 	cin >> N >> Q;
 	for (int i=1; i<=N; i++) {
 		cin >> A[i];
-		m.pb(mp(A[i], i));
 		tree.Update(i, A[i]);
+		m[i] = mp(A[i], i);
 	}
-	sort(m.begin(), m.end(), Cmp1);
 	for (int i=1; i<=Q; i++) {
-		cin >> l >> r >> k;
-		queries.pb(mp(mp(k, i), mp(l, r)));
+		cin >> l[i] >> r[i] >> k;
+		queries[i] = mp(k, i);
 	}
-	sort(queries.begin(), queries.end(), Cmp2);
-	int ind = 0;
-	for (auto i : queries) {
-		while (ind < N && i.f.f > m[ind].f) {
-			tree.Update(m[ind].s, -2 * m[ind++].f);
+	sort(m + 1, m + N + 1);
+	sort(queries + 1, queries + Q + 1);
+	int ind = 1;
+	for (int i=1; i<=Q; i++) {
+		while (ind <= N && queries[i].f > m[ind].f) {
+			tree.Update(m[ind].s, -2 * m[ind].f);
+			++ind;
 		}
-		ans[i.f.s] = tree.Query(i.s.f, i.s.s);
+		ans[queries[i].s] = tree.Query(l[queries[i].s], r[queries[i].s]);
 	}
 	for (int i=1; i<=Q; i++) cout << ans[i] << "\n";
 	return 0;

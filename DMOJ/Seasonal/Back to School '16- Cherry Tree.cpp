@@ -16,14 +16,14 @@ vector<pii> adj[MAXN];
 bool vis[MAXN];
 
 void DFS(int node, int par) {
-  if (vis[node]) return;
+	if (vis[node]) return;
 	vis[node] = 1;
     for (pii &next : adj[node]) {   
     	int currnode = next.f;
     	int currcost = next.s;
     	if (currnode == par) continue;
     	if (!vis[currnode]) {
-    	   DFS(currnode, node);
+    		DFS(currnode, node);
         	sum[node] += currcost + sum[currnode];
         	cherries[node] += cherries[currnode];
         	if (sum[currnode] + currcost <= K && cherries[currnode] >= C) ans++; 

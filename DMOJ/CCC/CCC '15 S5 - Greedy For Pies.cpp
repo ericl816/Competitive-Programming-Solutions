@@ -25,26 +25,26 @@ int A[MAXM], B[MAXN];
 int DP[MAXM][MAXN][MAXN][2];
 
 inline int Solve (int i, int l, int r, int pos) {
-	if (i > N && l > r) return 0;
-	int &val = DP[i][l][r][pos];
-	if (~val) return val;
-	if (i <= N) {
-		val = max(val, Solve(i + 1, l, r, 0));
-		if (pos == 0) val = max(val, A[i] + Solve(i + 1, l, r, 1));
-	}
-	if (l <= r) {
-		val = max(val, Solve(i, l + 1, r, 0));
-		if (pos == 0) val = max(val, B[r] + Solve(i, l, r - 1, 1));
-	}
-	return DP[i][l][r][pos] = val;
+    if (i > N && l > r) return 0;
+    int &val = DP[i][l][r][pos];
+    if (~val) return val;
+    if (i <= N) {
+        val = max(val, Solve(i + 1, l, r, 0));
+        if (pos == 0) val = max(val, A[i] + Solve(i + 1, l, r, 1));
+    }
+    if (l <= r) {
+        val = max(val, Solve(i, l + 1, r, 0));
+        if (pos == 0) val = max(val, B[r] + Solve(i, l, r - 1, 1));
+    }
+    return DP[i][l][r][pos] = val;
 }
 
 int main () {
-	scan(N);
-	for (int i=1; i<=N; i++) scan(A[i]);
-	scan(M);
-	for (int i=1; i<=M; i++) scan(B[i]);
-	sort(B + 1, B + M + 1);
-	memset(DP, -1, sizeof(DP));
-	return !printf("%d\n", Solve(1, 1, M, 0));
+    scan(N);
+    for (int i=1; i<=N; i++) scan(A[i]);
+    scan(M);
+    for (int i=1; i<=M; i++) scan(B[i]);
+    sort(B + 1, B + M + 1);
+    memset(DP, -1, sizeof(DP));
+    return !printf("%d\n", Solve(1, 1, M, 0));
 }

@@ -6,7 +6,7 @@
 char _;
 #define ll long long
 #define MAXN 1000010
-#define SEED 131
+#define SEED 37
 #define MOD 1000000007
 #define INF 0x3f3f3f3f
 #define min(a, b) (a) < (b) ? (a) : (b)

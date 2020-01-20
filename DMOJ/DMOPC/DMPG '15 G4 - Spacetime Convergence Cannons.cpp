@@ -39,12 +39,13 @@ ll ans;
 BIT tree(MAXN << 1);
 long double ang[MAXN << 1];
 long double deltay, deltax, theta1, theta2;
-vector<pair<long double, long double>> loc;
+vector<pair<long double, long double> > loc;
 pii query[MAXN];
 
 int main () {
 	cin.sync_with_stdio(0);
 	cin.tie(0);
+	cout.tie(0);
 	cin >> N >> X;
 	for (int i=0; i<N; i++) {
 		cin >> x >> y;
@@ -61,6 +62,6 @@ int main () {
 		ans += tree.Query(query[i].s) * tree.Query(query[i].s);
 		tree.Update(query[i].s, 1);
 	}
-	cout << ans << endl;
+	cout << ans << "\n";
 	return 0;
 }

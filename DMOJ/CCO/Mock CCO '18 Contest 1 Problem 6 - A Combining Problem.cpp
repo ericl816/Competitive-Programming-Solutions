@@ -40,8 +40,7 @@ int main (int argc, char const *argv[]) {
 	cin >> N;
 	for (int i=0; i<N; i++) {
 		cin >> a;
-		if (i == 0) prevv = a;
-		else ans += max(prevv, a);
+		if (i > 0) ans += max(prevv, a);
 		prevv = a;
 	}
 	cout << ans << "\n";

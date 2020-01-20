@@ -40,21 +40,21 @@ vi adj[MAXN], DAG[MAXN];
 bool processed[MAXN], endd[MAXN], vis[MAXN];
 stack<int> SCC;
 queue<int> q;
+priority_queue<pii, vector<pii>, greater<pii> > pq;
 
 inline void TarjansDFS (int node, int prev) {
     low[node] = DFN[node] = idx++;
     SCC.push(node);
     processed[node] = 1;
     for (auto &next : adj[node]) {
-        // if (next == prev) continue;
-        if (!DFN[next]) {
+        if (DFN[next] == -1) {
             TarjansDFS(next, node);
             low[node] = min(low[node], low[next]);
         }
         else if (processed[next]) low[node] = min(low[node], DFN[next]);
     }
-    if (low[node] == DFN[node]) { // Found a root of the SCC
-        while (SCC.top() ^ node) { // Pop the visited nodes that are part of the same SCCs
+    if (low[node] == DFN[node]) {
+        while (SCC.top() ^ node) {
             int curr = SCC.top();
             comp[curr] = cnt;
             processed[curr] = 0;
@@ -76,7 +76,25 @@ inline void Reconstruct_DAG () {
     }
 }
 
-inline int Solve (int src) {
+inline int Solve1 (int src) {
+	ans[src] = coins[src];
+	int maxx = 0;
+	pq.push(mp(coins[src], src));
+	while (!pq.empty()) {
+		pii curr = pq.top();
+		pq.pop();
+		if (endd[curr.s]) maxx = max(maxx, curr.f);
+		for (auto i : DAG[curr.s]) {
+			if (ans[i] < curr.f + coins[i]) {
+				ans[i] = curr.f + coins[i];
+				pq.push(mp(ans[i], i));
+			}
+		}
+	}
+	return maxx;
+}
+
+inline int Solve2 (int src) {
 	ans[src] = coins[src];
 	int maxx = 0;
 	vis[src] = 1;
@@ -85,15 +103,13 @@ inline int Solve (int src) {
 		int curr = q.front();
 		q.pop();
 		vis[curr] = 0;
-		// D("%d ", maxx);
 		if (endd[curr]) maxx = max(maxx, ans[curr]);
 		for (auto i : DAG[curr]) {
-			if (ans[i] < ans[curr] + coins[i]) {
-			    ans[i] = ans[curr] + coins[i];
-			    if (!vis[i]) {
-			        vis[i] = 1;
-			        q.push(i);
-			    }
+			if (ans[i] >= ans[curr] + coins[i]) continue;
+			ans[i] = ans[curr] + coins[i];
+			if (!vis[i]) {
+				vis[i] = 1;
+				q.push(i);
 			}
 		}
 	}
@@ -108,18 +124,19 @@ int main (int argc, char const *argv[]) {
 	cin.sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
+	memset(DFN, -1, sizeof(DFN));
+	memset(low, -1, sizeof(low));
 	cin >> N >> M;
 	for (int i=0; i<M; i++) {
 		cin >> src >> dest;
 		adj[src].pb(dest);
 	}
 	for (int i=1; i<=N; i++) {
-		if (!DFN[i]) TarjansDFS(i, -1);
+		if (DFN[i] == -1) TarjansDFS(i, -1);
 	}
 	Reconstruct_DAG();
 	for (int i=1, x; i<=N; i++) {
 		cin >> x;
-		// D("%d %d\n", comp[i], coins[comp[i]]);
 		coins[comp[i]] += x;
 	}
 	cin >> S >> P;
@@ -127,7 +144,7 @@ int main (int argc, char const *argv[]) {
 		cin >> x;
 		endd[comp[x]] = 1;
 	}
-	cout << Solve(comp[S]) << "\n";
+	cout << Solve2(comp[S]) << "\n";
 	return 0;
 }
 

@@ -31,8 +31,8 @@ int main () {
 		for (int j=prev; j<i; j++) {
 			eff = Calc(psa[i] - psa[j]) + DP[j];
 			if (eff > DP[i]) {
-			    DP[i] = eff;
-			    prev = j;
+				DP[i] = eff;
+				prev = j;
 			}
 		}
 	}

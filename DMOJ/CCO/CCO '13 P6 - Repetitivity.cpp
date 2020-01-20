@@ -21,13 +21,13 @@ using namespace std;
 
 int M, n;
 int dp[MAXN][MAXN];
-string ch;
+string s;
+char ch[MAXN];
 
 int main () {
-    cin.sync_with_stdio(0);
-    cin.tie(0);
-    cin >> ch >> M;
-    n = ch.size();
+    gets(ch);
+    scanf("%d", &M);
+    n = strlen(ch);
     for (int i=0; i<=n; i++) dp[0][i] = dp[i][0] = 1;
     for (int i=0; i<n; i++) {
         for (int j=0; j<n; j++) {
@@ -35,6 +35,5 @@ int main () {
             if (ch[i] ^ ch[j]) dp[i + 1][j + 1] = (dp[i + 1][j + 1] - dp[i][j] + M) % M;
         }
     }
-    cout << dp[n][n] << "\n";
-    return 0;
+    return !printf("%d\n", dp[n][n]);
 }

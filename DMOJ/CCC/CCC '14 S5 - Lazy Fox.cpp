@@ -33,11 +33,11 @@ int memo[MAXN], dist[MAXN], dist1[MAXN];
 vector<pii> loc;
 vector<Edge> edges;
 
-inline int EuclideanDist(const pii &a, const pii &b){
+inline int EuclideanDist (const pii &a, const pii &b) {
     return (a.f - b.f) * (a.f - b.f) + (a.s - b.s) * (a.s - b.s);
 }
 
-inline bool Cmp (Edge &a, Edge &b){
+inline bool Cmp (Edge &a, Edge &b) {
     return a.cost < b.cost;
 }
 
@@ -56,10 +56,11 @@ int main () {
     }
     pii orig = mp(0, 0);
     for (int i=0; i<N; i++) edges.pb((Edge) {N, i, EuclideanDist(loc[i], orig)});
-    for (int i=0; i<N; i++) for (int j=i + 1; j<N; j++) edges.pb((Edge) {i, j, EuclideanDist(loc[i], loc[j])});
+    for (int i=0; i<N; i++) {
+        for (int j=i + 1; j<N; j++) edges.pb((Edge) {i, j, EuclideanDist(loc[i], loc[j])});
+    }
     sort(edges.begin(), edges.end(), Cmp);
-    for (int i=0; i<edges.size(); i++) {
-        Edge &next = edges[i];
+    for (Edge &next : edges) {
         if (next.cost > dist[next.nodex]) {
           dist[next.nodex] = next.cost;
           dist1[next.nodex] = memo[next.nodex];

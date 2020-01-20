@@ -48,5 +48,6 @@ int main () {
     edge[i].pb(j);
   }
   Compute();
-  return !printf("%lld\n", MulMod(ans));
+  printf("%lld\n", MulMod(ans));
+  return 0;
 }

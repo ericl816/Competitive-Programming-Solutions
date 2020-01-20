@@ -37,7 +37,7 @@ inline ll Query (int x, int y, int idx) {
 
 inline ll Get_Loc (int x, int y) {
 	ll currdist = Query(x, y, x);
-	int lo = x, hi = y;
+	int lo = x + 1, hi = y;
 	while (lo <= hi) {
 		int mid = (lo + hi) >> 1;
 		if (Query(x, y, mid) <= Query(x, y, mid - 1)) lo = mid + 1;

@@ -25,7 +25,6 @@ char _;
 #endif
 using namespace std;
 
-// Essentialy RMQ + Sliding Window
 int N, K, Q, l, r, ind;
 int A[MAXN], L[MAXN], R[MAXN];
 int RMQ[MAXM][MAXN];
@@ -60,7 +59,6 @@ int main (int argc, char const *argv[]) {
 		}
 		L[i] = i - ind + 1;
 	}
-	// D("%d\n", ind);
 	for (int i=ind; i<N; i++) R[i] = N - i;
 	for (int i=0; i<N; i++) RMQ[0][i] = i;
 	for (int i=1; (1 << i)<=N; i++) {
@@ -78,9 +76,7 @@ int main (int argc, char const *argv[]) {
 			cout << val2 + 1 << " " << val1 + val2 << "\n";
 			continue;
 		}
-		// D("%d %d\n", val1, val2);
 		int res = Query(l, val2 - 1);
-		// D("%d\n", res);
 		if (min(R[res], r - res + 1) >= val1) {
 			val1 = min(R[res], r - res + 1);
 			val2 = res;
@@ -89,15 +85,6 @@ int main (int argc, char const *argv[]) {
 	}
 	return 0;
 }
-
-/*
-7 4
-3 6 8 4 3 6 1
-3
-2 6
-3 6
-1 3
-*/
 
 /* 
  * Look for:

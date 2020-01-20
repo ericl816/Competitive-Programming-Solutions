@@ -1,209 +1,260 @@
 #pragma GCC optimize "Ofast"
 #pragma GCC optimize "unroll-loops"
-#pragma GCC target "sse,sse2,sse3,sse4,abm,avx,mmx,popcnt,tune=native"
+#pragma GCC optimize "omit-frame-pointer"
+#pragma GCC optimize "prefetch-loop-arrays"
+#pragma GCC target "sse,sse2,sse3,sse4,abm,avx,aes,sse4a,sse4.1,sse4.2,mmx,popcnt,tune=native"
 #include <bits/stdc++.h>
 #define scan(x) do{while((x=getchar_unlocked())<'0'); for(x-='0'; '0'<=(_=getchar_unlocked()); x=(x<<3)+(x<<1)+_-'0');}while(0)
 char _;
 #define ll long long
 #define ull unsigned long long
-#define INF 0x3f3f3f3f3f3f3f
-#define min(a, b) (a) < (b) ? (a) : (b)
-#define max(a, b) (a) < (b) ? (b) : (a)
+#define MOD 1000000007
+#define INF 0x3f3f3f3f
 #define vi vector<int>
+#define vll vector<ll>
 #define pb push_back
 #define pii pair<int, int>
 #define mp make_pair
 #define f first
 #define s second
 #define mii map<int, int>
-#define umii unordered_map<int, int>
+#define umii unordered_map<int, int>w
+#define allof(x) x.begin(), x.end()
+#define DEBUG 1
+// #define NOT_DMOJ 0
 #ifdef DEBUG
     #define D(x...) printf(x)
 #else
     #define D(x...)
 #endif
+template<typename T>constexpr const T&_min(const T&x,const T&y) {return x<y?x:y;}
+template<typename T>constexpr const T&_max(const T&x,const T&y) {return x<y?y:x;}
+template<typename T,typename...Ts> constexpr const T&_min(const T&x,const Ts&...xs) {return _min(x,_min(xs...));}
+template<typename T,typename...Ts> constexpr const T&_max(const T&x,const Ts&...xs) {return _max(x,_max(xs...));}
+#define min(...) _min(__VA_ARGS__)
+#define max(...) _max(__VA_ARGS__)
 using namespace std;
 
+inline int GCD (int a, int b) { return b == 0 ? a : GCD(b, a % b); }
+inline int LCM (int a, int b) { return a * b / GCD(a, b); }
+inline ll PowMod (ll a, ll b, ll mod) { ll val = 1; while (b) { if (b & 1) val = (val * a) % mod; a = (a * a) % mod; b >>= 1; } return val; }
+
 struct Node {
-    int val, p, sz, lazy;
-    Node *l, *r;
-    ll psum, ssum, tsum, bsum;
-    bool rev, prop;
-    Node (int i) : val(i), p(rand()), sz(1), lazy(0), psum(i), ssum(i), tsum(i), bsum(i), rev(0), prop(0), l(0), r(0) { }
-} *root;
+    int value, priority, psum, ssum, sum, msum, size, same;
+    Node *left, *right;
+    bool reverse, make_same;
 
-inline int sz (Node *n) {
-    return n ? n-> sz : 0LL;
+    inline void initialize(int value, int priority) {
+        this->value = psum = ssum = sum = msum = value;
+        this->priority = priority;
+        reverse = make_same = false;
+        size = 1;
+        left = right = nullptr;
+    }
+} *root = nullptr;
+
+inline int size(Node *&node) {
+    return node ? node->size : 0;
 }
 
-inline ll psum (Node *n) {
-    return n ? n->psum : 0LL;
-}
+inline void handle_lazy(Node *&node) {
+    if (node) {
+        if (node->make_same) {
+            node->value = node->same;
+            node->sum = node->same * node->size;
+            node->msum = max(node->value, node->sum);
+            node->psum = max(node->value, node->sum);
+            node->ssum = max(node->value, node->sum);
 
-inline ll ssum (Node *n) {
-    return n ? n->ssum : 0LL;
-}
-
-inline ll tsum (Node *n) {
-    return n ? n->tsum : 0LL;
-}
-
-inline ll bsum (Node *n) {
-    return n ? n->bsum : -INF;
-}
-
-inline void push (Node *n) {
-    if (!n) return;
-    if (n->prop) {
-        n->val = n->lazy;
-        n->psum = n->ssum = n->bsum = 1LL * (n->lazy <= 0 ? 1LL : n->sz) * n->lazy;
-        n->tsum = 1LL * n->sz * n->lazy;
-        if (n->l) {
-            n->l->lazy = n->lazy;
-            n->l->prop = 1;
+            if (node->left) {
+                node->left->same = node->same;
+                node->left->make_same = true;
+            }
+            if (node->right) {
+                node->right->same = node->same;
+                node->right->make_same = true;
+            }
+            node->make_same = false;
         }
-        if (n->r) {
-            n->r->lazy = n->lazy;
-            n->r->prop = 1;
+
+        if (node->reverse) {
+            std::swap(node->left, node->right);
+            std::swap(node->psum, node->ssum);
+            node->reverse = !node->reverse;
+            if (node->left) node->left->reverse = !node->left->reverse;
+            if (node->right) node->right->reverse = !node->right->reverse;
+            node->reverse = false;
         }
-        n->prop = 0;
-    }
-    if (n->rev) {
-        swap(n->l, n->r);
-        swap(n->psum, n->ssum);
-        if (n->l) n->l->rev ^= 1;
-        if (n->r) n->r->rev ^= 1;
-        n->rev = 0;
     }
 }
 
-inline void update (Node *n) {
-    if (!n) return;
-    ll lbsum = n->val;
-    n->bsum = n->val;
-    n->tsum = n->val;
-    push(n->l);
-    push(n->r);
-    if (n->l) {
-        n->psum = max(psum(n->l), tsum(n->l) + n->val + (max(0LL, psum(n->r))));
-        n->bsum = max(n->bsum, max(bsum(n->l), ssum(n->l) + n->val));
-        n->tsum += tsum(n->l);
-        lbsum += ssum(n->l);
+inline Node *update(Node *&node) {
+    handle_lazy(node->left);
+    handle_lazy(node->right);
+    node->size = size(node->left) + 1 + size(node->right);
+
+    if (node->left && node->right) {
+        node->psum = max(node->left->psum, node->left->sum + node->value + max(0, node->right->psum));
+        node->ssum = max(max(0, node->left->ssum) + node->value + node->right->sum, node->right->ssum);
+        node->sum = node->left->sum + node->value + node->right->sum;
+        node->msum = max(node->psum, node->ssum, node->sum, max(0, node->left->ssum) + node->value + max(0, node->right->psum),
+                         node->left->msum, node->right->msum);
+    } else if (node->left) {
+        node->psum = max(node->left->psum, node->left->sum + node->value);
+        node->ssum = max(node->left->ssum + node->value, node->value);
+        node->sum = node->left->sum + node->value;
+        node->msum = max(node->psum, node->ssum, node->sum, node->left->msum);
+    } else if (node->right) {
+        node->psum = max(node->value, node->value + node->right->psum);
+        node->ssum = max(node->value + node->right->sum, node->right->ssum);
+        node->sum = node->value + node->right->sum;
+        node->msum = max(node->psum, node->ssum, node->sum, node->right->msum);
+    } else {
+        node->psum = node->ssum = node->sum = node->msum = node->value;
     }
-    else n->psum = n->val + (max(0LL, psum(n->r)));
-    if (n->r) {
-        n->ssum = max(ssum(n->r), tsum(n->r) + n->val + (max(0LL, ssum(n->l))));
-        n->bsum = max(n->bsum, max(bsum(n->r), max(lbsum + psum(n->r), n->val + psum(n->r))));
-        n->tsum += tsum(n->r);
-    }
-    else n->ssum = n->val + (max(0LL, ssum(n->l)));
-    n->sz = sz(n->l) + 1 + sz(n->r);
+
+    return node;
 }
 
-inline void merge (Node *&n, Node *l, Node *r) {
-    push(l);
-    push(r);
-    if (!l || !r) n = l ? l : r;
-    else if (l->p > r->p) {
-        merge(l->r, l->r, r);
-        n = l;
-    }
-    else {
-        merge(r->l, l, r->l);
-        n = r;
-    }
-    update(n);
+void split(Node *node, int index, Node *&left, Node *&right) {
+    handle_lazy(node);
+
+    if (!node)
+        left = right = nullptr;
+    else if (size(node->left) + 1 < index)
+        split(node->right, index - size(node->left) - 1, node->right, right), left = update(node);
+    else
+        split(node->left, index, left, node->left), right = update(node);
 }
 
-inline void split (Node *n, Node *&l, Node *&r, int key) {
-    push(n);
-    if (!n) l = r = 0;
-    else if (sz(n->l) < key) {
-        split(n->r, n->r, r, key - sz(n->l) - 1);
-        l = n;
+Node *merge(Node *left, Node *right) {
+    handle_lazy(left);
+    handle_lazy(right);
+
+    if (!left || !right) {
+        return left ? left : right;
+    } else if (left->priority > right->priority) {
+        left->right = merge(left->right, right);
+        return update(left);
+    } else {
+        right->left = merge(left, right->left);
+        return update(right);
     }
-    else {
-        split(n->l, l, n->l, key);
-        r = n;
-    }
-    update(n);
 }
 
-int N, M, a, b, c, d;
-string op;
+Node *insert(Node *&node, Node *ins) {
+    if (!node) return ins;
+    handle_lazy(node);
+
+    if (ins->priority > node->priority) {
+        ins->left = node;
+        return update(ins);
+    } else {
+        node->right = insert(node->right, ins);
+    }
+
+    return update(node);
+}
+
+int N, M, posi, tot, c, ri;
+char buffer[15];
+Node *reserved[500000];
+
+inline void reserve(Node *node) {
+    reserved[ri++] = node;
+}
+
+inline Node *init_node(int key) {
+    if (!ri) reserve(new Node());
+    Node *ret = reserved[--ri];
+    if (ret->left) reserved[ri++] = ret->left;
+    if (ret->right) reserved[ri++] = ret->right;
+    ret->initialize(key, rand());
+    return ret;
+}
 
 int main (int argc, char const *argv[]) {
     #ifdef NOT_DMOJ
-    freopen("in.txt", "r", stdin);
-    freopen("out.txt", "w", stdout);
+    freopen("DATA.in", "r", stdin);
+    freopen("DATA.out", "w", stdout);
     #endif // NOT_DMOJ
     cin.sync_with_stdio(0);
     cin.tie(0);
     cout.tie(0);
     cin >> N >> M;
-    for (int i=0; i<N; i++) {
-        cin >> a;
-        merge(root, root, new Node(a));
+    for (int i=0, val; i<N; i++) {
+        cin >> val;
+        root = insert(root, init_node(val));
     }
     while (M--) {
-        cin >> op;
-        if (op == "INSERT") {
-            cin >> a >> b;
-            Node *tmp = 0, *l = 0, *m = 0, *r = 0;
-            while (b--) {
-                cin >> d;
-                merge(tmp, tmp, new Node(d));
+        cin >> buffer;
+        switch (buffer[0]) {
+            case 'I': {
+                cin >> posi >> tot;
+                Node *insertion_point = nullptr, *left, *right;
+                while (tot--) {
+                    cin >> c;
+                    insertion_point = insert(insertion_point, init_node(c));
+                }
+                split(root, posi + 1, left, right);
+                root = merge(merge(left, insertion_point), right);
+                break;
             }
-            split(root, l, r, a);
-            merge(m, l, tmp);
-            merge(root, m, r);
-        }
-        else if (op == "DELETE") {
-            cin >> a >> b;
-            Node *tmp = 0, *l = 0, *m = 0, *r = 0;
-            split(root, l, tmp, a - 1);
-            split(tmp, m, r, b);
-            merge(root, l, r);
-        }
-        else if (op == "MAKE-SAME") {
-            cin >> a >> b >> c;
-            Node *tmp = 0, *l = 0, *m = 0, *r = 0;
-            split(root, l, tmp, a - 1);
-            split(tmp, m, r, b);
-            if (m) {
-                m->lazy = c;
-                m->prop = 1;
+            case 'D': {
+                cin >> posi >> tot;
+                Node *left, *middle, *right;
+                split(root, posi, left, middle);
+                split(middle, tot + 1, middle, right);
+                reserve(middle);
+                root = merge(left, right);
+                break;
             }
-            merge(tmp, m, r);
-            merge(root, l, tmp);
+            case 'M': {
+                if (buffer[4] == '-') {
+                    cin >> posi >> tot >> c;
+                    Node *left, *middle, *right;
+                    split(root, posi, left, middle);
+                    split(middle, tot + 1, middle, right);
+                    middle->same = c;
+                    middle->make_same = true;
+                    handle_lazy(middle);
+                    root = merge(merge(left, middle), right);
+                }
+                else {
+                    cout << root->msum << "\n";
+                }
+                break;
+            }
+            case 'R': {
+                cin >> posi >> tot;
+                Node *left, *middle, *right;
+                split(root, posi, left, middle);
+                split(middle, tot + 1, middle, right);
+                middle->reverse = !middle->reverse;
+                handle_lazy(middle);
+                root = merge(merge(left, middle), right);
+                break;
+            }
+            default: {
+                cin >> posi >> tot;
+                Node *left, *middle, *right;
+                split(root, posi, left, middle);
+                split(middle, tot + 1, middle, right);
+                cout << (middle ? middle->sum : 0) << "\n";
+                root = merge(merge(left, middle), right);
+                break;
+            }
         }
-        else if (op == "REVERSE") {
-            cin >> a >> b;
-            Node *tmp = 0, *l = 0, *m = 0, *r = 0;
-            split(root, l, tmp, a - 1);
-            split(tmp, m, r, b);
-            if (m) m->rev ^= 1;
-            merge(tmp, m, r);
-            merge(root, l, tmp);
-        }
-        else if (op == "GET-SUM") {
-            cin >> a >> b;
-            Node *tmp = 0, *l = 0, *m = 0, *r = 0;
-            split(root, l, tmp, a - 1);
-            split(tmp, m, r, b);
-            cout << tsum(m) << "\n";
-            merge(tmp, m, r);
-            merge(root, l, tmp);
-        }
-        else cout << bsum(root) << "\n";
     }
     return 0;
 }
 
 /* 
- * Look for:
+ Look for:
  * the exact constraints (multiple sets are too slow for n=10^6 :( ) 
  * special cases (n=1?)
  * overflow (ll vs int?)
  * array bounds
+ * number of test cases (T = 10)
+ * resetting containers, variables, etc
  */

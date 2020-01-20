@@ -47,7 +47,7 @@ void Build_Tree (int node) {
 }
 
 void DFS (int node) {
-	if (tree[node] == 0) {
+	if (!tree[node]) {
 		DFS(node << 1);
 		DFS(node << 1 | 1);
 		for (int i=0; i<=X; i++) {

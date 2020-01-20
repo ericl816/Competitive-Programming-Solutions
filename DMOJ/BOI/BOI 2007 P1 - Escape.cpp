@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#define MAXE 600
 #define MAXM 130000
 #define MAXN 300
 #define INF 0x3f3f3f3f
@@ -19,16 +18,14 @@ using namespace std;
 struct Network {
 	struct Edge {
 		int dest, cost, next;
-		Edge (int dest, int cost, int next) : dest(dest), cost(cost), next(next) {
-		}
+		Edge (int dest, int cost, int next) : dest(dest), cost(cost), next(next) { }
 	};
 
 	int N, src, sink;
-	vector<int> last;
-	vector<bool> vis;
+	vector<int> last, dist;
 	vector<Edge> e;
 
-	Network (int N, int src, int sink) : N(N), src(src), sink(sink), last(N), vis(N) {
+	Network (int N, int src, int sink) : N(N), src(src), sink(sink), last(N), dist(N) {
 		fill(last.begin(), last.end(), -1);
 	}
 
@@ -39,36 +36,54 @@ struct Network {
 		last[y] = e.size() - 1;
 	}
 
-	int dfs (int curr, int flow) {
-		vis[curr] = 1;
-
-		if (curr == sink) {
-			return flow;
-		}
-
-		for (int i = last[curr]; i != -1; i = e[i].next) {
-			if (e[i].cost > 0 && !vis[e[i].dest]) {
-				int res = dfs(e[i].dest, min(flow, e[i].cost));
-				if (res > 0) {
-					e[i].cost -= res;
-					e[i ^ 1].cost += res;
-					return res;
+	bool getPath () {
+		fill(dist.begin(), dist.end(), -1);
+		queue<int> q;
+		q.push(src);
+		dist[src] = 0;
+		while (!q.empty()) {
+			int curr = q.front();
+			q.pop();
+			for (int i = last[curr]; i != -1; i = e[i].next) {
+				if (e[i].cost > 0 && dist[e[i].dest] == -1) {
+					dist[e[i].dest] = dist[curr] + 1;
+					q.push(e[i].dest);
 				}
 			}
 		}
-		return 0;
+		return dist[sink] != -1;
+	}
+
+	int dfs (int curr, int flow) {
+		if (curr == sink) {
+			return flow;
+		}
+		int ret = 0;
+		for (int i = last[curr]; i != -1; i = e[i].next) {
+			if (e[i].cost > 0 && dist[e[i].dest] == dist[curr] + 1) {
+				int res = dfs(e[i].dest, min(flow, e[i].cost));
+				ret += res;
+				e[i].cost -= res;
+				e[i ^ 1].cost += res;
+				flow -= res;
+				if (flow == 0) {
+					break;
+				}
+			}
+		}
+		return ret;
 	}
 
 	int getFlow () {
-		int res = 0, curr;
-		fill(vis.begin(), vis.end(), 0);
-		while ((curr = dfs(src, INF))) {
-			res += curr;
-			fill(vis.begin(), vis.end(), 0);
+		int res = 0;
+		while (getPath()) {
+			res += dfs(src, 1 << 30);
 		}
 		return res;
 	}
 };
+
+const int radius = 100;
 
 int N, L, W, X, Y, source, sink;
 ll ans;
@@ -92,15 +107,15 @@ int main () {
 	for (int i=1; i<=N; i++) flow.addEdge(i, i + N, 1, 0);
 	for (int i=1; i<=N; i++) {
 		for (int j=i + 1; j<=N; j++) {
-			if (Get_Dist(centres[i], centres[j]) <= 40000) {
+			if (Get_Dist(centres[i], centres[j]) <= (radius * radius) << 2) {
 				flow.addEdge(i + N, j, INF, 0);
 				flow.addEdge(j + N, i, INF, 0);
 			}
 		}
 	}
 	for (int i=1; i<=N; i++) {
-		if (centres[i].s <= 100) flow.addEdge(source, i, INF, 0);
-		if (W - centres[i].s <= 100) flow.addEdge(i + N, sink, INF, 0);
+		if (centres[i].s <= radius) flow.addEdge(source, i, INF, 0);
+		if (W <= centres[i].s + radius) flow.addEdge(i + N, sink, INF, 0);
 	}
 	cout << flow.getFlow() << "\n";
 	return 0;

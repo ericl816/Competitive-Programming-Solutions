@@ -25,10 +25,9 @@ int query(int r, int c) {
 }
 
 int main() {
-    cin >> l >> t;
-    
+    scanf("%d%d", &l, &t);
     while (t--) {
-     cin >> op >> r >> c;
+     scanf(" %c%d%d", &op, &r, &c);
         if (r > 1800) continue;
         if (op == 'E') {
             flag[r][c] = true;

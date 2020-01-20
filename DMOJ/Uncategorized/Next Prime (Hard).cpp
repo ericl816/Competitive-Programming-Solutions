@@ -23,18 +23,18 @@ inline ull powMod(ull base, ull pow, ull mod) {
     return x % mod;
 }
 
-inline bool Miller (ull n, int iterations) {
-    if (n < 2 || (n ^ 2 && !(n & 1))) return 0;
+inline bool isPrime(ull n, int iterations) {
+    if (n < 2 || (n != 2 && n % 2 == 0)) return 0;
     ull s = n - 1;
-    while (!(s & 1)) s >>= 1;
+    while (s % 2 == 0) s /= 2;
     srand(time(0));
     for (int i=0; i<iterations; i++) {
         ull temp = s, r = powMod(rand() % (n - 1) + 1, temp, n);
-        while (temp ^ n - 1 && r ^ 1 && r ^ n - 1) {
+        while (temp != n - 1 && r != 1 && r != n - 1) {
             r = mulMod(r, r, n);
-            temp <<= 1;
+            temp *= 2;
         }
-        if (r ^ n - 1 && !(temp & 1)) return 0;
+        if (r != n - 1 && temp % 2 == 0) return 0;
     }
     return 1;
 }
@@ -43,7 +43,7 @@ ull N;
 
 int main() {
     scanf("%llu", &N);
-    while (!Miller(N, 5)) N++;
+    while (!isPrime(N, 5)) N++;
     printf("%llu\n", N);
     return 0;
 }

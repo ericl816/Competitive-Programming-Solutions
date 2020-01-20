@@ -34,7 +34,7 @@ inline int GCD (int a, int b) { return b == 0 ? a : GCD(b, a % b); }
 inline int LCM (int a, int b) { return a * b / GCD(a, b); }
 inline ll PowMod (ll a, ll b, ll mod) { ll val = 1; while (b) { if (b & 1) val = (val * a) % mod; a = (a * a) % mod; b >>= 1; } return val; }
 
-ll N, M, sum, cnt, maxx;
+ll N, M, sum = 0, cnt = 0, maxx = 0;
 ll C[MAXN];
 
 int main (int argc, char const *argv[]) {
