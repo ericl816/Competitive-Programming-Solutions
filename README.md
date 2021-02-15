@@ -1,6 +1,6 @@
 # Competitive-Programming-Solutions
 
-![alt text](https://img.shields.io/badge/DMOJ-1916-yellow?style=flat&logo=sourcegraph&logoColor=yellow&link=http://www.dmoj.ca/user/avis)
+![alt text](https://img.shields.io/badge/DMOJ-1916-yellow?style=flat&logo=sourcegraph&logoColor=yellow&link=https://dmoj.ca/user/avis)
 
 Repository consists of 1000+ solutions to various problems that can be found on online judges and programming platforms such as Codeforces, HackerEarth, DMOJ, SPOJ and WCIPEG. Note that these solutions are meant to be for reference only.
 
