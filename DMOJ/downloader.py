@@ -42,7 +42,7 @@ def better(a, b):
         return a
     return b
 
-username = "eric574" # whatever your username is
+username = "" # whatever your username is
 subs = requests.get("https://dmoj.ca/api/user/submissions/"+username).json() # a map from the submission id to the submission data
 #remove submissions with compile errors or aborted submissions, because those can have null time, points, or memory
 subs = {i:subs[i] for i in subs if subs[i]["status"] == "D"}
